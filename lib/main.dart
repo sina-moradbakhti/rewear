@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/themes.dart';
 import 'package:rewear/views/launchScreen/view.dart';
@@ -15,15 +16,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Rewear App',
       theme: MyThemes.primary,
-      routes: {
-        MyRoutes.launch: (context) => const LaunchScreen(),
-        MyRoutes.welcome: (context) => const WelcomeScreen(),
-        MyRoutes.signup: (context) => const SignUp()
-      },
-      initialRoute: MyRoutes.welcome,
+      getPages: [
+        GetPage(name: MyRoutes.launch, page: () => const LaunchScreen()),
+        GetPage(name: MyRoutes.welcome, page: () => const WelcomeScreen()),
+        GetPage(name: MyRoutes.signup, page: () => const SignUp())
+      ],
+      initialRoute: MyRoutes.launch,
     );
   }
 }

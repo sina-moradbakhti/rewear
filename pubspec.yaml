@@ -11,6 +11,12 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   ms_material_color: ^1.0.0
+  flutter_svg: ^1.1.1+1
+  get: ^4.6.5
+  get_storage: ^2.0.3
+  rxdart: ^0.27.4
+  google_sign_in: ^5.4.0
+  firebase_auth: ^3.4.2
 
 dev_dependencies:
   flutter_test:
@@ -21,8 +27,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/svg/
+    - assets/images/png/
+    - assets/images/png/shirts/
     - assets/fonts/
+    - assets/fonts/icons/
 
   fonts:
     - family: Roboto
@@ -39,3 +48,6 @@ flutter:
         - asset: assets/fonts/roboto/regular.ttf
         - asset: assets/fonts/roboto/thin.ttf
         - asset: assets/fonts/roboto/thinItalic.ttf
+    - family: IconlyFont
+      fonts:
+        - asset: assets/fonts/icons/IconlyFont.ttf

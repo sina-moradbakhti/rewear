@@ -25,7 +25,7 @@ class MyPrimaryButton extends StatelessWidget {
               height: 1.4,
               fontSize: 14,
               color: MyColors.white,
-              fontWeight: FontWeight.w400),
+              fontWeight: FontWeight.w500),
         ),
       ),
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rewear/generals/buttons.dart';
-import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/textfields.dart';
 
@@ -24,13 +25,13 @@ class SignUp extends StatelessWidget {
                 children: [
                   Text(
                     MyStrings.signup_title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Get.theme.textTheme.headline5,
                   ),
                   Padding(
                     padding: MyConstants.topHalfPadding,
                     child: Text(
                       MyStrings.signup_caption,
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Get.theme.textTheme.subtitle2,
                     ),
                   )
                 ],
@@ -40,10 +41,15 @@ class SignUp extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     MyTextfield(title: MyStrings.signup_fullName_text),
-                    MyTextfield(title: MyStrings.signup_email_text),
-                    MyTextfield(title: MyStrings.signup_password_text),
+                    MyTextfield(
+                        title: MyStrings.signup_email_text,
+                        hint: 'Example@mail.com'),
+                    MyTextfield(
+                        title: MyStrings.signup_password_text,
+                        isPassword: true,
+                        suffixIcon: IconlyFont.show),
                   ],
                 ),
               ),

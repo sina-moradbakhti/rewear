@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
@@ -8,12 +9,11 @@ class LaunchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2)).then(
-        (_) => Navigator.of(context).pushReplacementNamed(MyRoutes.welcome));
+    Future.delayed(const Duration(seconds: 2))
+        .then((_) => Get.offNamed(MyRoutes.welcome));
 
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Get.theme.primaryColor,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -22,8 +22,8 @@ class LaunchScreen extends StatelessWidget {
             children: [
               Image.asset(
                 MyImages.circularRewearLogo,
-                width: size.width / 2,
-                height: size.width / 2,
+                width: Get.width / 2,
+                height: Get.width / 2,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
