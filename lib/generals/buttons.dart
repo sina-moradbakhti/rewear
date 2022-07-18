@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/images.dart';
@@ -72,6 +73,45 @@ class GoogleButton extends StatelessWidget {
               ],
             ),
           )),
+    );
+  }
+}
+
+class MyTextButton extends StatelessWidget {
+  final String text;
+  final String button;
+  final VoidCallback? onPressed;
+  final bool largeSize;
+  const MyTextButton(
+      {Key? key,
+      required this.button,
+      required this.text,
+      this.onPressed,
+      this.largeSize = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(text,
+            style: largeSize
+                ? Get.theme.textTheme.bodyText2
+                : Get.theme.textTheme.caption,
+            textAlign: TextAlign.center),
+        TextButton(
+          onPressed: onPressed,
+          child: Text(button,
+              style: largeSize
+                  ? Get.theme.textTheme.bodyText2
+                      ?.copyWith(color: MyColors.orange)
+                  : Get.theme.textTheme.caption
+                      ?.copyWith(color: MyColors.orange),
+              textAlign: TextAlign.center),
+        )
+      ],
     );
   }
 }

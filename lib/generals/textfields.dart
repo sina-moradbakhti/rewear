@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 
-class MyTextfield extends StatelessWidget {
+class MyTextfield extends StatefulWidget {
   final String title;
   final String hint;
   final bool isPassword;
@@ -21,6 +21,31 @@ class MyTextfield extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<MyTextfield> createState() => _MyTextfieldState();
+}
+
+class _MyTextfieldState extends State<MyTextfield> {
+  VoidCallback? _onTappedSuffixIcon;
+  bool _showPassword = true;
+  IconData? _currentSuffix;
+
+  @override
+  void initState() {
+    _onTappedSuffixIcon = widget.onTappedSuffixIcon;
+    _currentSuffix = widget.suffixIcon;
+    if (widget.isPassword) {
+      _onTappedSuffixIcon = () {
+        setState(() {
+          _showPassword = !_showPassword;
+          _currentSuffix =
+              _showPassword ? widget.suffixIcon : widget.suffixIcon2;
+        });
+      };
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -31,7 +56,7 @@ class MyTextfield extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 2.5, left: 2.5),
             child: Text(
-              title,
+              widget.title,
               style: Get.theme.textTheme.bodyText2
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
@@ -40,9 +65,14 @@ class MyTextfield extends StatelessWidget {
             height: 42.5,
             child: TextField(
               style: Get.theme.textTheme.bodyText2,
+              obscureText: widget.isPassword ? _showPassword : false,
               decoration: InputDecoration(
-                suffixIcon: Icon(suffixIcon),
-                hintText: hint,
+                suffixIcon: IconButton(
+                  icon: Icon(_currentSuffix),
+                  onPressed: _onTappedSuffixIcon,
+                  padding: EdgeInsets.zero,
+                ),
+                hintText: widget.hint,
                 hintStyle: Get.theme.textTheme.bodyText2
                     ?.copyWith(color: MyColors.darkGrey),
               ),

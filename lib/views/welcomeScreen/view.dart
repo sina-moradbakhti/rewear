@@ -43,22 +43,10 @@ class WelcomeScreen extends StatelessWidget {
                   )
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(MyStrings.welcome_screen_have_account_text,
-                      style: Get.theme.textTheme.caption,
-                      textAlign: TextAlign.center),
-                  TextButton(
-                    onPressed: null,
-                    child: Text(MyStrings.welcome_screen_login_btn,
-                        style: Get.theme.textTheme.caption
-                            ?.copyWith(color: MyColors.orange),
-                        textAlign: TextAlign.center),
-                  )
-                ],
-              )
+              MyTextButton(
+                  onPressed: () => Get.toNamed(MyRoutes.login),
+                  button: MyStrings.welcome_screen_login_btn,
+                  text: MyStrings.welcome_screen_have_account_text)
             ],
           ),
         ),

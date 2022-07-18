@@ -4,7 +4,7 @@ class MyColors {
   MyColors._();
   static Color white = Colors.white;
   static Color orange = const Color(0xFFF77F00);
-  static Color lightOrange = const Color(0xFFFDB67F);
+  static Color lightOrange = const Color.fromARGB(255, 255, 226, 203);
   static Color grey = const Color(0xFFCED4DA);
   static Color veryLightGrey = const Color(0xFFBEBEBE);
   static Color lightGrey = const Color.fromRGBO(250, 250, 250, 1);

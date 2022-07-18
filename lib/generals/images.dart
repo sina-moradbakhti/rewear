@@ -13,6 +13,19 @@ class MyImages {
       MyImages.rootPath + '/shirts/' + 'tshirt_03.png';
   static const String tShirt04 =
       MyImages.rootPath + '/shirts/' + 'tshirt_04.png';
+
+  // Services
+  static const String redesign = MyImages.rootPath + '/' + 'srvc_redesign.png';
+  static const String alteration =
+      MyImages.rootPath + '/' + 'srvc_alteration.png';
+  static const String repair = MyImages.rootPath + '/' + 'srvc_repair.png';
+  static const String promotion =
+      MyImages.rootPath + '/' + 'srvc_promotion.png';
+
+  static const String requests = MyImages.rootPath + '/' + 'tlrs_requests.png';
+  static const String catalogs = MyImages.rootPath + '/' + 'tlrs_catalogs.png';
+
+  static const String eco_banner = MyImages.rootPath + '/' + 'srvc_banner.png';
 }
 
 class MySvgs {
