@@ -14,6 +14,15 @@ class MyImages {
   static const String tShirt04 =
       MyImages.rootPath + '/shirts/' + 'tshirt_04.png';
 
+  static const String tShirt01Grey =
+      MyImages.rootPath + '/shirts/' + 'tshirt_01_grey.png';
+  static const String tShirt02Grey =
+      MyImages.rootPath + '/shirts/' + 'tshirt_02_grey.png';
+  static const String tShirt03Grey =
+      MyImages.rootPath + '/shirts/' + 'tshirt_03_grey.png';
+  static const String tShirt04Grey =
+      MyImages.rootPath + '/shirts/' + 'tshirt_04_grey.png';
+
   // Services
   static const String redesign = MyImages.rootPath + '/' + 'srvc_redesign.png';
   static const String alteration =
@@ -26,6 +35,10 @@ class MyImages {
   static const String catalogs = MyImages.rootPath + '/' + 'tlrs_catalogs.png';
 
   static const String eco_banner = MyImages.rootPath + '/' + 'srvc_banner.png';
+
+  // Slides
+  static const String tailorySlide01 =
+      MyImages.rootPath + '/' + 'tailory-slide-01.png';
 }
 
 class MySvgs {

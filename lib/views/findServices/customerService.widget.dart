@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/images.dart';
+import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/views/findServices/serviceItem.widget.dart';
 
@@ -41,13 +42,13 @@ class CustomerServiceWidget extends StatelessWidget {
               Expanded(
                   child: InkWell(
                 child: _list[0],
-                onTap: () {},
+                onTap: () => Get.toNamed(MyRoutes.repair),
               )),
               const SizedBox(width: 16),
               Expanded(
                   child: InkWell(
                 child: _list[1],
-                onTap: () {},
+                onTap: () => Get.toNamed(MyRoutes.alteration),
               )),
             ],
           ),
@@ -57,13 +58,13 @@ class CustomerServiceWidget extends StatelessWidget {
               Expanded(
                   child: InkWell(
                 child: _list[2],
-                onTap: () {},
+                onTap: () => Get.toNamed(MyRoutes.redesign),
               )),
               const SizedBox(width: 16),
               Expanded(
                   child: InkWell(
                 child: _list[3],
-                onTap: () {},
+                onTap: () => Get.toNamed(MyRoutes.promotion),
               )),
             ],
           ),

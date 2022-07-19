@@ -9,12 +9,18 @@ class MyTextfield extends StatefulWidget {
   final IconData? suffixIcon;
   final IconData? suffixIcon2;
   final VoidCallback? onTappedSuffixIcon;
+  final bool isMultiline;
+  final int minLines;
+  final int maxLines;
 
   const MyTextfield(
       {Key? key,
       required this.title,
       this.hint = '',
+      this.minLines = 1,
+      this.maxLines = 1,
       this.isPassword = false,
+      this.isMultiline = false,
       this.suffixIcon,
       this.suffixIcon2,
       this.onTappedSuffixIcon})
@@ -45,6 +51,26 @@ class _MyTextfieldState extends State<MyTextfield> {
     super.initState();
   }
 
+  Widget _textfield({EdgeInsets? padding}) {
+    return TextField(
+      minLines: widget.isMultiline ? widget.minLines : 1,
+      maxLines: widget.isMultiline ? widget.maxLines : 1,
+      style: Get.theme.textTheme.bodyText2,
+      obscureText: widget.isPassword ? _showPassword : false,
+      decoration: InputDecoration(
+        contentPadding: padding,
+        suffixIcon: IconButton(
+          icon: Icon(_currentSuffix),
+          onPressed: _onTappedSuffixIcon,
+          padding: EdgeInsets.zero,
+        ),
+        hintText: widget.hint,
+        hintStyle:
+            Get.theme.textTheme.bodyText2?.copyWith(color: MyColors.darkGrey),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -61,23 +87,10 @@ class _MyTextfieldState extends State<MyTextfield> {
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(
-            height: 42.5,
-            child: TextField(
-              style: Get.theme.textTheme.bodyText2,
-              obscureText: widget.isPassword ? _showPassword : false,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  icon: Icon(_currentSuffix),
-                  onPressed: _onTappedSuffixIcon,
-                  padding: EdgeInsets.zero,
-                ),
-                hintText: widget.hint,
-                hintStyle: Get.theme.textTheme.bodyText2
-                    ?.copyWith(color: MyColors.darkGrey),
-              ),
-            ),
-          )
+          widget.isMultiline
+              ? _textfield(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8))
+              : SizedBox(height: 42.5, child: _textfield())
         ],
       ),
     );

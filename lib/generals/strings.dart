@@ -37,4 +37,16 @@ class MyStrings {
   static const String tlrs_title = 'My Tailory';
   static const String tlrs_requests = 'Requests';
   static const String tlrs_catalog = 'Catalogue';
+
+  // Alteration
+  static const String alteration_title = 'Alteration';
+
+  // Repair
+  static const String repair_title = 'Repair';
+
+  // Redesign Offers
+  static const String redesign_title = 'Redesign Offers';
+
+  // Promotion
+  static const String promotion_title = 'Promotion';
 }

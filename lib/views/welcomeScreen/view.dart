@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rewear/generals/buttons.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:get/get.dart';
@@ -22,9 +23,12 @@ class WelcomeScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: MyConstants.primaryCircularRadius,
                 child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   alignment: Alignment.center,
                   height: Get.height / 2,
-                  color: MyColors.grey,
+                  color: MyColors.lightGrey,
+                  child: Image.asset(MyImages.tailorySlide01),
                 ),
               ),
               Text(MyStrings.welcome_screen_slogan_title,
