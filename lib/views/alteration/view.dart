@@ -55,6 +55,7 @@ class Alteration extends StatelessWidget {
                       icon: IconlyFont.calendar,
                       title: 'Date',
                       hint: 'Choose date',
+                      current: bloc.currentDateToStr(),
                       onTapped: bloc.chooseDate),
                   const BreakWidget(size: 5),
                   MyCustomfield(
@@ -76,9 +77,10 @@ class Alteration extends StatelessWidget {
                     maxLines: 8,
                   ),
                   const BreakWidget(size: 5),
-                  const UploadBoxWidget(),
-                  const BreakWidget(size: 20),
-                  MyPrimaryButton(onPressed: () {}, title: 'Choose Tailor')
+                  UploadBoxWidget(onUpdatedPhotoList: bloc.updatePhotoList),
+                  const BreakWidget(size: 30),
+                  MyPrimaryButton(onPressed: () {}, title: 'Choose Tailor'),
+                  const BreakWidget(size: 100),
                 ],
               ),
             ),

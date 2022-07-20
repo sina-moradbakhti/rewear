@@ -41,7 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Rewear needs to access the PhotoLibrary to show you the photos</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Rewear needs to access the Camera to record your voice</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Rewear needs to access the Camera to take photo</string>
 </dict>
 </plist>

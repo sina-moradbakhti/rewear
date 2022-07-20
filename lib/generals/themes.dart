@@ -9,6 +9,9 @@ class MyThemes {
       primarySwatch: MsMaterialColor(MyColors.orange.value),
       backgroundColor: MyColors.white,
       scaffoldBackgroundColor: MyColors.white,
+      dialogTheme: const DialogTheme(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)))),
       inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: MyColors.lightGrey,
