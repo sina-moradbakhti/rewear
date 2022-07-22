@@ -12,6 +12,7 @@ class MyTextfield extends StatefulWidget {
   final bool isMultiline;
   final int minLines;
   final int maxLines;
+  final TextEditingController? controller;
 
   const MyTextfield(
       {Key? key,
@@ -21,6 +22,7 @@ class MyTextfield extends StatefulWidget {
       this.maxLines = 1,
       this.isPassword = false,
       this.isMultiline = false,
+      this.controller,
       this.suffixIcon,
       this.suffixIcon2,
       this.onTappedSuffixIcon})
@@ -53,6 +55,7 @@ class _MyTextfieldState extends State<MyTextfield> {
 
   Widget _textfield({EdgeInsets? padding}) {
     return TextField(
+      controller: widget.controller,
       minLines: widget.isMultiline ? widget.minLines : 1,
       maxLines: widget.isMultiline ? widget.maxLines : 1,
       style: Get.theme.textTheme.bodyText2,
@@ -89,7 +92,8 @@ class _MyTextfieldState extends State<MyTextfield> {
           ),
           widget.isMultiline
               ? _textfield(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8))
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 8, right: 8, left: 8))
               : SizedBox(height: 42.5, child: _textfield())
         ],
       ),

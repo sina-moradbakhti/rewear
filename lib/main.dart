@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/themes.dart';
 import 'package:rewear/views/alteration/view.dart';
@@ -13,7 +14,8 @@ import 'package:rewear/views/repair/view.dart';
 import 'package:rewear/views/signUp/view.dart';
 import 'package:rewear/views/welcomeScreen/view.dart';
 
-void main() {
+void main() async {
+  await AppInit().preInit();
   runApp(const MyApp());
 }
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: MyThemes.primary,
         getPages: [
           GetPage(name: MyRoutes.launch, page: () => const LaunchScreen()),
-          GetPage(name: MyRoutes.welcome, page: () => const WelcomeScreen()),
+          GetPage(name: MyRoutes.welcome, page: () => WelcomeScreen()),
           GetPage(name: MyRoutes.signup, page: () => SignUp()),
           GetPage(name: MyRoutes.login, page: () => Login()),
           GetPage(name: MyRoutes.forgotPassword, page: () => ForgotPassword()),
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: MyRoutes.promotion, page: () => const Promotion()),
           GetPage(name: MyRoutes.home, page: () => const Home()),
         ],
-        initialRoute: MyRoutes.home, // MyRoutes.launch
+        initialRoute: MyRoutes.launch, // MyRoutes.launch
       ),
     );
   }

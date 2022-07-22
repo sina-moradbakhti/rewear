@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
@@ -9,8 +10,10 @@ class LaunchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2))
-        .then((_) => Get.offNamed(MyRoutes.welcome));
+    Future.delayed(const Duration(seconds: 2)).then((_) =>
+        AppInit().isUserLoggedIn
+            ? Get.offNamed(MyRoutes.home)
+            : Get.offNamed(MyRoutes.welcome));
 
     return Scaffold(
       backgroundColor: Get.theme.primaryColor,
