@@ -10,4 +10,6 @@ class MyRoutes {
   static const String repair = '/repair';
   static const String promotion = '/promotion';
   static const String redesign = '/redesign';
+  static const String settings = '/settings';
+  static const String search = '/search';
 }

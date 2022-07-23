@@ -19,7 +19,7 @@ dependencies:
   firebase_auth: ^3.4.2
   image_picker: ^0.8.5+3
   firebase_core: ^1.20.0
-  cloud_firestore: ^3.4.0
+  cloud_firestore: ^3.4.0 # https://github.com/firebase/flutterfire/issues/2751
   url_launcher: ^6.1.5
 
 dev_dependencies:

@@ -117,7 +117,7 @@ class SignUp extends StatelessWidget {
                                 text:
                                     'By clicking Sign up, you agree to our\n'),
                             TextSpan(
-                                text: 'Terms and condition',
+                                text: MyStrings.termsCondition,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => AppInit()
                                       .openLink(AppInit.TERMS_CONDITION_URL),
@@ -126,7 +126,7 @@ class SignUp extends StatelessWidget {
                                     decoration: TextDecoration.underline)),
                             const TextSpan(text: ' and '),
                             TextSpan(
-                                text: 'Privacy Statement',
+                                text: MyStrings.privacyStatement,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => AppInit()
                                       .openLink(AppInit.PRIVACY_POLICY_URL),

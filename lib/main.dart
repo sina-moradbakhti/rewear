@@ -11,6 +11,8 @@ import 'package:rewear/views/login/view.dart';
 import 'package:rewear/views/promotion/view.dart';
 import 'package:rewear/views/redesign/view.dart';
 import 'package:rewear/views/repair/view.dart';
+import 'package:rewear/views/search/view.dart';
+import 'package:rewear/views/settings/view.dart';
 import 'package:rewear/views/signUp/view.dart';
 import 'package:rewear/views/welcomeScreen/view.dart';
 
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: MyRoutes.repair, page: () => const Repair()),
           GetPage(name: MyRoutes.promotion, page: () => const Promotion()),
           GetPage(name: MyRoutes.home, page: () => const Home()),
+          GetPage(name: MyRoutes.settings, page: () => Settings()),
+          GetPage(name: MyRoutes.search, page: () => Search()),
         ],
         initialRoute: MyRoutes.launch, // MyRoutes.launch
       ),

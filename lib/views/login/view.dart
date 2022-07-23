@@ -8,6 +8,7 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/textfields.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
+import 'package:rewear/generals/widgets/loading.widget.dart';
 
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
@@ -42,11 +43,13 @@ class Login extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       MyTextfield(
+                          controller: bloc.email,
                           title: MyStrings.signup_email_text,
                           hint: 'Example@mail.com'),
                       MyTextfield(
+                          controller: bloc.password,
                           title: MyStrings.signup_password_text,
                           isPassword: true,
                           suffixIcon: IconlyFont.hide,
@@ -56,8 +59,10 @@ class Login extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
-                  child: MyPrimaryButton(
-                      onPressed: () => bloc.login(), title: MyStrings.login_title),
+                  child: Obx(() => bloc.loading.value
+                      ? const Center(child: MyLoading())
+                      : MyPrimaryButton(
+                          onPressed: bloc.login, title: MyStrings.login_title)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30),

@@ -49,4 +49,16 @@ class MyStrings {
 
   // Promotion
   static const String promotion_title = 'Promotion';
+
+  // Settings
+  static const String settings_title = 'Settings';
+
+  // Settings
+  static const String search_title = 'Search';
+
+  // Generals
+  static const String termsCondition = 'Terms and condition';
+  static const String privacyPolicy = 'Privacy policy';
+  static const String privacyStatement = 'Privacy Statement';
+  static const String logOut = 'Logout';
 }

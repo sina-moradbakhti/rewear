@@ -5,7 +5,7 @@ import 'package:rewear/models/userType.enum.dart';
 class User {
   final String? uid;
   final String? fullname;
-  final String? token;
+  String? token;
   final String? email;
   final UserType? role;
 

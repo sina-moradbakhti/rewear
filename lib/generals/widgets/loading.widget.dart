@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:rewear/generals/colors.dart';
 
 class MyLoading extends StatelessWidget {

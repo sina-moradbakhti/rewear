@@ -90,6 +90,7 @@ class SignupBloc extends GetxController {
           .add(user.toJsonForFirestore());
       AppInit().user = user;
       await AppInit().user.saveToCacheAndLogin();
+      loading.value = false; // Stop loading
       Get.offAllNamed(MyRoutes.home);
     } catch (error) {
       loading.value = false; // Stop loading
