@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:record/record.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
 
@@ -35,7 +36,11 @@ class AlterationBloc extends GetxController {
     selectedDate.value = date;
   }
 
-  void recordVoice() async {}
+  void recordVoice() async {
+    final record = Record();
+    bool status = await record.hasPermission();
+    print('Record : $status');
+  }
 
   void updatePhotoList(List<XFile> list) {
     photos = list;

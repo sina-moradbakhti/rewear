@@ -2,7 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Google Sign-in Section -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -14,7 +13,6 @@
 			</array>
 		</dict>
 	</array>
-	<!-- End of the Google Sign-in Section -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -62,10 +60,14 @@
 	<string>Rewear needs to access the Camera to record your voice</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Rewear needs to access the Camera to take photo</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-	<string>sms</string>
-	<string>tel</string>
+		<string>sms</string>
+		<string>tel</string>
 	</array>
 </dict>
 </plist>

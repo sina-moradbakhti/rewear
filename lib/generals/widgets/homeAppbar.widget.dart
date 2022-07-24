@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/iconly_font_icons.dart';
@@ -28,10 +29,22 @@ class HomeAppbar extends StatelessWidget with PreferredSizeWidget {
       ),
       centerTitle: true,
       title: InkWell(
-        onTap: () => Get.dialog(const CityPickerDialog(),
-            useSafeArea: true,
-            barrierColor: Colors.black87,
-            transitionCurve: Curves.easeInOut),
+        onTap: () async {
+          // Get.dialog(const CityPickerDialog(),
+          //     useSafeArea: true,
+          //     barrierColor: Colors.black87,
+          //     transitionCurve: Curves.easeInOut);
+
+          var res =
+              await GeolocatorPlatform.instance.isLocationServiceEnabled();
+          var checkh = await GeolocatorPlatform.instance.checkPermission();
+          if (checkh != LocationPermission.whileInUse &&
+              checkh != LocationPermission.always) {
+            GeolocatorPlatform.instance.requestPermission();
+          }
+
+          print('Location Service : $res    |    $checkh');
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
