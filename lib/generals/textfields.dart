@@ -12,7 +12,7 @@ class MyTextfield extends StatefulWidget {
   final bool isMultiline;
   final int minLines;
   final int maxLines;
-  final TextEditingController? controller;
+  final Function(String)? onChanges;
 
   const MyTextfield(
       {Key? key,
@@ -22,9 +22,9 @@ class MyTextfield extends StatefulWidget {
       this.maxLines = 1,
       this.isPassword = false,
       this.isMultiline = false,
-      this.controller,
       this.suffixIcon,
       this.suffixIcon2,
+      this.onChanges,
       this.onTappedSuffixIcon})
       : super(key: key);
 
@@ -55,10 +55,10 @@ class _MyTextfieldState extends State<MyTextfield> {
 
   Widget _textfield({EdgeInsets? padding}) {
     return TextField(
-      controller: widget.controller,
       minLines: widget.isMultiline ? widget.minLines : 1,
       maxLines: widget.isMultiline ? widget.maxLines : 1,
       style: Get.theme.textTheme.bodyText2,
+      onChanged: widget.onChanges,
       obscureText: widget.isPassword ? _showPassword : false,
       decoration: InputDecoration(
         contentPadding: padding,

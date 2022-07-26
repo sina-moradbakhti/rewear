@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as fbStore;
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
@@ -10,9 +9,9 @@ import 'package:rewear/models/userType.enum.dart';
 
 class SignupBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;
-  TextEditingController fullname = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  var fullname = ''.obs;
+  var email = ''.obs;
+  var password = ''.obs;
   RxBool loading = false.obs;
 
   void changeUserType(UserType type) {
@@ -67,9 +66,9 @@ class SignupBloc extends GetxController {
   void signUp() async {
     if (loading.value) return;
 
-    String fullname = this.fullname.text;
-    String email = this.email.text;
-    String password = this.password.text;
+    String fullname = this.fullname.value;
+    String email = this.email.value;
+    String password = this.password.value;
 
     if (!signupCheck(fullname, email, password)) return;
 

@@ -1,6 +1,12 @@
 class MyImages {
   MyImages._();
+
   static const String rootPath = "assets/images/png";
+
+  static const String retailPin = MyImages.rootPath + '/' + 'ic_retail_pin.png';
+  static const String youPin = MyImages.rootPath + '/' + 'ic_you_pin.png';
+  static const String testPin = MyImages.rootPath + '/' + 'destination_map_marker.png';
+  
   static const String circularRewearLogo =
       MyImages.rootPath + '/' + 'img.rewear-circular-logo.png';
   static const String googleLogo = MyImages.rootPath + '/' + 'icon.google.png';

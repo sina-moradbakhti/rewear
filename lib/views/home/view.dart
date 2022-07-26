@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/home.bloc.dart';
-import 'package:rewear/generals/colors.dart';
-import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/widgets/homeAppbar.widget.dart';
 import 'package:rewear/generals/widgets/homeNavbar.widget.dart';
 import 'package:rewear/views/findServices/view.dart';
@@ -18,7 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final _bloc = Get.put(HomeBloc());
-  final _pages = const [FindServices(), TailorsNearby(), Profile()];
+  final _pages = [const FindServices(), const TailorsNearby(), const Profile()];
 
   @override
   void initState() {

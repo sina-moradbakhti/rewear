@@ -45,11 +45,11 @@ class Login extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextfield(
-                          controller: bloc.email,
+                          onChanges: bloc.email,
                           title: MyStrings.signup_email_text,
                           hint: 'Example@mail.com'),
                       MyTextfield(
-                          controller: bloc.password,
+                          onChanges: bloc.password,
                           title: MyStrings.signup_password_text,
                           isPassword: true,
                           suffixIcon: IconlyFont.hide,

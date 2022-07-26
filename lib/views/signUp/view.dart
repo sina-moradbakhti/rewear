@@ -53,18 +53,20 @@ class SignUp extends StatelessWidget {
                     children: [
                       MyTextfield(
                         title: MyStrings.signup_fullName_text,
-                        controller: bloc.fullname,
+                        onChanges: bloc.fullname,
                       ),
                       MyTextfield(
-                          title: MyStrings.signup_email_text,
-                          hint: 'Example@mail.com',
-                          controller: bloc.email),
+                        title: MyStrings.signup_email_text,
+                        hint: 'Example@mail.com',
+                        onChanges: bloc.email,
+                      ),
                       MyTextfield(
-                          title: MyStrings.signup_password_text,
-                          isPassword: true,
-                          suffixIcon: IconlyFont.hide,
-                          suffixIcon2: IconlyFont.show,
-                          controller: bloc.password),
+                        title: MyStrings.signup_password_text,
+                        isPassword: true,
+                        suffixIcon: IconlyFont.hide,
+                        suffixIcon2: IconlyFont.show,
+                        onChanges: bloc.password,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Obx(() => Row(
