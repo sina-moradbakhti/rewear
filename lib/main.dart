@@ -8,6 +8,7 @@ import 'package:rewear/views/forgotPassword/view.dart';
 import 'package:rewear/views/home/view.dart';
 import 'package:rewear/views/launchScreen/view.dart';
 import 'package:rewear/views/login/view.dart';
+import 'package:rewear/views/profile/view.dart';
 import 'package:rewear/views/promotion/view.dart';
 import 'package:rewear/views/redesign/view.dart';
 import 'package:rewear/views/repair/view.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: MyRoutes.home, page: () => const Home()),
           GetPage(name: MyRoutes.settings, page: () => Settings()),
           GetPage(name: MyRoutes.search, page: () => Search()),
+          GetPage(name: MyRoutes.profile, page: () => Profile())
         ],
         initialRoute: MyRoutes.launch, // MyRoutes.launch
       ),

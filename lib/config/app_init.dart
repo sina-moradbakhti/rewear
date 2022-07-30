@@ -8,6 +8,7 @@ import 'package:rewear/generals/images.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
+import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,6 +31,7 @@ class AppInit {
 
   bool isUserLoggedIn = false;
   User user = User();
+  Tailor tailor = Tailor();
 
   final List<Color> colors = [
     Colors.green,

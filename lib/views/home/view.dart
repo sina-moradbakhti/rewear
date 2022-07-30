@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final _bloc = Get.put(HomeBloc());
-  final _pages = [const FindServices(), const TailorsNearby(), const Profile()];
+  final _pages = [const FindServices(), const TailorsNearby(), Profile()];
 
   @override
   void initState() {

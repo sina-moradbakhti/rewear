@@ -12,4 +12,5 @@ class MyRoutes {
   static const String redesign = '/redesign';
   static const String settings = '/settings';
   static const String search = '/search';
+  static const String profile = '/profile';
 }

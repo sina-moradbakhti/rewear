@@ -56,9 +56,16 @@ class MyStrings {
   // Settings
   static const String search_title = 'Search';
 
+  // Profile
+
+  // Tailory Profile
+  
+
   // Generals
   static const String termsCondition = 'Terms and condition';
   static const String privacyPolicy = 'Privacy policy';
   static const String privacyStatement = 'Privacy Statement';
+  static const String profile = 'Profile';
+  static const String tailoryProfile = 'Tailory profile';
   static const String logOut = 'Logout';
 }

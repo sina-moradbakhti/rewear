@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
-import 'package:cloud_firestore/cloud_firestore.dart' as fbStore;
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/user.dart';
+import 'package:rewear/services/firestore.services.dart';
 
 class LoginBloc extends GetxController {
   var email = ''.obs;
@@ -61,18 +61,15 @@ class LoginBloc extends GetxController {
 
       var token = await credential.user?.getIdToken();
 
-      final doc = await fbStore.FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: credential.user?.uid)
-          .get();
-      final user = User.fromJson(doc.docs.first.data());
+      final userJsonData =
+          await FirestoreServices().getUser(credential.user?.uid ?? '');
+      final user = User.fromJson(userJsonData.data);
       user.token = token;
       AppInit().user = user;
+      AppInit().user.docId = userJsonData.docId;
       await AppInit().user.saveToCacheAndLogin();
-      await fbStore.FirebaseFirestore.instance
-          .collection('users')
-          .doc(doc.docs.first.id)
-          .update({'token': token});
+      await FirestoreServices()
+          .updateUserWithDocId(userJsonData.docId, {'token': token});
       loading.value = false; // Stop loading
       Get.offAllNamed(MyRoutes.home);
     } catch (er) {

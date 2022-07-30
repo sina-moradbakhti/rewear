@@ -5,6 +5,7 @@ import 'package:rewear/generals/colors.dart';
 class MyTextfield extends StatefulWidget {
   final String title;
   final String hint;
+  final String value;
   final bool isPassword;
   final IconData? suffixIcon;
   final IconData? suffixIcon2;
@@ -12,12 +13,15 @@ class MyTextfield extends StatefulWidget {
   final bool isMultiline;
   final int minLines;
   final int maxLines;
+  final bool disable;
   final Function(String)? onChanges;
 
   const MyTextfield(
       {Key? key,
       required this.title,
       this.hint = '',
+      this.value = '',
+      this.disable = false,
       this.minLines = 1,
       this.maxLines = 1,
       this.isPassword = false,
@@ -53,24 +57,56 @@ class _MyTextfieldState extends State<MyTextfield> {
     super.initState();
   }
 
+  TextInputType _getInputType() {
+    if (widget.title.toLowerCase() == 'address') {
+      return TextInputType.streetAddress;
+    }
+    if (widget.title.toLowerCase().contains('email')) {
+      return TextInputType.emailAddress;
+    }
+    if (widget.title.toLowerCase().contains('number') ||
+        widget.title.toLowerCase().contains('phone')) {
+      return TextInputType.phone;
+    }
+    if (widget.title.toLowerCase() == 'age') {
+      return TextInputType.number;
+    }
+    if (widget.title.toLowerCase().contains('name')) {
+      return TextInputType.name;
+    }
+    if (widget.title.toLowerCase().contains('url')) {
+      return TextInputType.url;
+    }
+    if (widget.title.toLowerCase().contains('date')) {
+      return TextInputType.datetime;
+    }
+    return TextInputType.text;
+  }
+
   Widget _textfield({EdgeInsets? padding}) {
-    return TextField(
+    return TextFormField(
+      initialValue: widget.value,
       minLines: widget.isMultiline ? widget.minLines : 1,
       maxLines: widget.isMultiline ? widget.maxLines : 1,
-      style: Get.theme.textTheme.bodyText2,
+      keyboardType: _getInputType(),
+      style: widget.disable
+          ? Get.theme.textTheme.bodyText2!.copyWith(color: MyColors.darkGrey)
+          : Get.theme.textTheme.bodyText2,
       onChanged: widget.onChanges,
       obscureText: widget.isPassword ? _showPassword : false,
       decoration: InputDecoration(
-        contentPadding: padding,
-        suffixIcon: IconButton(
-          icon: Icon(_currentSuffix),
-          onPressed: _onTappedSuffixIcon,
-          padding: EdgeInsets.zero,
-        ),
-        hintText: widget.hint,
-        hintStyle:
-            Get.theme.textTheme.bodyText2?.copyWith(color: MyColors.darkGrey),
-      ),
+          enabled: !widget.disable,
+          contentPadding: padding,
+          suffixIcon: IconButton(
+            icon: Icon(_currentSuffix),
+            onPressed: _onTappedSuffixIcon,
+            padding: EdgeInsets.zero,
+          ),
+          hintText: widget.hint,
+          hintStyle:
+              Get.theme.textTheme.bodyText2?.copyWith(color: MyColors.darkGrey),
+          disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: MyColors.grey, width: 0.5))),
     );
   }
 

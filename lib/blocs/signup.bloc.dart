@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart' as fbStore;
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
@@ -6,6 +5,7 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/firestore.services.dart';
 
 class SignupBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;
@@ -84,10 +84,11 @@ class SignupBloc extends GetxController {
           fullname: fullname,
           role: selectedUserType.value,
           token: token);
-      await fbStore.FirebaseFirestore.instance
-          .collection('users')
-          .add(user.toJsonForFirestore());
+
+      final docId = await FirestoreServices()
+          .addUser(user.toJsonForFirestore(createdAt: true));
       AppInit().user = user;
+      AppInit().user.docId = docId;
       await AppInit().user.saveToCacheAndLogin();
       loading.value = false; // Stop loading
       Get.offAllNamed(MyRoutes.home);
