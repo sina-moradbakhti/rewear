@@ -110,6 +110,12 @@ class User {
     await box.save();
   }
 
+  Future<void> updateCache() async {
+    final box = GetStorage();
+    box.write(MyConstants.USER_DATA_ID, toJson());
+    await box.save();
+  }
+
   Future<void> signOut() async {
     final box = GetStorage();
     await box.erase();

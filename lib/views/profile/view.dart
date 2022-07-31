@@ -8,6 +8,7 @@ import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/textfields.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
+import 'package:rewear/generals/widgets/locationCoordinator.widget.dart';
 import 'package:rewear/models/userType.enum.dart';
 
 class Profile extends StatelessWidget {
@@ -87,6 +88,10 @@ class Profile extends StatelessWidget {
             minLines: 4,
             maxLines: 6,
             onChanges: (newBio) => bloc.app.user.description = newBio),
+        Obx(() => LocationCoordinatorWidget(
+              onTapped: bloc.coordinateLocation,
+              loading: bloc.coordinatingLocation.value,
+            )),
       ];
 
   List<Widget> get customerFields => [
