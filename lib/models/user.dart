@@ -8,6 +8,7 @@ class User {
   final String? uid;
   String? fullname;
   String? token;
+  String? fcmToken;
   final String? email;
   final UserType? role;
   String? address;
@@ -27,6 +28,7 @@ class User {
       this.cover,
       this.email,
       this.token,
+      this.fcmToken,
       this.address,
       this.description,
       this.image,
@@ -41,23 +43,29 @@ class User {
     }
     return User.fromJson(box.read(MyConstants.USER_DATA_ID));
   }
-  factory User.fromJson(Map<String, dynamic> json) => User(
-      docId: json['docId'],
-      uid: json['uid'],
-      address: json['address'],
-      image: json['image'],
-      cover: json['cover'],
-      slogan: json['slogan'],
-      description: json['description'],
-      position: json['position'],
-      rate: json['rate'],
-      email: json['email'],
-      fullname: json['fullname'],
-      phone: json['phone'],
-      token: json['token'],
-      role: json['role'] == UserType.seller.toString()
-          ? UserType.seller
-          : UserType.customer);
+  factory User.fromJson(Map<String, dynamic> json) {
+    final pos = (json['position'] != null) ? json['position'].split(',') : null;
+    return User(
+        docId: json['docId'],
+        uid: json['uid'],
+        address: json['address'],
+        image: json['image'],
+        cover: json['cover'],
+        slogan: json['slogan'],
+        description: json['description'],
+        position: pos != null
+            ? LatLng(double.parse(pos[0]), double.parse(pos[1]))
+            : pos,
+        rate: json['rate'],
+        email: json['email'],
+        fullname: json['fullname'],
+        phone: json['phone'],
+        token: json['token'],
+        fcmToken: json['fcmToken'],
+        role: json['role'] == UserType.seller.toString()
+            ? UserType.seller
+            : UserType.customer);
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -66,6 +74,7 @@ class User {
       'fullname': fullname,
       'email': email,
       'token': token,
+      'fcmToken': fcmToken,
       'role': role.toString(),
       'address': address,
       'image': image,
@@ -86,6 +95,7 @@ class User {
       'fullname': fullname,
       'email': email,
       'token': token,
+      'fcmToken': fcmToken,
       'role': role.toString(),
       'address': address,
       'image': image,

@@ -25,11 +25,21 @@ dependencies:
   firebase_auth: ^3.4.2
   firebase_storage: ^10.3.4
   cloud_firestore: ^3.4.0 # https://github.com/firebase/flutterfire/issues/2751
+  firebase_messaging: ^12.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: ^0.9.3
+
+# In order to regenerate app icon you can use following command in your console.
+# flutter pub run flutter_launcher_icons:main
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/png/app-icon.png"
 
 flutter:
   uses-material-design: true

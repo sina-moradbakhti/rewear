@@ -16,11 +16,11 @@ class Order {
   DateTime? deliveryDate;
   bool? tailorysDone;
 
-  final DateTime createdAt;
+  final DateTime? createdAt;
   DateTime? updatedAt;
 
   Order(
-      {required this.createdAt,
+      {this.createdAt,
       this.updatedAt,
       this.description,
       this.foundTailorId,

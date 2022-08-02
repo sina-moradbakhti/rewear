@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rewear/blocs/nearby.bloc.dart';
 import 'package:rewear/config/app_init.dart';
+import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/views/tailorsNearby/tailorySlideshow.widget.dart';
 
 class TailorsNearby extends StatefulWidget {
@@ -18,16 +19,25 @@ class _TailorsNearbyState extends State<TailorsNearby>
 
   @override
   Widget build(BuildContext context) {
-    bloc.initMArkers();
+    return bloc.appBar
+        ? Scaffold(
+            appBar: const CustomAppbar(
+              title: Text('Choose Tailory'),
+              main: false,
+            ),
+            body: _body,
+          )
+        : Scaffold(
+            body: _body,
+          );
+  }
 
-    return Scaffold(
-      body: Obx(() {
-        print('Hereeee');
+  Widget get _body => Obx(() {
         return Stack(
           children: [
             GoogleMap(
-                initialCameraPosition: const CameraPosition(
-                    target: LatLng(43.846278, -79.415929), zoom: 14),
+                initialCameraPosition:
+                    CameraPosition(target: bloc.myPosition, zoom: 17),
                 onMapCreated: (controller) {
                   controller.setMapStyle(AppInit.googleMapStyle01);
                 },
@@ -45,15 +55,13 @@ class _TailorsNearbyState extends State<TailorsNearby>
                 child: Container(
                   width: double.infinity,
                   height: 200,
-                  child: TailorySlideshowWidget(),
+                  child: const TailorySlideshowWidget(),
                 ),
               ),
             ),
           ],
         );
-      }),
-    );
-  }
+      });
 
   @override
   bool get wantKeepAlive => true;

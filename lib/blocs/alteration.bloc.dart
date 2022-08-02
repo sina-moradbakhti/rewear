@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:record/record.dart';
+import 'package:rewear/config/app_init.dart';
+import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
+import 'package:rewear/models/order.dart';
 
 class AlterationBloc extends GetxController {
   Rx<NeckStyle> selectedNeckStyle = NeckStyle.style0.obs;
@@ -17,7 +21,6 @@ class AlterationBloc extends GetxController {
   }
 
   String currentDateToStr() {
-    print(selectedDate);
     if (selectedDate.value == null) {
       return '';
     } else {
@@ -48,5 +51,18 @@ class AlterationBloc extends GetxController {
 
   void changedColor(Color color) {
     selectedColor = color;
+  }
+
+  void next() async {
+    await AppInit().updateLastLocation(firestoreUpdate: true);
+    if (AppInit().currentPosition != null) {
+      Order order =
+          Order(id: '', userId: AppInit().user.uid!, createdAt: DateTime.now());
+      order.color = selectedColor;
+      order.material = selectedMaterial.value;
+      order.deliveryDate = selectedDate.value;
+      order.neckStyle = selectedNeckStyle.value;
+      Get.toNamed(MyRoutes.tailorsNearby, arguments: order);
+    }
   }
 }

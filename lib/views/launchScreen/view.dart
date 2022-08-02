@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
@@ -10,18 +11,28 @@ import 'package:rewear/services/firestore.services.dart';
 class LaunchScreen extends StatelessWidget {
   const LaunchScreen({Key? key}) : super(key: key);
 
+  void _init() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (AppInit().isUserLoggedIn) {
+      AppInit().updateLastLocation(isBackground: true);
+      final freshData =
+          await FirestoreServices().getUser(AppInit().user.uid ?? '');
+      final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
+      AppInit().user = User.fromJson(freshData.data);
+      AppInit().user.docId = freshData.docId;
+      AppInit().user.fcmToken = fcmToken;
+      await FirestoreServices()
+          .updateUserWithDocId(freshData.docId, {'fcmToken': fcmToken});
+
+      Get.offNamed(MyRoutes.home);
+    } else {
+      Get.offNamed(MyRoutes.welcome);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2)).then((_) {
-      FirestoreServices().getUser(AppInit().user.uid ?? '').then((freshData) {
-        AppInit().user = User.fromJson(freshData.data);
-        AppInit().user.docId = freshData.docId;
-        AppInit().isUserLoggedIn
-            ? Get.offNamed(MyRoutes.home)
-            : Get.offNamed(MyRoutes.welcome);
-      });
-    });
-
+    _init();
     return Scaffold(
       backgroundColor: Get.theme.primaryColor,
       body: SafeArea(

@@ -15,6 +15,7 @@ import 'package:rewear/views/repair/view.dart';
 import 'package:rewear/views/search/view.dart';
 import 'package:rewear/views/settings/view.dart';
 import 'package:rewear/views/signUp/view.dart';
+import 'package:rewear/views/tailorsNearby/view.dart';
 import 'package:rewear/views/welcomeScreen/view.dart';
 
 void main() async {
@@ -46,7 +47,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: MyRoutes.home, page: () => const Home()),
           GetPage(name: MyRoutes.settings, page: () => Settings()),
           GetPage(name: MyRoutes.search, page: () => Search()),
-          GetPage(name: MyRoutes.profile, page: () => Profile())
+          GetPage(name: MyRoutes.profile, page: () => Profile()),
+          GetPage(
+              name: MyRoutes.tailorsNearby, page: () => const TailorsNearby()),
         ],
         initialRoute: MyRoutes.launch, // MyRoutes.launch
       ),

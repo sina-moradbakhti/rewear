@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:firebase_core/firebase_core.dart' as fbCore;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/models/errorException.dart';
@@ -10,6 +13,8 @@ import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
+import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/firestore.services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppInit {
@@ -32,6 +37,7 @@ class AppInit {
   bool isUserLoggedIn = false;
   User user = User();
   Tailor tailor = Tailor();
+  Position? currentPosition;
 
   final List<Color> colors = [
     Colors.green,
@@ -75,6 +81,68 @@ class AppInit {
         image: MyImages.tShirt04Grey,
         style: NeckStyle.style3)
   ];
+
+  Future<void> updateLastLocation(
+      {bool firestoreUpdate = false, bool isBackground = false}) async {
+    final isServiceEnabled =
+        await GeolocatorPlatform.instance.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      if (!isBackground) {
+        // Get.dialog(widget);
+      }
+      return;
+    }
+    final check = await GeolocatorPlatform.instance.checkPermission();
+    if (check == LocationPermission.whileInUse ||
+        check == LocationPermission.always) {
+      currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();
+      user.position =
+          LatLng(currentPosition!.latitude, currentPosition!.longitude);
+      if (firestoreUpdate) {
+        await FirestoreServices().updateUserWithDocId(user.docId!, {
+          'position':
+              '${currentPosition!.latitude}, ${currentPosition!.longitude}',
+          'updatedAt': DateTime.now()
+        });
+      }
+    } else {
+      await GeolocatorPlatform.instance.requestPermission();
+    }
+  }
+
+  Future<void> updateUserData(
+      {bool isLogin = true,
+      UserType? role,
+      String? fullname,
+      User? currentUser,
+      fbAuth.UserCredential? credential}) async {
+    final token = await credential?.user?.getIdToken();
+    final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
+    final user = currentUser ??
+        User(
+            uid: credential?.user?.uid,
+            email: credential?.user?.email,
+            fullname: fullname ?? credential?.user?.displayName,
+            role: role,
+            token: token,
+            fcmToken: fcmToken);
+
+    var dataForUpdate = {'token': token, 'fcmToken': fcmToken};
+
+    if (isLogin) {
+      // Login
+    } else {
+      // Sign up
+      final docId = await FirestoreServices()
+          .addUser(user.toJsonForFirestore(createdAt: true));
+      user.docId = docId;
+      dataForUpdate['docId'] = docId;
+    }
+    AppInit().user = user;
+    await AppInit().user.saveToCacheAndLogin();
+    await FirestoreServices()
+        .updateUserWithDocId(AppInit().user.docId!, dataForUpdate);
+  }
 
   Future<void> preInit() async {
     await GetStorage.init();

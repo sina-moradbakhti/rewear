@@ -43,7 +43,7 @@ class Profile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: ((bloc.app.user.role == UserType.seller)
                           ? sellerFields
-                          : [])
+                          : customerFields)
                         ..add(Padding(
                           padding: MyConstants.topDoublePadding,
                           child: Obx(() => bloc.loading.value

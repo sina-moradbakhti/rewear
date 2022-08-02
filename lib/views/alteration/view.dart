@@ -79,7 +79,7 @@ class Alteration extends StatelessWidget {
                   const BreakWidget(size: 5),
                   UploadBoxWidget(onUpdatedPhotoList: bloc.updatePhotoList),
                   const BreakWidget(size: 30),
-                  MyPrimaryButton(onPressed: () {}, title: 'Choose Tailor'),
+                  MyPrimaryButton(onPressed: bloc.next, title: 'Choose Tailor'),
                   const BreakWidget(size: 100),
                 ],
               ),

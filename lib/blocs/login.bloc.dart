@@ -58,18 +58,14 @@ class LoginBloc extends GetxController {
       loading.value = true; // Start loading ...
       final credential = await fbAuth.FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
-
-      var token = await credential.user?.getIdToken();
-
+      // Refresh Data
       final userJsonData =
           await FirestoreServices().getUser(credential.user?.uid ?? '');
-      final user = User.fromJson(userJsonData.data);
-      user.token = token;
-      AppInit().user = user;
-      AppInit().user.docId = userJsonData.docId;
-      await AppInit().user.saveToCacheAndLogin();
-      await FirestoreServices()
-          .updateUserWithDocId(userJsonData.docId, {'token': token});
+      final User user = User.fromJson(userJsonData.data);
+      user.docId = userJsonData.docId;
+      await AppInit().updateUserData(
+          credential: credential, isLogin: true, currentUser: user);
+      // Refresh Data
       loading.value = false; // Stop loading
       Get.offAllNamed(MyRoutes.home);
     } catch (er) {

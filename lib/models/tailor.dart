@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class Tailor {
   final String? uid;
   final String? fullname;
-  String? token;
+  String? fcmToken;
   final String? email;
   final String? address;
   final String? image;
@@ -19,7 +19,7 @@ class Tailor {
       this.uid,
       this.address,
       this.email,
-      this.token,
+      this.fcmToken,
       this.description,
       this.image,
       this.cover,
@@ -31,7 +31,7 @@ class Tailor {
         uid: json['uid'],
         email: json['email'],
         fullname: json['fullname'],
-        token: json['token'],
+        fcmToken: json['fcmToken'],
         address: json['address'],
         image: json['image'],
         slogan: json['slogan'],
@@ -47,7 +47,7 @@ class Tailor {
       'uid': uid,
       'fullname': fullname,
       'email': email,
-      'token': token,
+      'fcmToken': fcmToken,
       'address': address,
       'image': image,
       'slogan': slogan,
@@ -64,7 +64,7 @@ class Tailor {
       'uid': uid,
       'fullname': fullname,
       'email': email,
-      'token': token,
+      'fcmToken': fcmToken,
       'address': address,
       'image': image,
       'slogan': slogan,

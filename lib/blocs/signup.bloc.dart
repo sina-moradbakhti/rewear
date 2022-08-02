@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
@@ -76,20 +77,14 @@ class SignupBloc extends GetxController {
       loading.value = true; // Start loading ...
       fbAuth.UserCredential credential = await fbAuth.FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-
-      var token = await credential.user?.getIdToken();
-      final user = User(
-          uid: credential.user?.uid,
-          email: email,
+      // Refresh Data
+      await AppInit().updateUserData(
           fullname: fullname,
+          credential: credential,
           role: selectedUserType.value,
-          token: token);
-
-      final docId = await FirestoreServices()
-          .addUser(user.toJsonForFirestore(createdAt: true));
-      AppInit().user = user;
-      AppInit().user.docId = docId;
-      await AppInit().user.saveToCacheAndLogin();
+          isLogin: false,
+          currentUser: null);
+      // Refresh Data
       loading.value = false; // Stop loading
       Get.offAllNamed(MyRoutes.home);
     } catch (error) {
