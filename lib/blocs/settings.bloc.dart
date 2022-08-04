@@ -6,7 +6,8 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
 
 class SettingsBloc extends GetxController {
-  void profile() => Get.toNamed(MyRoutes.profile);
+  void profile() =>
+      Get.toNamed(MyRoutes.profile, arguments: {'withoutAppbar': false});
   void terms() => AppInit().openLink(AppInit.TERMS_CONDITION_URL);
   void privacy() => AppInit().openLink(AppInit.PRIVACY_POLICY_URL);
   void exit() async {

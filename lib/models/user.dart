@@ -44,7 +44,17 @@ class User {
     return User.fromJson(box.read(MyConstants.USER_DATA_ID));
   }
   factory User.fromJson(Map<String, dynamic> json) {
-    final pos = (json['position'] != null) ? json['position'].split(',') : null;
+
+    LatLng? pos;
+    if (json['position'].runtimeType == List<dynamic>) {
+      pos = LatLng(double.parse(json['position'][0].toString()),
+          double.parse(json['position'][1].toString()));
+    } else {
+      final posSplited = json['position'].toString().split(',');
+      pos = LatLng(double.parse(posSplited[0].toString()),
+          double.parse(posSplited[1].toString()));
+    }
+
     return User(
         docId: json['docId'],
         uid: json['uid'],
@@ -53,9 +63,7 @@ class User {
         cover: json['cover'],
         slogan: json['slogan'],
         description: json['description'],
-        position: pos != null
-            ? LatLng(double.parse(pos[0]), double.parse(pos[1]))
-            : pos,
+        position: pos,
         rate: json['rate'],
         email: json['email'],
         fullname: json['fullname'],

@@ -9,6 +9,7 @@ class HomeBloc extends GetxController {
   TabController? controller;
   var currentTab = MainNavItem.home.obs;
   AppInit app = AppInit();
+  RxString currentCity = 'Toronto'.obs;
 
   @override
   void onInit() {

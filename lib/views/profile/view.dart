@@ -18,48 +18,56 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: CustomAppbar(
-          centerTitle: true,
-          title: Text(
-            MyStrings.profile,
-            style: Get.theme.textTheme.headline5,
+    bool withoutAppbar = true;
+    if (Get.arguments != null) {
+      withoutAppbar = Get.arguments['withoutAppbar'];
+    }
+
+    return withoutAppbar
+        ? Scaffold(body: _getContent)
+        : Scaffold(
+            appBar: CustomAppbar(
+              centerTitle: true,
+              title: Text(
+                MyStrings.profile,
+                style: Get.theme.textTheme.headline5,
+              ),
+            ),
+            body: _getContent);
+  } // build
+
+  Widget get _getContent => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              coverAndProfile,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: MyConstants.primaryPadding.left, vertical: 20),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: ((bloc.app.user.role == UserType.seller)
+                        ? sellerFields
+                        : customerFields)
+                      ..add(Padding(
+                        padding: MyConstants.topDoublePadding,
+                        child: Obx(() => bloc.loading.value
+                            ? const Center(
+                                child: MyLoading(),
+                              )
+                            : MyPrimaryButton(
+                                onPressed: bloc.updateInfo,
+                                title: 'Update info')),
+                      ))),
+              )
+            ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                coverAndProfile,
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MyConstants.primaryPadding.left,
-                      vertical: 20),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: ((bloc.app.user.role == UserType.seller)
-                          ? sellerFields
-                          : customerFields)
-                        ..add(Padding(
-                          padding: MyConstants.topDoublePadding,
-                          child: Obx(() => bloc.loading.value
-                              ? const Center(
-                                  child: MyLoading(),
-                                )
-                              : MyPrimaryButton(
-                                  onPressed: bloc.updateInfo,
-                                  title: 'Update info')),
-                        ))),
-                )
-              ],
-            ),
-          ),
-        ));
-  } // build
+      );
 
   List<Widget> get sellerFields => [
         MyTextfield(

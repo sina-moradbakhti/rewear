@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rewear/generals/widgets/tailoryMapItem.widget.dart';
 
 class TailorySlideshowWidget extends StatefulWidget {
-  const TailorySlideshowWidget({Key? key}) : super(key: key);
+  Function(LatLng)? onTappedItem;
+  TailorySlideshowWidget({Key? key, this.onTappedItem})
+      : super(key: key);
 
   @override
   State<TailorySlideshowWidget> createState() => _TailorySlideshowWidgetState();
@@ -12,21 +16,18 @@ class _TailorySlideshowWidgetState extends State<TailorySlideshowWidget>
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      viewportFraction: 0.9,
-      controller: TabController(length: 3, vsync: this),
-      children: [
-      Container(
-        margin: const EdgeInsets.all(5),
-        color: Colors.yellow,
-      ),
-      Container(
-        margin: const EdgeInsets.all(5),
-        color: Colors.green,
-      ),
-      Container(
-        margin: const EdgeInsets.all(5),
-        color: Colors.blue,
-      ),
-    ]);
+        viewportFraction: 0.9,
+        controller: TabController(length: 5, vsync: this),
+        children: [
+          TailoryMapItem(
+              onTapped: widget.onTappedItem != null
+                  ? () => widget
+                      .onTappedItem!(const LatLng(45.5616284, -73.6056387))
+                  : null),
+          TailoryMapItem(),
+          TailoryMapItem(),
+          TailoryMapItem(),
+          TailoryMapItem()
+        ]);
   }
 }

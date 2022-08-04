@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:firebase_core/firebase_core.dart' as fbCore;
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -8,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
+import 'package:rewear/generals/modals/location.modal.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
@@ -88,7 +88,10 @@ class AppInit {
         await GeolocatorPlatform.instance.isLocationServiceEnabled();
     if (!isServiceEnabled) {
       if (!isBackground) {
-        // Get.dialog(widget);
+        Get.dialog(const TurnOffLocationDialog(),
+            useSafeArea: true,
+            barrierColor: Colors.black87,
+            transitionCurve: Curves.easeInOut);
       }
       return;
     }

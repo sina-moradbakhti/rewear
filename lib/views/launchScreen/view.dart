@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
@@ -14,13 +13,13 @@ class LaunchScreen extends StatelessWidget {
   void _init() async {
     await Future.delayed(const Duration(seconds: 2));
     if (AppInit().isUserLoggedIn) {
-      AppInit().updateLastLocation(isBackground: true);
       final freshData =
           await FirestoreServices().getUser(AppInit().user.uid ?? '');
       final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
       AppInit().user = User.fromJson(freshData.data);
       AppInit().user.docId = freshData.docId;
       AppInit().user.fcmToken = fcmToken;
+      await AppInit().updateLastLocation(isBackground: true);
       await FirestoreServices()
           .updateUserWithDocId(freshData.docId, {'fcmToken': fcmToken});
 

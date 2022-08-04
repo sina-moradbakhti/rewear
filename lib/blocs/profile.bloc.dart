@@ -20,7 +20,7 @@ class ProfileBloc extends GetxController {
 
   void coordinateLocation() async {
     final reqRes = await GeolocatorPlatform.instance.requestPermission();
-    
+
     // coordinatingLocation.value = true;
     print('xxx: $reqRes');
   }
