@@ -12,6 +12,8 @@ class User {
   final String? email;
   final UserType? role;
   String? address;
+  String? city;
+  String? country;
   String? image;
   String? cover;
   String? slogan;
@@ -30,6 +32,8 @@ class User {
       this.token,
       this.fcmToken,
       this.address,
+      this.city,
+      this.country,
       this.description,
       this.image,
       this.phone,
@@ -44,7 +48,6 @@ class User {
     return User.fromJson(box.read(MyConstants.USER_DATA_ID));
   }
   factory User.fromJson(Map<String, dynamic> json) {
-
     LatLng? pos;
     if (json['position'].runtimeType == List<dynamic>) {
       pos = LatLng(double.parse(json['position'][0].toString()),
@@ -59,6 +62,8 @@ class User {
         docId: json['docId'],
         uid: json['uid'],
         address: json['address'],
+        country: json['country'],
+        city: json['city'],
         image: json['image'],
         cover: json['cover'],
         slogan: json['slogan'],
@@ -85,6 +90,8 @@ class User {
       'fcmToken': fcmToken,
       'role': role.toString(),
       'address': address,
+      'country': country,
+      'city': city,
       'image': image,
       'cover': cover,
       'slogan': slogan,
@@ -106,6 +113,8 @@ class User {
       'fcmToken': fcmToken,
       'role': role.toString(),
       'address': address,
+      'country': country,
+      'city': city,
       'image': image,
       'cover': cover,
       'slogan': slogan,

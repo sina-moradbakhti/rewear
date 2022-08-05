@@ -15,6 +15,7 @@ import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/general.services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppInit {
@@ -101,6 +102,14 @@ class AppInit {
       currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();
       user.position =
           LatLng(currentPosition!.latitude, currentPosition!.longitude);
+
+      // Geolocating
+      final geolocatedModel =
+          await GeneralServices().geoCoding(AppInit().user.position!);
+      user.address = geolocatedModel?.addr;
+      user.city = geolocatedModel?.city;
+      user.country = geolocatedModel?.country;
+
       if (firestoreUpdate) {
         await FirestoreServices().updateUserWithDocId(user.docId!, {
           'position':

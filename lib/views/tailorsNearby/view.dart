@@ -57,9 +57,9 @@ class _TailorsNearbyState extends State<TailorsNearby>
                 compassEnabled: false,
                 myLocationButtonEnabled: false,
                 trafficEnabled: false,
-                buildingsEnabled: false,
+                buildingsEnabled: true,
                 indoorViewEnabled: false,
-                markers: {for (var item in bloc.markers.value) item},
+                markers: {for (final item in bloc.markers.value) item},
                 mapType: MapType.normal),
             Align(
               alignment: Alignment.bottomCenter,
@@ -73,9 +73,10 @@ class _TailorsNearbyState extends State<TailorsNearby>
                       child: SizedBox(
                           height: 155,
                           child: TailorySlideshowWidget(
-                            onTappedItem: (location) => bloc.moveTo(
-                                location.latitude, location.longitude,
-                                makeOrder: !_showAppbar),
+                            onChangedItem: (tailory) => bloc.moveTo(tailory,
+                                makeOrder: !_showAppbar, scrolled: true),
+                            onTappedItem: (tailory) =>
+                                bloc.moveTo(tailory, makeOrder: !_showAppbar),
                           ))),
                 ),
               ),

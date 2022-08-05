@@ -6,6 +6,8 @@ class Tailor {
   String? fcmToken;
   final String? email;
   final String? address;
+  final String? city;
+  final String? country;
   final String? image;
   final String? slogan;
   final String? description;
@@ -18,6 +20,8 @@ class Tailor {
       {this.fullname,
       this.uid,
       this.address,
+      this.city,
+      this.country,
       this.email,
       this.fcmToken,
       this.description,
@@ -33,6 +37,8 @@ class Tailor {
         fullname: json['fullname'],
         fcmToken: json['fcmToken'],
         address: json['address'],
+        city: json['city'],
+        country: json['country'],
         image: json['image'],
         slogan: json['slogan'],
         description: json['description'],
@@ -49,6 +55,8 @@ class Tailor {
       'email': email,
       'fcmToken': fcmToken,
       'address': address,
+      'city': city,
+      'country': country,
       'image': image,
       'slogan': slogan,
       'description': description,
@@ -66,6 +74,8 @@ class Tailor {
       'email': email,
       'fcmToken': fcmToken,
       'address': address,
+      'city': city,
+      'country': country,
       'image': image,
       'slogan': slogan,
       'description': description,

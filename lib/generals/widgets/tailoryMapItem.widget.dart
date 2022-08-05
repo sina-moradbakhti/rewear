@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
+import 'package:rewear/generals/widgets/star.widget.dart';
+import 'package:rewear/models/tailor.dart';
 
 class TailoryMapItem extends StatelessWidget {
   VoidCallback? onTapped;
-  TailoryMapItem({Key? key, this.onTapped}) : super(key: key);
+  final Tailor tailory;
+  TailoryMapItem({Key? key, this.onTapped, required this.tailory})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +36,12 @@ class TailoryMapItem extends StatelessWidget {
                     child: SizedBox(
                         width: 100,
                         height: 100,
-                        child: Image.network(
-                          'https://pr1.nicelocal.ca/qpMl5En9i9Z8BBUeOIpcjw/587x440,q85/4px-BW84_n0QJGVPszge3NRBsKw-2VcOifrJIjPYFYkOtaCZxxXQ2QYGKPyr9phEd2hf2KdrWWhmco4x-UwPq9Z05LRz1uf85kBf0Qhk-gVUWUuWK--t5Q',
-                          fit: BoxFit.cover,
-                        ))),
+                        child: (tailory.image != null)
+                            ? Image.network(
+                                tailory.image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Container())),
               ),
               Expanded(
                   child: Column(
@@ -44,7 +50,7 @@ class TailoryMapItem extends StatelessWidget {
                 children: [
                   SizedBox(
                       child: Text(
-                        'Lynn — Tailor',
+                        tailory.fullname ?? '',
                         style: Get.theme.textTheme.headline6!.copyWith(
                             fontWeight: FontWeight.w500,
                             overflow: TextOverflow.fade),
@@ -52,7 +58,7 @@ class TailoryMapItem extends StatelessWidget {
                       height: 35),
                   SizedBox(
                     child: Text(
-                      'Montreal, Quebec H2A 1H6, 3257 Rue Michel-Ange',
+                      tailory.address ?? '',
                       style: Get.theme.textTheme.bodyText2!.copyWith(
                         overflow: TextOverflow.fade,
                       ),
@@ -63,15 +69,7 @@ class TailoryMapItem extends StatelessWidget {
                     padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Hr(),
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.star, size: 16, color: Colors.yellow.shade700),
-                      Icon(Icons.star, size: 16, color: Colors.yellow.shade700),
-                      Icon(Icons.star, size: 16, color: Colors.yellow.shade700),
-                      Icon(Icons.star, size: 16, color: Colors.yellow.shade700),
-                      Icon(Icons.star, size: 16, color: Colors.grey.shade400),
-                    ],
-                  )
+                  StarWidget(rate: tailory.rate ?? 0)
                 ],
               ))
             ],
