@@ -5,23 +5,28 @@ import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/user.dart';
+import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/services/firestore.services.dart';
 
 class LaunchScreen extends StatelessWidget {
-  const LaunchScreen({Key? key}) : super(key: key);
+  LaunchScreen({Key? key}) : super(key: key);
+
+  final app = AppInit();
 
   void _init() async {
     await Future.delayed(const Duration(seconds: 2));
-    if (AppInit().isUserLoggedIn) {
-      final freshData =
-          await FirestoreServices().getUser(AppInit().user.uid ?? '');
+    if (app.isUserLoggedIn) {
+      final freshData = await FirestoreServices().getUser(app.user.uid ?? '');
       final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
-      AppInit().user = User.fromJson(freshData.data);
-      AppInit().user.docId = freshData.docId;
-      AppInit().user.fcmToken = fcmToken;
-      await AppInit().updateLastLocation(isBackground: true);
+      app.user = User.fromJson(freshData.data);
+      app.user.docId = freshData.docId;
+      app.user.fcmToken = fcmToken;
+      await app.updateLastLocation(isBackground: true);
       await FirestoreServices()
           .updateUserWithDocId(freshData.docId, {'fcmToken': fcmToken});
+      if (app.user.role == UserType.seller) {
+        FirestoreServices().getRequests();
+      }
 
       Get.offNamed(MyRoutes.home);
     } else {

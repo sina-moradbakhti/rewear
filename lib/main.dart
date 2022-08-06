@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         title: 'Rewear App',
         theme: MyThemes.primary,
         getPages: [
-          GetPage(name: MyRoutes.launch, page: () => const LaunchScreen()),
+          GetPage(name: MyRoutes.launch, page: () => LaunchScreen()),
           GetPage(name: MyRoutes.welcome, page: () => WelcomeScreen()),
           GetPage(name: MyRoutes.signup, page: () => SignUp()),
           GetPage(name: MyRoutes.login, page: () => Login()),

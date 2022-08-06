@@ -30,6 +30,7 @@ class ServiceItemWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Stack(
+              alignment: Alignment.center,
               children: [
                 badge > 0
                     ? Align(

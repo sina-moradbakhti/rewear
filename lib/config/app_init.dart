@@ -18,6 +18,8 @@ import 'package:rewear/services/firestore.services.dart';
 import 'package:rewear/services/general.services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/request.model.dart';
+
 class AppInit {
   static final AppInit _singleton = AppInit._internal();
   factory AppInit() {
@@ -39,6 +41,7 @@ class AppInit {
   User user = User();
   Tailor tailor = Tailor();
   Position? currentPosition;
+  List<Request> requests = [];
 
   final List<Color> colors = [
     Colors.green,
