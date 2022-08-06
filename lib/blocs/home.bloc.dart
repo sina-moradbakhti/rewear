@@ -9,11 +9,12 @@ class HomeBloc extends GetxController {
   TabController? controller;
   var currentTab = MainNavItem.home.obs;
   AppInit app = AppInit();
-  RxString currentCity = 'Toronto'.obs;
+  RxString currentCity = ''.obs;
 
   @override
   void onInit() {
     _checkIsUpdatedProfile();
+    currentCity.value = '${app.user.city}, ${app.user.country}';
     super.onInit();
   }
 
@@ -37,11 +38,18 @@ class HomeBloc extends GetxController {
         (app.user.phone == null ||
             app.user.address == null ||
             app.user.position == null)) {
+      List<String> emptyList = [];
+      if (app.user.phone == null) emptyList.add('Phone number');
+      if (app.user.address == null) emptyList.add('Address');
+      if (app.user.position == null) emptyList.add('Location');
+
       Future.delayed(const Duration(seconds: 2)).then((_) {
-        Get.dialog(const ShouldUpdateProfileDialog(),
-            useSafeArea: true,
-            barrierColor: Colors.black87,
-            transitionCurve: Curves.easeInOut);
+        Get.dialog(
+          ShouldUpdateProfileDialog(emptyList: emptyList),
+          useSafeArea: true,
+          barrierColor: Colors.black87,
+          transitionCurve: Curves.easeInOut,
+        );
       });
     }
   }

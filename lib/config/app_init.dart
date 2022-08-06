@@ -106,7 +106,7 @@ class AppInit {
       // Geolocating
       final geolocatedModel =
           await GeneralServices().geoCoding(AppInit().user.position!);
-      user.address = geolocatedModel?.addr;
+      if (user.role == UserType.customer) user.address = geolocatedModel?.addr;
       user.city = geolocatedModel?.city;
       user.country = geolocatedModel?.country;
 

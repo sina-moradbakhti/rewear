@@ -56,10 +56,15 @@ class MyStrings {
   // Settings
   static const String search_title = 'Search';
 
+  // Requests
+  static const String requests_title = 'Requests';
+
+  // Catalogues
+  static const String catalogues_title = 'Catalogues';
+
   // Profile
 
   // Tailory Profile
-  
 
   // Generals
   static const String termsCondition = 'Terms and condition';

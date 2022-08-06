@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/images.dart';
+import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/views/findServices/serviceItem.widget.dart';
@@ -13,7 +14,8 @@ class SellerServiceWidget extends StatelessWidget {
     ServiceItemWidget(
         image: MyImages.requests,
         title: MyStrings.tlrs_requests,
-        type: UserType.seller),
+        type: UserType.seller,
+        badge: 1),
     ServiceItemWidget(
         image: MyImages.catalogs,
         title: MyStrings.tlrs_catalog,
@@ -40,12 +42,12 @@ class SellerServiceWidget extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => Get.toNamed(MyRoutes.requests),
             child: _list[0],
           ),
           const SizedBox(height: 16),
           InkWell(
-            onTap: () {},
+            onTap: () => Get.toNamed(MyRoutes.catalogues),
             child: _list[1],
           ),
         ],

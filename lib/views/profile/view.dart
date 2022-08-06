@@ -99,6 +99,8 @@ class Profile extends StatelessWidget {
         Obx(() => LocationCoordinatorWidget(
               onTapped: bloc.coordinateLocation,
               loading: bloc.coordinatingLocation.value,
+              active:
+                  (bloc.locationIsSet.value || bloc.app.user.position != null),
             )),
       ];
 

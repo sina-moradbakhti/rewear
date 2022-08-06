@@ -49,13 +49,15 @@ class User {
   }
   factory User.fromJson(Map<String, dynamic> json) {
     LatLng? pos;
-    if (json['position'].runtimeType == List<dynamic>) {
-      pos = LatLng(double.parse(json['position'][0].toString()),
-          double.parse(json['position'][1].toString()));
-    } else {
-      final posSplited = json['position'].toString().split(',');
-      pos = LatLng(double.parse(posSplited[0].toString()),
-          double.parse(posSplited[1].toString()));
+    if (json['position'] != null) {
+      if (json['position'].runtimeType == List<dynamic>) {
+        pos = LatLng(double.parse(json['position'][0].toString()),
+            double.parse(json['position'][1].toString()));
+      } else {
+        final posSplited = json['position'].toString().split(',');
+        pos = LatLng(double.parse(posSplited[0].toString()),
+            double.parse(posSplited[1].toString()));
+      }
     }
 
     return User(
@@ -97,7 +99,9 @@ class User {
       'slogan': slogan,
       'phone': phone,
       'description': description,
-      'position': position,
+      'position': position != null
+          ? '${position!.latitude},${position!.longitude}'
+          : null,
       'rate': rate
     };
   }
@@ -120,7 +124,9 @@ class User {
       'slogan': slogan,
       'phone': phone,
       'description': description,
-      'position': position,
+      'position': position != null
+          ? '${position!.latitude},${position!.longitude}'
+          : null,
       'rate': rate,
       'updatedAt': updatedAt ?? DateTime.now()
     };

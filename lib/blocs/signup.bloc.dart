@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
-import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/firestore.services.dart';
 
 class SignupBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;

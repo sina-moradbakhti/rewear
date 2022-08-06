@@ -13,16 +13,19 @@ import 'package:rewear/services/firestore.services.dart';
 class ProfileBloc extends GetxController {
   RxBool loading = false.obs;
   RxBool coordinatingLocation = false.obs;
+  RxBool locationIsSet = false.obs;
   Rx<XFile?> selectedFile = Rx<XFile?>(null);
   Rx<XFile?> selectedCoverFile = Rx<XFile?>(null);
   final ImagePicker _picker = ImagePicker();
   AppInit app = AppInit();
 
   void coordinateLocation() async {
-    final reqRes = await GeolocatorPlatform.instance.requestPermission();
-
-    // coordinatingLocation.value = true;
-    print('xxx: $reqRes');
+    coordinatingLocation.value = true;
+    await AppInit().updateLastLocation(isBackground: false);
+    if (AppInit().user.position != null) {
+      locationIsSet.value = true;
+    }
+    coordinatingLocation.value = false;
   }
 
   ImageProvider getProfileAvatar() {
@@ -74,6 +77,7 @@ class ProfileBloc extends GetxController {
           title: 'Updated Successfully',
           message: 'your profile information updated.'));
     } catch (er) {
+      debugPrint('$er');
       loading.value = false;
       app.handleError(er);
     }

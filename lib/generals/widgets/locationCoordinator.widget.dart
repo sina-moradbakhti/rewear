@@ -21,7 +21,8 @@ class LocationCoordinatorWidget extends StatelessWidget {
         padding: const EdgeInsets.all(12.5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(width: 1, color: MyColors.mediumGrey),
+          border: Border.all(
+              width: 1, color: active ? MyColors.orange : MyColors.mediumGrey),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,16 +30,20 @@ class LocationCoordinatorWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  IconlyFont.location,
-                  size: 19,
-                  color: active ? MyColors.orange : MyColors.mediumGrey,
-                ),
+                if (!active)
+                  Icon(
+                    IconlyFont.location,
+                    size: 19,
+                    color: active ? MyColors.orange : MyColors.mediumGrey,
+                  ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
                     'Coordinate your location',
-                    style: Get.theme.textTheme.bodyText2,
+                    style: active
+                        ? Get.theme.textTheme.bodyText2!
+                            .copyWith(color: MyColors.orange)
+                        : Get.theme.textTheme.bodyText2,
                   ),
                 )
               ],
