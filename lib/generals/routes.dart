@@ -16,4 +16,5 @@ class MyRoutes {
   static const String tailorsNearby = '/tailors-nearby';
   static const String requests = '/requests';
   static const String catalogues = '/catalogues';
+  static const String requestDetails = '/request-details';
 }

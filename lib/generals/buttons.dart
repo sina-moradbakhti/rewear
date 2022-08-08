@@ -7,8 +7,16 @@ import 'package:rewear/generals/images.dart';
 class MyPrimaryButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
-  const MyPrimaryButton(
-      {Key? key, required this.onPressed, required this.title})
+  bool designViceVersa = false;
+  Color? color;
+  Color? textColor;
+  MyPrimaryButton(
+      {Key? key,
+      required this.onPressed,
+      required this.title,
+      this.color,
+      this.textColor,
+      this.designViceVersa = false})
       : super(key: key);
 
   @override
@@ -18,14 +26,15 @@ class MyPrimaryButton extends StatelessWidget {
       child: MaterialButton(
         height: 50,
         minWidth: double.infinity,
-        color: MyColors.orange,
+        color: color ?? (designViceVersa ? MyColors.white : MyColors.orange),
         onPressed: onPressed,
         child: Text(
           title,
           style: TextStyle(
               height: 1.4,
               fontSize: 14,
-              color: MyColors.white,
+              color: textColor ??
+                  (designViceVersa ? MyColors.orange : MyColors.white),
               fontWeight: FontWeight.w500),
         ),
       ),

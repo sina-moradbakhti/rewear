@@ -12,6 +12,7 @@ import 'package:rewear/generals/widgets/break.widget.dart';
 import 'package:rewear/generals/widgets/colorSelector.widget.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:get/get.dart';
+import 'package:rewear/generals/widgets/loading.widget.dart';
 import 'package:rewear/generals/widgets/neckStyleSelector.widget.dart';
 import 'package:rewear/generals/widgets/uploadBox.widget.dart';
 
@@ -35,7 +36,7 @@ class Alteration extends StatelessWidget {
             EdgeInsets.symmetric(vertical: MyConstants.primaryPadding.top / 2),
         children: [
           NeckStyleSelector(onSelected: bloc.updateNeckStyle),
-          const BreakWidget(),
+          BreakWidget(),
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: MyConstants.primaryPadding.left),
@@ -50,37 +51,41 @@ class Alteration extends StatelessWidget {
                       onSelected: (material) {
                         bloc.selectedMaterial.value = material;
                       }),
-                  const BreakWidget(size: 5),
+                  BreakWidget(size: 5),
                   MyCustomfield(
                       icon: IconlyFont.calendar,
                       title: 'Date',
                       hint: 'Choose date',
                       current: bloc.currentDateToStr(),
                       onTapped: bloc.chooseDate),
-                  const BreakWidget(size: 5),
+                  BreakWidget(size: 5),
                   MyCustomfield(
                     icon: IconlyFont.voice,
                     title: 'Voice writing (Optional)',
                     hint: 'Long tap here to record voice',
                     onLongTapped: bloc.recordVoice,
                   ),
-                  const BreakWidget(size: 5),
+                  BreakWidget(size: 5),
                   ColorSelectorWidget(
                       selectedColor: Colors.green,
                       onChanged: bloc.changedColor),
-                  const BreakWidget(size: 5),
-                  const MyTextfield(
+                  BreakWidget(size: 5),
+                  MyTextfield(
+                    onChanges: (newVal) => bloc.description.value = newVal,
                     title: 'Details',
                     hint: 'Details',
                     isMultiline: true,
                     minLines: 4,
                     maxLines: 8,
                   ),
-                  const BreakWidget(size: 5),
+                  BreakWidget(size: 5),
                   UploadBoxWidget(onUpdatedPhotoList: bloc.updatePhotoList),
-                  const BreakWidget(size: 30),
-                  MyPrimaryButton(onPressed: bloc.next, title: 'Choose Tailor'),
-                  const BreakWidget(size: 100),
+                  BreakWidget(size: 30),
+                  Obx(() => bloc.creatingAnOrderLoading.value
+                      ? const Center(child: MyLoading())
+                      : MyPrimaryButton(
+                          onPressed: bloc.next, title: 'Choose Tailor')),
+                  BreakWidget(size: 100),
                 ],
               ),
             ),

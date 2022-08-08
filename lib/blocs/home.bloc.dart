@@ -24,7 +24,7 @@ class HomeBloc extends GetxController {
       case MainNavItem.home:
         controller?.animateTo(0);
         break;
-      case MainNavItem.tailorsNearby:
+      case MainNavItem.orders:
         controller?.animateTo(1);
         break;
       case MainNavItem.profile:

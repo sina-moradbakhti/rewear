@@ -11,6 +11,8 @@ class MyImages {
   static const String defaultProfile =
       MyImages.rootPath + '/' + 'sbcf-default-avatar.png';
   static const String tailory = MyImages.rootPath + '/' + 'tailory.png';
+  static const String tailoryCongrats =
+      MyImages.rootPath + '/' + 'congrats.png';
   static const String circularRewearLogo =
       MyImages.rootPath + '/' + 'img.rewear-circular-logo.png';
   static const String googleLogo = MyImages.rootPath + '/' + 'icon.google.png';

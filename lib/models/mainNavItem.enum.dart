@@ -1,1 +1,1 @@
-enum MainNavItem { home, tailorsNearby, profile }
+enum MainNavItem { home, orders, profile }

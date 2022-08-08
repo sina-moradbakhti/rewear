@@ -39,7 +39,7 @@ class _UploadBoxWidgetState extends State<UploadBoxWidget> {
                         _photos.removeWhere((element) => element == photo);
                       });
                     }),
-              const BreakWidget(size: 10)
+              BreakWidget(size: 10)
             ],
           ),
         MaterialButton(
@@ -63,13 +63,13 @@ class _UploadBoxWidgetState extends State<UploadBoxWidget> {
                   width: 35,
                   height: 35,
                 ),
-                const BreakWidget(size: 10),
+                BreakWidget(size: 10),
                 Text(
-                  'Upload your files here',
+                  'Upload your photos here',
                   style: Get.theme.textTheme.bodyText2!.copyWith(
                       fontWeight: FontWeight.w400, color: MyColors.black),
                 ),
-                const BreakWidget(size: 10),
+                BreakWidget(size: 10),
                 Text(
                   'Browse',
                   style: Get.theme.textTheme.bodyText1!.copyWith(

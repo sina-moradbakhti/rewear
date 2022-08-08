@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as fbStore;
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/models/firestore.model.dart';
 import 'package:rewear/models/request.model.dart';
+import 'package:rewear/models/userType.enum.dart';
 
 class FirestoreServices {
   static final FirestoreServices _singleton = FirestoreServices._internal();
@@ -48,10 +49,19 @@ class FirestoreServices {
     return res.id;
   }
 
+  Future<void> updateRequests(Map<String, dynamic> data, String docId) async {
+    await fbStore.FirebaseFirestore.instance
+        .collection(FirestoreServices.REQUESTS_COLLECTION)
+        .doc(docId)
+        .update(data);
+  }
+
   void getRequests() async {
     fbStore.FirebaseFirestore.instance
         .collection(REQUESTS_COLLECTION)
-        .where('sellerId', isEqualTo: AppInit().user.uid)
+        .where(
+            AppInit().user.role == UserType.seller ? 'sellerId' : 'customerId',
+            isEqualTo: AppInit().user.uid)
         .snapshots()
         .listen((snapshot) {
       AppInit().requests.clear();
@@ -60,6 +70,7 @@ class FirestoreServices {
           ..addAll(doc.data());
         AppInit().requests.add(Request.fromJson(updatedData));
       }
+      AppInit().requestsStreamController.sink.add(true);
     });
   }
 }

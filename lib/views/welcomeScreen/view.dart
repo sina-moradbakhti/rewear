@@ -35,11 +35,11 @@ class WelcomeScreen extends StatelessWidget {
                     child: Image.asset(MyImages.tailorySlide01),
                   ),
                 ),
-                const BreakWidget(size: 20),
+                BreakWidget(size: 20),
                 Text(MyStrings.welcome_screen_slogan_title,
                     style: Get.theme.textTheme.headline5,
                     textAlign: TextAlign.center),
-                const BreakWidget(size: 20),
+                BreakWidget(size: 20),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                const BreakWidget(size: 20),
+                BreakWidget(size: 20),
                 MyTextButton(
                     onPressed: () => Get.toNamed(MyRoutes.login),
                     button: MyStrings.welcome_screen_login_btn,

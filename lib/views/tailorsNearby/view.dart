@@ -24,6 +24,7 @@ class _TailorsNearbyState extends State<TailorsNearby>
   @override
   void initState() {
     if (Get.arguments != null) {
+      bloc.request = Get.arguments;
       _showAppbar = false;
     }
     super.initState();

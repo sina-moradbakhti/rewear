@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class BreakWidget extends StatelessWidget {
   final double size;
-  const BreakWidget({Key? key, this.size = 15}) : super(key: key);
+  bool vertical = true;
+  BreakWidget({Key? key, this.size = 15, this.vertical = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: size);
+    return vertical ? SizedBox(height: size) : SizedBox(width: size);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:firebase_core/firebase_core.dart' as fbCore;
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/services/firestore.services.dart';
 import 'package:rewear/services/general.services.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/request.model.dart';
@@ -42,6 +45,8 @@ class AppInit {
   Tailor tailor = Tailor();
   Position? currentPosition;
   List<Request> requests = [];
+  final requestsStreamController = PublishSubject<bool>();
+  Stream<bool> get requestsStream => requestsStreamController.stream;
 
   final List<Color> colors = [
     Colors.green,

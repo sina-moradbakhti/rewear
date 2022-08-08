@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 
@@ -39,7 +40,7 @@ class Order {
         id: json['id'],
         userId: json['userId'],
         foundTailorId: json['foundTailorId'],
-        images: json['images'],
+        images: [for (final image in json['images']) image],
         description: json['description'],
         color: (json['color'] != null)
             ? (json['color'] ?? '').toString().toColor()
@@ -48,10 +49,10 @@ class Order {
         serviceType: json['serviceType'],
         material: json['material'],
         price: json['price'],
-        deliveryDate: json['deliveryDate'],
+        deliveryDate: (json['deliveryDate'] as Timestamp).toDate(),
         tailorysDone: json['tailorysDone'],
-        createdAt: json['createdAt'],
-        updatedAt: json['updatedAt'],
+        createdAt: (json['createdAt'] as Timestamp).toDate(),
+        updatedAt: (json['updatedAt'] as Timestamp).toDate(),
       );
 
   Map<String, dynamic> toJson() {
@@ -62,7 +63,7 @@ class Order {
       'images': images,
       'description': description,
       'color': color?.asString(),
-      'neckStyle': neckStyle,
+      'neckStyle': neckStyle != null ? neckStyleToString(neckStyle!) : null,
       'serviceType': serviceType,
       'material': material,
       'price': price,
@@ -81,7 +82,7 @@ class Order {
       'images': images,
       'description': description,
       'color': color?.asString(),
-      'neckStyle': neckStyle,
+      'neckStyle': neckStyle != null ? neckStyleToString(neckStyle!) : null,
       'serviceType': serviceType,
       'material': material,
       'price': price,

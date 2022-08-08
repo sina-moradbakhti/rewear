@@ -5,6 +5,7 @@ import 'package:rewear/generals/widgets/homeAppbar.widget.dart';
 import 'package:rewear/generals/widgets/homeNavbar.widget.dart';
 import 'package:rewear/views/findServices/view.dart';
 import 'package:rewear/views/profile/view.dart';
+import 'package:rewear/views/requests/view.dart';
 import 'package:rewear/views/tailorsNearby/view.dart';
 
 class Home extends StatefulWidget {
@@ -16,7 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final _bloc = Get.put(HomeBloc());
-  final _pages = [const FindServices(), const TailorsNearby(), Profile()];
+  final _pages = [const FindServices(), Requests(showAppBar: false), Profile()];
 
   @override
   void initState() {

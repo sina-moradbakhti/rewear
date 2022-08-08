@@ -108,7 +108,7 @@ class SignUp extends StatelessWidget {
                           onPressed: bloc.signUp,
                           title: MyStrings.signup_title)),
                 ),
-                const BreakWidget(size: 30),
+                BreakWidget(size: 30),
                 Center(
                   child: Text.rich(
                       TextSpan(

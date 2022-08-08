@@ -33,20 +33,27 @@ class HomeNavbar extends StatelessWidget {
                       icon: IconlyFont.home,
                       onTapped: () => _bloc.changeTab(MainNavItem.home)),
                   AppInit().user.role! == UserType.customer
-                      ? HomeNavbarItem(
-                          isSelected: _bloc.currentTab.value ==
-                              MainNavItem.tailorsNearby,
-                          title: 'Tailors Nearby',
-                          icon: IconlyFont.discovery,
-                          onTapped: () =>
-                              _bloc.changeTab(MainNavItem.tailorsNearby))
+                      ? StreamBuilder(
+                          stream: AppInit().requestsStream,
+                          builder: ((context, snapshot) => HomeNavbarItem(
+                              badge: AppInit()
+                                  .requests
+                                  .where((req) =>
+                                      (!req.seen && req.acceptedBySeller))
+                                  .toList()
+                                  .isNotEmpty,
+                              isSelected:
+                                  _bloc.currentTab.value == MainNavItem.orders,
+                              title: 'Orders',
+                              icon: IconlyFont.discovery,
+                              onTapped: () =>
+                                  _bloc.changeTab(MainNavItem.orders))))
                       : HomeNavbarItem(
-                          isSelected: _bloc.currentTab.value ==
-                              MainNavItem.tailorsNearby,
+                          isSelected:
+                              _bloc.currentTab.value == MainNavItem.orders,
                           title: 'Catalogue',
                           icon: MySvgs.book,
-                          onTapped: () =>
-                              _bloc.changeTab(MainNavItem.tailorsNearby)),
+                          onTapped: () => _bloc.changeTab(MainNavItem.orders)),
                   HomeNavbarItem(
                       isSelected: _bloc.currentTab.value == MainNavItem.profile,
                       title: 'Profile',
@@ -63,12 +70,14 @@ class HomeNavbarItem extends StatelessWidget {
   final dynamic icon;
   final String title;
   final VoidCallback onTapped;
+  final bool badge;
   const HomeNavbarItem(
       {Key? key,
       this.isSelected = false,
       required this.icon,
       required this.title,
-      required this.onTapped})
+      required this.onTapped,
+      this.badge = false})
       : super(key: key);
 
   @override
@@ -107,9 +116,24 @@ class HomeNavbarItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      icon.runtimeType.toString() == 'IconData'
-                          ? Icon(icon, size: 20)
-                          : SvgPicture.asset(icon),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          icon.runtimeType.toString() == 'IconData'
+                              ? Icon(icon, size: 20)
+                              : SvgPicture.asset(icon),
+                          if (badge)
+                            Positioned(
+                                top: 5,
+                                left: -15,
+                                child: Icon(
+                                  Icons.circle,
+                                  size: 10,
+                                  color: MyColors.orange,
+                                ))
+                        ],
+                      ),
                       Text(
                         title,
                         style: Get.theme.textTheme.bodyText1,

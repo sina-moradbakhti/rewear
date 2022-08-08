@@ -31,22 +31,35 @@ class Tailor {
       this.position,
       this.rate,
       this.slogan});
-  factory Tailor.fromJson(Map<String, dynamic> json) => Tailor(
-        uid: json['uid'],
-        email: json['email'],
-        fullname: json['fullname'],
-        fcmToken: json['fcmToken'],
-        address: json['address'],
-        city: json['city'],
-        country: json['country'],
-        image: json['image'],
-        slogan: json['slogan'],
-        description: json['description'],
-        position: json['position'],
-        cover: json['cover'],
-        phone: json['phone'],
-        rate: json['rate'],
-      );
+  factory Tailor.fromJson(Map<String, dynamic> json) {
+    LatLng? pos;
+    if (json['position'] != null) {
+      if (json['position'].runtimeType == List<dynamic>) {
+        pos = LatLng(double.parse(json['position'][0].toString()),
+            double.parse(json['position'][1].toString()));
+      } else {
+        final posSplited = json['position'].toString().split(',');
+        pos = LatLng(double.parse(posSplited[0].toString()),
+            double.parse(posSplited[1].toString()));
+      }
+    }
+    return Tailor(
+      uid: json['uid'],
+      email: json['email'],
+      fullname: json['fullname'],
+      fcmToken: json['fcmToken'],
+      address: json['address'],
+      city: json['city'],
+      country: json['country'],
+      image: json['image'],
+      slogan: json['slogan'],
+      description: json['description'],
+      position: pos,
+      cover: json['cover'],
+      phone: json['phone'],
+      rate: json['rate'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

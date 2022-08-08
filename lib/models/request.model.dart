@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rewear/models/order.dart';
 
 class Request {
-  final String docId;
-  final String sellerId;
+  String? docId;
+  String? sellerId;
   final String customerId;
   final Order order;
   bool seen = false;
@@ -15,10 +16,10 @@ class Request {
   final DateTime orderDate;
 
   Request(
-      {required this.docId,
+      {this.docId,
       required this.order,
       required this.customerId,
-      required this.sellerId,
+      this.sellerId,
       this.seen = false,
       this.acceptedBySeller = false,
       this.acceptedByUser = false,
@@ -36,9 +37,9 @@ class Request {
         acceptedBySeller: data['acceptedBySeller'],
         acceptedByUser: data['acceptedByUser'],
         isReady: data['isReady'],
-        price: data['price'],
+        price: double.parse(data['price'].toString()),
         timeToDelivery: data['timeToDelivery'],
-        orderDate: data['orderDate'],
+        orderDate: (data['orderDate'] as Timestamp).toDate(),
         order: Order.fromJson(data['order']));
   }
 
