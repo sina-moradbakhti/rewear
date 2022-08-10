@@ -26,7 +26,7 @@ class SellerServiceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     _list[0].badge = AppInit()
         .requests
-        .where((req) => (!req.acceptedBySeller && !req.canceledBySeller))
+        .where((req) => (!req.acceptedBySeller && !req.canceledBySeller) || !req.tailorSeen)
         .toList()
         .length;
     return Padding(

@@ -49,8 +49,11 @@ class _TailorsNearbyState extends State<TailorsNearby>
         return Stack(
           children: [
             GoogleMap(
-                initialCameraPosition:
-                    CameraPosition(target: bloc.myPosition, zoom: 17),
+                initialCameraPosition: CameraPosition(
+                    target: AppInit().tailors.isNotEmpty
+                        ? AppInit().tailors.first.position!
+                        : bloc.myPosition,
+                    zoom: 17),
                 onMapCreated: (controller) {
                   controller.setMapStyle(AppInit.googleMapStyle01);
                   bloc.mapController = controller;

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:record/record.dart';
 import 'package:rewear/config/app_init.dart';
-import 'package:rewear/generals/modals/congrats.modal.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';

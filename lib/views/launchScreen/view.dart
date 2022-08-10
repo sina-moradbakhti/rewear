@@ -21,10 +21,10 @@ class LaunchScreen extends StatelessWidget {
       app.user = User.fromJson(freshData.data);
       app.user.docId = freshData.docId;
       app.user.fcmToken = fcmToken;
-      await app.updateLastLocation(isBackground: true);
       await FirestoreServices()
           .updateUserWithDocId(freshData.docId, {'fcmToken': fcmToken});
-      FirestoreServices().getRequests();
+      FirestoreServices().getRequests(); // listen for new request
+      FirestoreServices().getTailors(); // listen for new tailors
 
       Get.offNamed(MyRoutes.home);
     } else {

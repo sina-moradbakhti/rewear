@@ -8,6 +8,7 @@ class Request {
   final String customerId;
   final Order order;
   bool seen = false;
+  bool tailorSeen = false;
   bool acceptedBySeller = false;
   bool acceptedByUser = false;
   bool canceledBySeller = false;
@@ -32,13 +33,15 @@ class Request {
       required this.orderDate,
       this.canceledBySeller = false,
       this.canceledByUser = false,
+      this.tailorSeen = false,
       this.canceledExcuse = '',
       this.price = 0});
 
   factory Request.fromJson(Map<String, dynamic> data) {
     return Request(
         docId: data['docId'],
-        seen: data['seen'],
+        seen: data['seen'] ?? false,
+        tailorSeen: data['tailorSeen'] ?? false,
         sellerId: data['sellerId'],
         customerId: data['customerId'],
         acceptedBySeller: data['acceptedBySeller'],
@@ -59,6 +62,7 @@ class Request {
       'sellerId': sellerId,
       'customerId': customerId,
       'seen': seen,
+      'tailorSeen': tailorSeen,
       'acceptedBySeller': acceptedBySeller,
       'acceptedByUser': acceptedByUser,
       'canceledBySeller': canceledBySeller,

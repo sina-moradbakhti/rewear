@@ -93,12 +93,18 @@ class TailorRequestDetails extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
             width: double.infinity,
-            decoration: BoxDecoration(color: MyColors.orange),
+            decoration: BoxDecoration(
+                color: bloc.request!.acceptedByUser
+                    ? Colors.green
+                    : MyColors.orange),
             child: SafeArea(
               child: Padding(
                 padding:
                     MyConstants.primaryPadding.copyWith(bottom: 0, top: 10),
-                child: Text('Waiting to customer...',
+                child: Text(
+                    !bloc.request!.acceptedByUser
+                        ? 'Waiting to customer...'
+                        : 'You can deliver the order till now',
                     textAlign: TextAlign.center,
                     style: Get.theme.textTheme.headline6!
                         .copyWith(color: Colors.white)),

@@ -39,7 +39,8 @@ class HomeNavbar extends StatelessWidget {
                               badge: AppInit()
                                   .requests
                                   .where((req) =>
-                                      (!req.seen && req.acceptedBySeller))
+                                      (!req.seen && req.acceptedBySeller) ||
+                                      (!req.seen && req.canceledBySeller))
                                   .toList()
                                   .isNotEmpty,
                               isSelected:

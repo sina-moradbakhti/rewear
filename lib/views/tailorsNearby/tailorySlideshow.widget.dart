@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rewear/config/mock_data.dart';
+import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/widgets/tailoryMapItem.widget.dart';
 import 'package:rewear/models/tailor.dart';
 
@@ -19,10 +19,10 @@ class _TailorySlideshowWidgetState extends State<TailorySlideshowWidget>
 
   @override
   void initState() {
-    _controller = TabController(length: 5, vsync: this);
+    _controller = TabController(length: AppInit().tailors.length, vsync: this);
     if (widget.onChangedItem != null) {
       _controller!.addListener(() {
-        widget.onChangedItem!(MockData().tailories[_controller!.index]);
+        widget.onChangedItem!(AppInit().tailors[_controller!.index]);
       });
     }
     super.initState();
@@ -34,7 +34,7 @@ class _TailorySlideshowWidgetState extends State<TailorySlideshowWidget>
         viewportFraction: 0.9,
         controller: _controller,
         children: [
-          for (final tailory in MockData().tailories)
+          for (final tailory in AppInit().tailors)
             TailoryMapItem(
                 tailory: tailory,
                 onTapped: widget.onTappedItem != null

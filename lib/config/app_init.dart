@@ -45,8 +45,13 @@ class AppInit {
   Tailor tailor = Tailor();
   Position? currentPosition;
   List<Request> requests = [];
+  List<Tailor> tailors = [];
+
   final requestsStreamController = PublishSubject<bool>();
   Stream<bool> get requestsStream => requestsStreamController.stream;
+
+  final tailorsStreamController = PublishSubject<bool>();
+  Stream<bool> get tailorsStream => tailorsStreamController.stream;
 
   final List<Color> colors = [
     Colors.green,

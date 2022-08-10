@@ -1,17 +1,15 @@
-import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rewear/blocs/home.bloc.dart';
 import 'package:rewear/config/app_init.dart';
-import 'package:rewear/config/mock_data.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/confirmTailory.modal.dart';
 import 'package:rewear/generals/modals/congrats.modal.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
-import 'package:rewear/services/firestorage.services.dart';
 import 'package:rewear/services/firestore.services.dart';
 
 class NearbyBloc extends GetxController {
@@ -24,6 +22,14 @@ class NearbyBloc extends GetxController {
 
   LatLng get myPosition => LatLng(
       app.user.position?.latitude ?? 0, app.user.position?.longitude ?? 0);
+
+  LatLng _getRandom() {
+    final rng = Random();
+    double lat = rng.nextDouble() * 100;
+    double lng = rng.nextDouble() * 100;
+
+    return LatLng(lat, lng);
+  }
 
   void initMarkers() async {
     final me = await BitmapDescriptor.fromAssetImage(
@@ -38,12 +44,12 @@ class NearbyBloc extends GetxController {
         icon: me);
 
     var _markers = [];
-    for (final item in MockData().tailories) {
+    for (final item in app.tailors) {
       _markers.add(Marker(
           infoWindow:
               InfoWindow(title: item.fullname ?? '', snippet: item.phone ?? ''),
           markerId: MarkerId('${item.uid}'),
-          position: item.position!,
+          position: item.position ?? _getRandom(),
           alpha: 1,
           icon: retail));
     }

@@ -26,7 +26,6 @@ class RequestDetailsBloc extends GetxController {
         showBottomPriceButtons.value = true;
       }
       _getTailorProfile();
-      _seen();
     } else {
       if (!request!.acceptedBySeller &&
           !request!.canceledBySeller &&
@@ -35,6 +34,7 @@ class RequestDetailsBloc extends GetxController {
       }
       _getCustomerProfile();
     }
+    _seen();
     super.onInit();
   }
 
@@ -54,8 +54,9 @@ class RequestDetailsBloc extends GetxController {
 
       if (app.user.role == UserType.customer) {
         // customer
-        await FirestoreServices()
-            .updateRequests({'acceptedByUser': true}, request!.docId ?? '');
+        await FirestoreServices().updateRequests(
+            {'acceptedByUser': true, 'tailorSeen': false},
+            request!.docId ?? '');
         request!.acceptedByUser = true;
       } else {
         // seller
@@ -68,9 +69,11 @@ class RequestDetailsBloc extends GetxController {
           return;
         }
 
-        await FirestoreServices().updateRequests(
-            {'acceptedBySeller': true, 'price': double.parse(strPrice.value)},
-            request!.docId ?? '');
+        await FirestoreServices().updateRequests({
+          'acceptedBySeller': true,
+          'price': double.parse(strPrice.value),
+          'seen': false
+        }, request!.docId ?? '');
         request!.acceptedBySeller = true;
       }
 
@@ -88,12 +91,13 @@ class RequestDetailsBloc extends GetxController {
       if (app.user.role == UserType.customer) {
         // customer
         await FirestoreServices().updateRequests(
-            {'canceledByUser': true, 'cancelExcuse': ''}, request!.docId ?? '');
+            {'canceledByUser': true, 'cancelExcuse': '', 'tailorSeen': false},
+            request!.docId ?? '');
         request!.canceledByUser = true;
       } else {
         // seller
         await FirestoreServices().updateRequests(
-            {'canceledBySeller': true, 'cancelExcuse': ''},
+            {'canceledBySeller': true, 'cancelExcuse': '', 'seen': false},
             request!.docId ?? '');
         request!.canceledBySeller = true;
       }
@@ -106,8 +110,16 @@ class RequestDetailsBloc extends GetxController {
   }
 
   void _seen() {
-    if (!request!.seen) {
-      FirestoreServices().updateRequests({'seen': true}, request!.docId ?? '');
+    if (app.user.role == UserType.customer) {
+      if (!request!.seen) {
+        FirestoreServices()
+            .updateRequests({'seen': true}, request!.docId ?? '');
+      }
+    } else {
+      if (!request!.tailorSeen) {
+        FirestoreServices()
+            .updateRequests({'tailorSeen': true}, request!.docId ?? '');
+      }
     }
   }
 }
