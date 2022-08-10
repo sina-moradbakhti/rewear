@@ -7,9 +7,9 @@ import 'package:rewear/generals/strings.dart';
 import 'package:rewear/views/findServices/serviceItem.widget.dart';
 
 class CustomerServiceWidget extends StatelessWidget {
-  const CustomerServiceWidget({Key? key}) : super(key: key);
+  CustomerServiceWidget({Key? key}) : super(key: key);
 
-  final _list = const [
+  final _list = [
     ServiceItemWidget(image: MyImages.repair, title: MyStrings.srvc_repair),
     ServiceItemWidget(
         image: MyImages.alteration, title: MyStrings.srvc_alteration),

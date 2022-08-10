@@ -9,8 +9,8 @@ import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 
-class RequestDetails extends StatelessWidget {
-  RequestDetails({Key? key}) : super(key: key);
+class TailorRequestDetails extends StatelessWidget {
+  TailorRequestDetails({Key? key}) : super(key: key);
 
   final bloc = Get.put(RequestDetailsBloc());
 
@@ -39,12 +39,7 @@ class RequestDetails extends StatelessWidget {
                     const Hr(),
                     Stack(
                       children: [
-                        (!bloc.request!.acceptedBySeller)
-                            ? ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.grey, BlendMode.color),
-                                child: _seller)
-                            : _seller,
+                        _customer,
                         _tailorStatus,
                       ],
                     ),
@@ -60,7 +55,7 @@ class RequestDetails extends StatelessWidget {
               ),
               Obx(() => bloc.showBottomPriceButtons.value
                   ? _safeAreaButtons
-                  : Container())
+                  : _waitingForCustomer)
             ],
           )),
     );
@@ -94,6 +89,23 @@ class RequestDetails extends StatelessWidget {
         ),
       ));
 
+  Widget get _waitingForCustomer => Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(color: MyColors.orange),
+            child: SafeArea(
+              child: Padding(
+                padding:
+                    MyConstants.primaryPadding.copyWith(bottom: 0, top: 10),
+                child: Text('Waiting to customer...',
+                    textAlign: TextAlign.center,
+                    style: Get.theme.textTheme.headline6!
+                        .copyWith(color: Colors.white)),
+              ),
+            )),
+      );
+
   Widget get _price => Container(
         padding: EdgeInsets.only(
             top: 20,
@@ -110,14 +122,28 @@ class RequestDetails extends StatelessWidget {
                 style: Get.theme.textTheme.headline4!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              Text('\$${bloc.request!.price}',
-                  style: Get.theme.textTheme.headline4),
+              SizedBox(
+                width: 130,
+                child: TextFormField(
+                  onChanged: (newVal) => bloc.strPrice.value = newVal,
+                  initialValue:
+                      bloc.request!.price > 0 ? '${bloc.request!.price}' : '',
+                  textAlign: TextAlign.center,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                      hintText: 'price...',
+                      enabled: bloc.showBottomPriceButtons.value),
+                  style: Get.theme.textTheme.headline5!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+              )
             ],
           ),
         ),
       );
 
-  Widget get _seller => Container(
+  Widget get _customer => Container(
         child: Padding(
             padding: const EdgeInsets.only(bottom: 0),
             child: Column(
@@ -125,17 +151,9 @@ class RequestDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Obx(() => Container(
-                      decoration: bloc.tailor.value?.cover != null
-                          ? BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      bloc.tailor.value?.cover ?? '')),
-                            )
-                          : const BoxDecoration(),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: bloc.tailor.value?.uid == null
+                        child: bloc.customer.value?.uid == null
                             ? Padding(
                                 padding: EdgeInsets.only(
                                     left: MyConstants.primaryPadding.left,
@@ -148,7 +166,7 @@ class RequestDetails extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Tailor',
+                                        'Customer',
                                         style: Get.theme.textTheme.headline4!
                                             .copyWith(
                                                 fontWeight: FontWeight.bold),
@@ -156,7 +174,7 @@ class RequestDetails extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 10),
                                         child: Text(
-                                          'Seller not accepted yet',
+                                          'Customer not accepted yet',
                                           style: Get.textTheme.bodyText1,
                                         ),
                                       )
@@ -173,7 +191,7 @@ class RequestDetails extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Tailor',
+                                      'Customer',
                                       style: Get.theme.textTheme.headline4!
                                           .copyWith(
                                               fontWeight: FontWeight.bold),
@@ -182,13 +200,13 @@ class RequestDetails extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 15),
                                       child: Row(
                                         children: [
-                                          bloc.tailor.value?.cover != null
+                                          bloc.customer.value?.image != null
                                               ? CircleAvatar(
                                                   radius: 30,
                                                   backgroundColor:
                                                       MyColors.grey,
                                                   backgroundImage: NetworkImage(
-                                                      bloc.tailor.value
+                                                      bloc.customer.value
                                                               ?.image ??
                                                           ''))
                                               : CircleAvatar(
@@ -206,7 +224,7 @@ class RequestDetails extends StatelessWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '${bloc.tailor.value?.fullname}',
+                                                    '${bloc.customer.value?.fullname}',
                                                     style: Get.theme.textTheme
                                                         .bodyText1!
                                                         .copyWith(
@@ -219,7 +237,7 @@ class RequestDetails extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 5),
                                                     child: Text(
-                                                      '${bloc.tailor.value?.phone}',
+                                                      '${bloc.customer.value?.description}',
                                                       style: Get.theme.textTheme
                                                           .bodyText1!
                                                           .copyWith(
@@ -330,18 +348,18 @@ class RequestDetails extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Container(
             decoration: BoxDecoration(
-                color: bloc.request!.acceptedBySeller
+                color: bloc.request!.acceptedByUser
                     ? Colors.green
                     : MyColors.mediumGrey,
                 borderRadius: BorderRadius.circular(30)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
               child: Text(
-                  bloc.request!.acceptedBySeller
-                      ? 'Seller accepted'
+                  bloc.request!.acceptedByUser
+                      ? 'Customer accepted'
                       : 'Pending',
                   style: Get.theme.textTheme.bodyText2!.copyWith(
-                      color: bloc.request!.acceptedBySeller
+                      color: bloc.request!.acceptedByUser
                           ? Colors.white
                           : Colors.black)),
             ),

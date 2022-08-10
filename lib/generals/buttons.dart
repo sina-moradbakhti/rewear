@@ -3,12 +3,14 @@ import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/images.dart';
+import 'package:rewear/generals/widgets/loading.widget.dart';
 
 class MyPrimaryButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
   bool designViceVersa = false;
   Color? color;
+  bool loading = false;
   Color? textColor;
   MyPrimaryButton(
       {Key? key,
@@ -16,6 +18,7 @@ class MyPrimaryButton extends StatelessWidget {
       required this.title,
       this.color,
       this.textColor,
+      this.loading = false,
       this.designViceVersa = false})
       : super(key: key);
 
@@ -27,16 +30,18 @@ class MyPrimaryButton extends StatelessWidget {
         height: 50,
         minWidth: double.infinity,
         color: color ?? (designViceVersa ? MyColors.white : MyColors.orange),
-        onPressed: onPressed,
-        child: Text(
-          title,
-          style: TextStyle(
-              height: 1.4,
-              fontSize: 14,
-              color: textColor ??
-                  (designViceVersa ? MyColors.orange : MyColors.white),
-              fontWeight: FontWeight.w500),
-        ),
+        onPressed: loading ? () {} : onPressed,
+        child: loading
+            ? const MyLoading(size: 22, color: Colors.white)
+            : Text(
+                title,
+                style: TextStyle(
+                    height: 1.4,
+                    fontSize: 14,
+                    color: textColor ??
+                        (designViceVersa ? MyColors.orange : MyColors.white),
+                    fontWeight: FontWeight.w500),
+              ),
       ),
     );
   }

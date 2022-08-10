@@ -8,8 +8,8 @@ class ServiceItemWidget extends StatelessWidget {
   final String title;
   final String image;
   final UserType type;
-  final int badge;
-  const ServiceItemWidget(
+  int badge = 0;
+  ServiceItemWidget(
       {Key? key,
       required this.title,
       this.badge = 0,

@@ -29,8 +29,11 @@ class FindServices extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 AppInit().user.role! == UserType.customer
-                    ? const CustomerServiceWidget()
-                    : const SellerServiceWidget(),
+                    ? CustomerServiceWidget()
+                    : StreamBuilder(
+                        stream: AppInit().requestsStream,
+                        builder: ((context, snapshot) =>
+                            SellerServiceWidget())),
               ],
             ),
           ),

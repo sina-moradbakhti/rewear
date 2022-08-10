@@ -5,10 +5,14 @@ import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
+import 'package:rewear/models/userType.enum.dart';
 
 class RequestWidget extends StatelessWidget {
   final Request request;
-  const RequestWidget({Key? key, required this.request}) : super(key: key);
+  final UserType userType;
+  const RequestWidget(
+      {Key? key, required this.request, this.userType = UserType.customer})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +24,9 @@ class RequestWidget extends StatelessWidget {
             ? MyColors.lightOrange
             : MyColors.white,
         padding: EdgeInsets.zero,
-        onPressed: () =>
-            Get.toNamed(MyRoutes.requestDetails, arguments: request),
+        onPressed: () => userType == UserType.seller
+            ? Get.toNamed(MyRoutes.tailorRequestDetails, arguments: request)
+            : Get.toNamed(MyRoutes.requestDetails, arguments: request),
         child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: MyConstants.primaryPadding.top / 2,
@@ -65,7 +70,7 @@ class RequestWidget extends StatelessWidget {
                   )
                 ],
               ),
-              _status
+              userType == UserType.seller ? _statusForTailor : _status
             ],
           ),
         ),
@@ -74,6 +79,13 @@ class RequestWidget extends StatelessWidget {
   }
 
   Widget get _status {
+    if (request.canceledBySeller) {
+      return Icon(
+        Icons.close,
+        color: MyColors.red,
+      );
+    }
+
     if (!request.acceptedBySeller) {
       return Icon(
         Icons.circle_outlined,
@@ -89,6 +101,34 @@ class RequestWidget extends StatelessWidget {
         return const Icon(
           Icons.check_circle_outline_rounded,
           color: Colors.green,
+        );
+      }
+    }
+  }
+
+  Widget get _statusForTailor {
+    if (request.canceledByUser) {
+      return Icon(
+        Icons.close,
+        color: MyColors.red,
+      );
+    }
+
+    if (request.acceptedBySeller && request.acceptedByUser) {
+      return const Icon(
+        Icons.check_circle_outline_rounded,
+        color: Colors.green,
+      );
+    } else {
+      if (request.acceptedByUser) {
+        return Icon(
+          Icons.emoji_people_rounded,
+          color: MyColors.orange,
+        );
+      } else {
+        return Icon(
+          Icons.circle_outlined,
+          color: MyColors.grey,
         );
       }
     }

@@ -10,6 +10,10 @@ class Request {
   bool seen = false;
   bool acceptedBySeller = false;
   bool acceptedByUser = false;
+  bool canceledBySeller = false;
+  bool canceledByUser = false;
+  String canceledExcuse = '';
+
   TimeOfDay? timeToDelivery;
   bool isReady = false;
   double price = 0;
@@ -26,6 +30,9 @@ class Request {
       this.timeToDelivery,
       this.isReady = false,
       required this.orderDate,
+      this.canceledBySeller = false,
+      this.canceledByUser = false,
+      this.canceledExcuse = '',
       this.price = 0});
 
   factory Request.fromJson(Map<String, dynamic> data) {
@@ -36,6 +43,9 @@ class Request {
         customerId: data['customerId'],
         acceptedBySeller: data['acceptedBySeller'],
         acceptedByUser: data['acceptedByUser'],
+        canceledBySeller: data['canceledBySeller'] ?? false,
+        canceledByUser: data['canceledByUser'] ?? false,
+        canceledExcuse: data['cancelExcuse'] ?? '',
         isReady: data['isReady'],
         price: double.parse(data['price'].toString()),
         timeToDelivery: data['timeToDelivery'],
@@ -51,6 +61,9 @@ class Request {
       'seen': seen,
       'acceptedBySeller': acceptedBySeller,
       'acceptedByUser': acceptedByUser,
+      'canceledBySeller': canceledBySeller,
+      'canceledByUser': canceledByUser,
+      'cancelExcuse': canceledExcuse,
       'isReady': isReady,
       'price': price,
       'timeToDelivery': timeToDelivery,
