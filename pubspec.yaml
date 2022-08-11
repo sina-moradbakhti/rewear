@@ -48,6 +48,7 @@ flutter:
     - assets/images/svg/
     - assets/images/png/
     - assets/images/png/shirts/
+    - assets/images/jpg/
     - assets/fonts/
     - assets/fonts/icons/
 

@@ -4,6 +4,8 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/themes.dart';
 import 'package:rewear/views/alteration/view.dart';
+import 'package:rewear/views/catalogueDetails/view.dart';
+import 'package:rewear/views/catalouges/view.dart';
 import 'package:rewear/views/forgotPassword/view.dart';
 import 'package:rewear/views/home/view.dart';
 import 'package:rewear/views/launchScreen/view.dart';
@@ -53,8 +55,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: MyRoutes.search, page: () => Search()),
           GetPage(name: MyRoutes.profile, page: () => Profile()),
           GetPage(name: MyRoutes.requests, page: () => Requests()),
-          GetPage(name: MyRoutes.catalogues, page: () => Requests()),
-          GetPage(name: MyRoutes.tailorCatalogues, page: () => Requests()),
+          GetPage(name: MyRoutes.catalogues, page: () => Catalogues()),
+          GetPage(
+              name: MyRoutes.catalogueDetails, page: () => CatalogueDetails()),
           GetPage(name: MyRoutes.requestDetails, page: () => RequestDetails()),
           GetPage(name: MyRoutes.tailorRequests, page: () => TailorRequests()),
           GetPage(

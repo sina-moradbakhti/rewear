@@ -18,7 +18,7 @@ class NearbyBloc extends GetxController {
   GoogleMapController? mapController;
   RxBool myLocationLoading = false.obs;
   final app = AppInit();
-  final homeBloc = Get.put(HomeBloc());
+  final homeBloc = Get.find<HomeBloc>();
 
   LatLng get myPosition => LatLng(
       app.user.position?.latitude ?? 0, app.user.position?.longitude ?? 0);

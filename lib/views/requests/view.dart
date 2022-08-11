@@ -34,7 +34,7 @@ class Requests extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 15, top: 24, left: 24),
           child: Text(
             MyStrings.requests_title,
-            style: Get.theme.textTheme.headline6!
+            style: Get.theme.textTheme.headline5!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
         )

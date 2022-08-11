@@ -48,7 +48,9 @@ class FirestoreServices {
         .where('position', isNull: false)
         .snapshots()
         .listen((snapshot) {
-      AppInit().requests.clear();
+      if (snapshot.docs.isNotEmpty) {
+        AppInit().tailors.clear();
+      }
       for (final doc in snapshot.docs) {
         final Map<String, dynamic> updatedData = {'docId': doc.id}
           ..addAll(doc.data());
@@ -82,7 +84,9 @@ class FirestoreServices {
             isEqualTo: AppInit().user.uid)
         .snapshots()
         .listen((snapshot) {
-      AppInit().requests.clear();
+      if (snapshot.docs.isNotEmpty) {
+        AppInit().requests.clear();
+      }
       for (final doc in snapshot.docs) {
         final Map<String, dynamic> updatedData = {'docId': doc.id}
           ..addAll(doc.data());

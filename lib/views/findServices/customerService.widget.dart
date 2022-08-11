@@ -32,7 +32,7 @@ class CustomerServiceWidget extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 MyStrings.srvc_title,
-                style: Get.theme.textTheme.headline6!
+                style: Get.theme.textTheme.headline5!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
             ),

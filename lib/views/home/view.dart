@@ -5,9 +5,9 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/widgets/homeAppbar.widget.dart';
 import 'package:rewear/generals/widgets/homeNavbar.widget.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/views/catalouges/view.dart';
 import 'package:rewear/views/findServices/view.dart';
 import 'package:rewear/views/profile/view.dart';
-import 'package:rewear/views/requests/tailor.view.dart';
 import 'package:rewear/views/requests/view.dart';
 
 class Home extends StatefulWidget {
@@ -22,7 +22,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   final _pages = [
     const FindServices(),
     AppInit().user.role == UserType.seller
-        ? TailorRequests(showAppBar: false)
+        ? Catalogues(showAppBar: false)
         : Requests(showAppBar: false),
     Profile()
   ];

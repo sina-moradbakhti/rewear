@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/home.bloc.dart';
 import 'package:rewear/generals/colors.dart';
@@ -12,7 +11,7 @@ class HomeAppbar extends StatelessWidget with PreferredSizeWidget {
   HomeAppbar({Key? key, this.title, this.centerTitle = false})
       : super(key: key);
 
-  final homeBloc = Get.put(HomeBloc());
+  final homeBloc = Get.find<HomeBloc>();
 
   @override
   AppBar build(BuildContext context) {

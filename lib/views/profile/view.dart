@@ -38,7 +38,7 @@ class Profile extends StatelessWidget {
 
   Widget get _getContent => SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,8 @@ class Profile extends StatelessWidget {
               coverAndProfile,
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: MyConstants.primaryPadding.left, vertical: 20),
+                        horizontal: MyConstants.primaryPadding.left)
+                    .copyWith(bottom: 150),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
