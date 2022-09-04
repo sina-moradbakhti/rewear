@@ -10,7 +10,7 @@ import 'package:rewear/generals/modals/confirmTailory.modal.dart';
 import 'package:rewear/generals/modals/congrats.modal.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
-import 'package:rewear/services/firestore.services.dart';
+// import 'package:rewear/services/firestore.services.dart';
 
 class NearbyBloc extends GetxController {
   var markers = [].obs;
@@ -75,18 +75,18 @@ class NearbyBloc extends GetxController {
   }
 
   void makeRequest(Tailor tailor) async {
-    try {
-      await FirestoreServices()
-          .updateRequests({'sellerId': tailor.uid}, request?.docId ?? '');
-      Get.back();
-      Get.dialog(const CongratsDialog(),
-          useSafeArea: true,
-          barrierColor: Colors.black87,
-          transitionCurve: Curves.easeInOut);
-    } catch (er) {
-      Get.back();
-      app.handleError(er);
-    }
+    // try {
+    //   await FirestoreServices()
+    //       .updateRequests({'sellerId': tailor.uid}, request?.docId ?? '');
+    //   Get.back();
+    //   Get.dialog(const CongratsDialog(),
+    //       useSafeArea: true,
+    //       barrierColor: Colors.black87,
+    //       transitionCurve: Curves.easeInOut);
+    // } catch (er) {
+    //   Get.back();
+    //   app.handleError(er);
+    // }
   }
 
   void showMe() async {

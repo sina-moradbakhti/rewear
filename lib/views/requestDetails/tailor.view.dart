@@ -159,7 +159,7 @@ class TailorRequestDetails extends StatelessWidget {
                 Obx(() => Container(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: bloc.customer.value?.uid == null
+                        child: bloc.customer.value?.id == null
                             ? Padding(
                                 padding: EdgeInsets.only(
                                     left: MyConstants.primaryPadding.left,

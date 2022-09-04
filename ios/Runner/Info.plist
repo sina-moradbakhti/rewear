@@ -2,17 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.206836641686-qe7t7sk28frlqkosj19700da5gpqigfe</string>
-			</array>
-		</dict>
-	</array>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -31,10 +22,36 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.206836641686-qe7t7sk28frlqkosj19700da5gpqigfe</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Rewear needs to access the Camera to take photo</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Rewear needs to access the Camera to record your voice</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Rewear needs to access the PhotoLibrary to show you the photos</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -52,22 +69,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Rewear needs to access the PhotoLibrary to show you the photos</string>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Rewear needs to access the Camera to record your voice</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Rewear needs to access the Camera to take photo</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>sms</string>
-		<string>tel</string>
-	</array>
 </dict>
 </plist>

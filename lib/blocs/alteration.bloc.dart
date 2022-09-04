@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,8 +9,8 @@ import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
 import 'package:rewear/models/order.dart';
 import 'package:rewear/models/request.model.dart';
-import 'package:rewear/services/firestorage.services.dart';
-import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/http.services.dart';
+// import 'package:rewear/services/firestorage.services.dart';
 
 class AlterationBloc extends GetxController {
   Rx<String> description = ''.obs;
@@ -23,6 +21,7 @@ class AlterationBloc extends GetxController {
   List<XFile> photos = [];
   RxBool creatingAnOrderLoading = false.obs;
 
+  final services = HttpServices();
   final app = AppInit();
 
   void updateNeckStyle(NeckStyleModel model) {
@@ -91,39 +90,42 @@ class AlterationBloc extends GetxController {
 
     if (app.currentPosition != null) {
       Order order =
-          Order(id: '', userId: app.user.uid!, createdAt: DateTime.now());
+          Order(id: '', userId: app.user.id!, createdAt: DateTime.now());
       order.color = selectedColor;
       order.material = selectedMaterial.value;
-      order.deliveryDate = selectedDate.value;
       order.neckStyle = selectedNeckStyle.value;
       order.description = description.value;
       order.images = [];
       order.serviceType = 'Alteration';
 
       final request = Request(
-          order: order, customerId: app.user.uid!, orderDate: DateTime.now());
+          deliveryToTailor: selectedDate.value!,
+          order: order,
+          customerId: app.user.id!,
+          orderDate: DateTime.now());
 
       try {
-        final docId =
-            await FirestoreServices().addRequests(request.toJsonForFirestore());
-        request.docId = docId;
+        final reqId = await services.newRequest(request);
+        if (reqId != null) {
+          List<String> mustUpload = [];
+          for (final photo in photos) {
+            mustUpload.add(photo.path);
+          }
+          final uploadedImageList =
+              await services.uploadResources(reqId: reqId, images: mustUpload);
 
-        for (final photo in photos) {
-          final uploadedPhoto = await StorageServices().putDataForOrder(
-              File(photo.path), StorageServices().generateRandomId(), docId);
-          order.images!.add(uploadedPhoto);
+          await services.updateRequestImages(
+              images: uploadedImageList ?? [], reqId: reqId);
         }
-
-        await FirestoreServices()
-            .updateRequests(request.toJsonForFirestore(), docId);
-
         // Go to choose a tailor
         Get.toNamed(MyRoutes.tailorsNearby, arguments: request);
         creatingAnOrderLoading.value = false;
       } catch (er) {
+        print(er);
         Get.back();
         app.handleError(er);
       }
     }
+    creatingAnOrderLoading.value = false;
   }
 }

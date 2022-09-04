@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:rewear/config/app_init.dart';
+
 extension ColorToString on Color {
   String? asString() {
     final Color color = this;
@@ -8,6 +10,26 @@ extension ColorToString on Color {
 }
 
 extension StringToColor on String {
+  String avatarURL() {
+    final str = this;
+    return AppInit.BASE_URL +
+        '/resources/avatar/' +
+        str
+            .replaceAll('uploads/perm/', '')
+            .replaceAll('.jpg', '')
+            .replaceAll('_avatar', '');
+  }
+
+  String coverURL() {
+    final str = this;
+    return AppInit.BASE_URL +
+        '/resources/cover/' +
+        str
+            .replaceAll('uploads/perm/', '')
+            .replaceAll('.jpg', '')
+            .replaceAll('_cover', '');
+  }
+
   Color? toColor() {
     if (this == '') return null;
     final String strColor = this;

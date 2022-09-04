@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
+// import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
+import 'package:rewear/models/registerType.enum.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/http.services.dart';
 
 class SignupBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;
@@ -11,6 +13,8 @@ class SignupBloc extends GetxController {
   var email = ''.obs;
   var password = ''.obs;
   RxBool loading = false.obs;
+
+  final services = HttpServices();
 
   void changeUserType(UserType type) {
     selectedUserType.value = type;
@@ -61,7 +65,7 @@ class SignupBloc extends GetxController {
     return allow;
   }
 
-  void signUp() async {
+  void signUp({RegisterType registerType = RegisterType.emailPassword}) async {
     if (loading.value) return;
 
     String fullname = this.fullname.value;
@@ -70,23 +74,18 @@ class SignupBloc extends GetxController {
 
     if (!signupCheck(fullname, email, password)) return;
 
-    try {
-      loading.value = true; // Start loading ...
-      fbAuth.UserCredential credential = await fbAuth.FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      // Refresh Data
-      await AppInit().updateUserData(
-          fullname: fullname,
-          credential: credential,
-          role: selectedUserType.value,
-          isLogin: false,
-          currentUser: null);
-      // Refresh Data
-      loading.value = false; // Stop loading
+    loading.value = true; // Start loading ...
+    final user = await services.register(
+        fullname: fullname,
+        email: email,
+        password: password,
+        userType: selectedUserType.value.toString(),
+        registerType: registerType.toString());
+    loading.value = false; // Stop loading
+    if (user != null) {
+      AppInit().user = user;
+      await AppInit().user.saveToCacheAndLogin();
       Get.offAllNamed(MyRoutes.home);
-    } catch (error) {
-      loading.value = false; // Stop loading
-      AppInit().handleError(error);
     }
   }
 }

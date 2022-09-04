@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/models/errorException.dart';
@@ -28,12 +28,12 @@ class ForgotPasswordBloc extends GetxController {
 
     loading.value = true;
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.value);
-      AppInit().handleError(MyErrorException(
-          message: 'the reset password link is sent to your email',
-          title: 'Successfully Sent'));
-      loading.value = false;
-      showWarning.value = true;
+      // await FirebaseAuth.instance.sendPasswordResetEmail(email: email.value);
+      // AppInit().handleError(MyErrorException(
+      //     message: 'the reset password link is sent to your email',
+      //     title: 'Successfully Sent'));
+      // loading.value = false;
+      // showWarning.value = true;
     } catch (er) {
       AppInit().handleError(er);
       loading.value = false;

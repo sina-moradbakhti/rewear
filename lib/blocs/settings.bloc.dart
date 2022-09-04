@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
@@ -22,7 +22,7 @@ class SettingsBloc extends GetxController {
         ));
     try {
       await AppInit().user.signOut();
-      await FirebaseAuth.instance.signOut();
+      // await FirebaseAuth.instance.signOut();
       Get.offAllNamed(MyRoutes.welcome);
     } catch (er) {
       Get.back();

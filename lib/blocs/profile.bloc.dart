@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/models/errorException.dart';
-import 'package:rewear/services/firestorage.services.dart';
-import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/http.services.dart';
+import 'package:rewear/generals/exts/extensions.dart';
 
 class ProfileBloc extends GetxController {
   RxBool loading = false.obs;
@@ -18,6 +16,8 @@ class ProfileBloc extends GetxController {
   Rx<XFile?> selectedCoverFile = Rx<XFile?>(null);
   final ImagePicker _picker = ImagePicker();
   AppInit app = AppInit();
+
+  final services = HttpServices();
 
   void coordinateLocation() async {
     coordinatingLocation.value = true;
@@ -30,7 +30,9 @@ class ProfileBloc extends GetxController {
 
   ImageProvider getProfileAvatar() {
     if (selectedFile.value == null) {
-      if (app.user.image != null) return NetworkImage(app.user.image!);
+      if (app.user.image != null) {
+        return NetworkImage(app.user.image!.avatarURL());
+      }
       return const AssetImage(MyImages.defaultProfile);
     }
     return FileImage(File(selectedFile.value!.path));
@@ -38,39 +40,42 @@ class ProfileBloc extends GetxController {
 
   ImageProvider? getProfileCover() {
     if (selectedCoverFile.value == null) {
-      if (app.user.cover != null) return NetworkImage(app.user.cover!);
+      if (app.user.cover != null) {
+        return NetworkImage(app.user.cover!.coverURL());
+      }
       return null;
     }
     return FileImage(File(selectedCoverFile.value!.path));
   }
 
   void uploadProfile() async {
-    selectedFile.value = await _picker.pickImage(source: ImageSource.gallery);
+    selectedFile.value = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 60,
+        maxHeight: 300,
+        maxWidth: 300);
   }
 
   void uploadCover() async {
-    selectedCoverFile.value =
-        await _picker.pickImage(source: ImageSource.gallery);
+    selectedCoverFile.value = await _picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 70, maxHeight: 400);
   }
 
   void updateInfo() async {
     loading.value = true;
 
     try {
-      if (selectedFile.value != null) {
-        app.user.image = await StorageServices()
-            .putCoverOrAvatar(File(selectedFile.value!.path), 'avatar');
-      }
-
-      if (selectedCoverFile.value != null) {
-        app.user.cover = await StorageServices()
-            .putCoverOrAvatar(File(selectedCoverFile.value!.path), 'cover');
-      }
-
-      await FirestoreServices().updateUserWithDocId(
-          app.user.docId ?? '', app.user.toJsonForFirestore());
-
-      await app.user.updateCache();
+      await services.updateProfile(
+          fullname: app.user.fullname,
+          image: selectedFile.value?.path,
+          cover: selectedCoverFile.value?.path,
+          address: app.user.address,
+          description: app.user.description,
+          phone: app.user.phone,
+          position: app.user.position != null
+              ? '${app.user.position!.latitude},${app.user.position!.longitude}'
+              : null,
+          slogan: app.user.slogan);
 
       loading.value = false;
       app.handleError(MyErrorException(

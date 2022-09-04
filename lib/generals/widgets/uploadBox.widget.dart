@@ -85,7 +85,7 @@ class _UploadBoxWidgetState extends State<UploadBoxWidget> {
 
   void _upload() async {
     await _picker
-        .pickImage(source: ImageSource.gallery, imageQuality: 50, maxWidth: 512)
+        .pickImage(source: ImageSource.gallery, imageQuality: 50, maxWidth: 400)
         .then((photos) {
       if (photos != null) {
         setState(() {

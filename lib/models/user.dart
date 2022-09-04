@@ -4,8 +4,7 @@ import 'package:rewear/generals/constants.dart';
 import 'package:rewear/models/userType.enum.dart';
 
 class User {
-  String? docId;
-  final String? uid;
+  final String? id;
   String? fullname;
   String? token;
   String? fcmToken;
@@ -24,8 +23,7 @@ class User {
 
   User(
       {this.fullname,
-      this.docId,
-      this.uid,
+      this.id,
       this.role,
       this.cover,
       this.email,
@@ -40,6 +38,7 @@ class User {
       this.position,
       this.rate,
       this.slogan});
+
   factory User.fromCache() {
     final box = GetStorage();
     if (box.read(MyConstants.USER_DATA_ID) == null) {
@@ -47,6 +46,7 @@ class User {
     }
     return User.fromJson(box.read(MyConstants.USER_DATA_ID));
   }
+
   factory User.fromJson(Map<String, dynamic> json) {
     LatLng? pos;
     if (json['position'] != null) {
@@ -61,8 +61,7 @@ class User {
     }
 
     return User(
-        docId: json['docId'],
-        uid: json['uid'],
+        id: json['_id'],
         address: json['address'],
         country: json['country'],
         city: json['city'],
@@ -84,8 +83,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
-      'docId': docId,
-      'uid': uid,
+      '_id': id,
       'fullname': fullname,
       'email': email,
       'token': token,
@@ -106,36 +104,6 @@ class User {
     };
   }
 
-  Map<String, dynamic> toJsonForFirestore(
-      {DateTime? updatedAt, bool createdAt = false}) {
-    var obj = {
-      'docId': docId,
-      'uid': uid,
-      'fullname': fullname,
-      'email': email,
-      'token': token,
-      'fcmToken': fcmToken,
-      'role': role.toString(),
-      'address': address,
-      'country': country,
-      'city': city,
-      'image': image,
-      'cover': cover,
-      'slogan': slogan,
-      'phone': phone,
-      'description': description,
-      'position': position != null
-          ? '${position!.latitude},${position!.longitude}'
-          : null,
-      'rate': rate,
-      'updatedAt': updatedAt ?? DateTime.now()
-    };
-    if (createdAt) {
-      obj.addAll({'createdAt': DateTime.now()});
-    }
-    return obj;
-  }
-
   Future<void> saveToCacheAndLogin() async {
     final box = GetStorage();
     box.write(MyConstants.USER_IS_LOGIN_ID, true);
@@ -153,5 +121,15 @@ class User {
     final box = GetStorage();
     await box.erase();
     await box.save();
+  }
+
+  LatLng? convertLatLng(var jsonData) {
+    if (jsonData != null) {
+      final posSplited = jsonData.toString().split(',');
+      return LatLng(double.parse(posSplited[0].toString()),
+          double.parse(posSplited[1].toString()));
+    }
+
+    return null;
   }
 }

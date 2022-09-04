@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
-import 'package:firebase_core/firebase_core.dart' as fbCore;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -16,7 +13,6 @@ import 'package:rewear/models/neckStyle.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/firestore.services.dart';
 import 'package:rewear/services/general.services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,13 +28,12 @@ class AppInit {
 
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
-  static const String BASE_URL = 'https://asbrothers.ca';
+  static const String BASE_URL =
+      'http://localhost:4933'; // http://rewear.asbrothers.ca
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =
       '[{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"administrative.land_parcel","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}]';
-
-  fbCore.FirebaseApp? firebaseApp;
 
   bool isUserLoggedIn = false;
   User user = User();
@@ -124,59 +119,24 @@ class AppInit {
       user.country = geolocatedModel?.country;
 
       if (firestoreUpdate) {
-        await FirestoreServices().updateUserWithDocId(user.docId!, {
-          'position':
-              '${currentPosition!.latitude}, ${currentPosition!.longitude}',
-          'updatedAt': DateTime.now()
-        });
+        // await FirestoreServices().updateUserWithDocId(user.docId!, {
+        //   'position':
+        //       '${currentPosition!.latitude}, ${currentPosition!.longitude}',
+        //   'updatedAt': DateTime.now()
+        // });
       }
     } else {
       await GeolocatorPlatform.instance.requestPermission();
     }
   }
 
-  Future<void> updateUserData(
-      {bool isLogin = true,
-      UserType? role,
-      String? fullname,
-      User? currentUser,
-      fbAuth.UserCredential? credential}) async {
-    final token = await credential?.user?.getIdToken();
-    final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
-    final user = currentUser ??
-        User(
-            uid: credential?.user?.uid,
-            email: credential?.user?.email,
-            fullname: fullname ?? credential?.user?.displayName,
-            role: role,
-            token: token,
-            fcmToken: fcmToken);
-
-    var dataForUpdate = {'token': token, 'fcmToken': fcmToken};
-
-    if (isLogin) {
-      // Login
-    } else {
-      // Sign up
-      final docId = await FirestoreServices()
-          .addUser(user.toJsonForFirestore(createdAt: true));
-      user.docId = docId;
-      dataForUpdate['docId'] = docId;
-    }
-    AppInit().user = user;
-    await AppInit().user.saveToCacheAndLogin();
-    await FirestoreServices()
-        .updateUserWithDocId(AppInit().user.docId!, dataForUpdate);
-  }
-
   Future<void> preInit() async {
     await GetStorage.init();
     WidgetsFlutterBinding.ensureInitialized();
-    firebaseApp = await fbCore.Firebase.initializeApp();
 
     // Check user is logged in or not
     user = User.fromCache();
-    if (user.uid != null) {
+    if (user.id != null) {
       isUserLoggedIn = true;
     } else {
       isUserLoggedIn = false;
@@ -187,16 +147,20 @@ class AppInit {
     String title = '';
     String message = '';
     switch (exception.runtimeType) {
-      case fbAuth.FirebaseException:
-      case fbAuth.FirebaseAuthException:
-        title =
-            exception.code.toString().replaceAll('-', ' ').capitalizeFirst ??
-                '';
-        message = exception.message ?? '';
-        break;
+      // case fbAuth.FirebaseException:
+      // case fbAuth.FirebaseAuthException:
+      //   title =
+      //       exception.code.toString().replaceAll('-', ' ').capitalizeFirst ??
+      //           '';
+      //   message = exception.message ?? '';
+      //   break;
       case MyErrorException:
         title = exception.title;
         message = exception.message ?? '';
+        break;
+      default:
+        title = 'Error';
+        message = exception.toString();
         break;
     }
 

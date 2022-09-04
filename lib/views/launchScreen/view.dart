@@ -4,28 +4,20 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
-import 'package:rewear/models/user.dart';
-import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/http.services.dart';
 
 class LaunchScreen extends StatelessWidget {
   LaunchScreen({Key? key}) : super(key: key);
 
   final app = AppInit();
+  final services = HttpServices();
 
   void _init() async {
     await Future.delayed(const Duration(seconds: 2));
     if (app.isUserLoggedIn) {
-      final freshData = await FirestoreServices().getUser(app.user.uid ?? '');
-      final fcmToken = ''; // await FirebaseMessaging.instance.getToken();
-      app.user = User.fromJson(freshData.data);
-      app.user.docId = freshData.docId;
-      app.user.fcmToken = fcmToken;
-      await FirestoreServices()
-          .updateUserWithDocId(freshData.docId, {'fcmToken': fcmToken});
-      FirestoreServices().getRequests(); // listen for new request
-      FirestoreServices().getTailors(); // listen for new tailors
-
+      await services.init();
+      // FirestoreServices().getRequests(); // listen for new request
+      await services.getTailorsNearby(); // listen for new tailors
       Get.offNamed(MyRoutes.home);
     } else {
       Get.offNamed(MyRoutes.welcome);

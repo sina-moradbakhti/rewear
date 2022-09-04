@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 
@@ -13,9 +13,6 @@ class Order {
   NeckStyle? neckStyle;
   String? serviceType;
   String? material;
-  double? price;
-  DateTime? deliveryDate;
-  bool? tailorysDone;
 
   final DateTime? createdAt;
   DateTime? updatedAt;
@@ -26,14 +23,11 @@ class Order {
       this.description,
       this.foundTailorId,
       this.images,
-      this.price,
       this.color,
       this.material,
       this.neckStyle,
       this.serviceType,
       required this.id,
-      this.deliveryDate,
-      this.tailorysDone,
       required this.userId});
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -48,11 +42,8 @@ class Order {
         neckStyle: stringToNeckStyle(json['neckStyle']),
         serviceType: json['serviceType'],
         material: json['material'],
-        price: json['price'],
-        deliveryDate: (json['deliveryDate'] as Timestamp).toDate(),
-        tailorysDone: json['tailorysDone'],
-        createdAt: (json['createdAt'] as Timestamp).toDate(),
-        updatedAt: (json['updatedAt'] as Timestamp).toDate(),
+        createdAt: (json['createdAt']).toDate(),
+        updatedAt: (json['updatedAt']).toDate(),
       );
 
   Map<String, dynamic> toJson() {
@@ -66,9 +57,6 @@ class Order {
       'neckStyle': neckStyle != null ? neckStyleToString(neckStyle!) : null,
       'serviceType': serviceType,
       'material': material,
-      'price': price,
-      'deliveryDate': deliveryDate,
-      'tailorysDone': tailorysDone,
       'createdAt': createdAt,
       'updatedAt': updatedAt
     };
@@ -85,9 +73,6 @@ class Order {
       'neckStyle': neckStyle != null ? neckStyleToString(neckStyle!) : null,
       'serviceType': serviceType,
       'material': material,
-      'price': price,
-      'deliveryDate': deliveryDate,
-      'tailorysDone': tailorysDone,
       'createdAt': DateTime.now(),
       'updatedAt': updatedAt ?? DateTime.now()
     };

@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rewear/models/order.dart';
 
 class Request {
-  String? docId;
+  String? id;
   String? sellerId;
   final String customerId;
   final Order order;
@@ -19,9 +18,10 @@ class Request {
   bool isReady = false;
   double price = 0;
   final DateTime orderDate;
+  final DateTime deliveryToTailor;
 
   Request(
-      {this.docId,
+      {this.id,
       required this.order,
       required this.customerId,
       this.sellerId,
@@ -35,11 +35,12 @@ class Request {
       this.canceledByUser = false,
       this.tailorSeen = false,
       this.canceledExcuse = '',
-      this.price = 0});
+      this.price = 0,
+      required this.deliveryToTailor});
 
   factory Request.fromJson(Map<String, dynamic> data) {
     return Request(
-        docId: data['docId'],
+        id: data['_id'],
         seen: data['seen'] ?? false,
         tailorSeen: data['tailorSeen'] ?? false,
         sellerId: data['sellerId'],
@@ -52,27 +53,8 @@ class Request {
         isReady: data['isReady'],
         price: double.parse(data['price'].toString()),
         timeToDelivery: data['timeToDelivery'],
-        orderDate: (data['orderDate'] as Timestamp).toDate(),
-        order: Order.fromJson(data['order']));
-  }
-
-  Map<String, dynamic> toJsonForFirestore() {
-    return {
-      'docId': docId,
-      'sellerId': sellerId,
-      'customerId': customerId,
-      'seen': seen,
-      'tailorSeen': tailorSeen,
-      'acceptedBySeller': acceptedBySeller,
-      'acceptedByUser': acceptedByUser,
-      'canceledBySeller': canceledBySeller,
-      'canceledByUser': canceledByUser,
-      'cancelExcuse': canceledExcuse,
-      'isReady': isReady,
-      'price': price,
-      'timeToDelivery': timeToDelivery,
-      'orderDate': orderDate,
-      'order': order.toJsonForFirestore()
-    };
+        orderDate: (data['orderDate']).toDate(),
+        order: Order.fromJson(data['order']),
+        deliveryToTailor: data['deliveryToTailor']);
   }
 }
