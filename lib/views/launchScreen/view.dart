@@ -4,20 +4,23 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
-import 'package:rewear/services/http.services.dart';
+import 'package:rewear/services/get_tailors_nearby.dart';
+import 'package:rewear/services/init.dart';
 
 class LaunchScreen extends StatelessWidget {
   LaunchScreen({Key? key}) : super(key: key);
 
   final app = AppInit();
-  final services = HttpServices();
+  final tailorsServices = TailorsServices();
+  final initService = InitService();
 
   void _init() async {
+    await AppInit().preInit();
     await Future.delayed(const Duration(seconds: 2));
     if (app.isUserLoggedIn) {
-      await services.init();
+      await initService.call();
       // FirestoreServices().getRequests(); // listen for new request
-      await services.getTailorsNearby(); // listen for new tailors
+      await tailorsServices.getTailorsNearby(); // listen for new tailors
       Get.offNamed(MyRoutes.home);
     } else {
       Get.offNamed(MyRoutes.welcome);

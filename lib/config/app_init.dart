@@ -37,7 +37,6 @@ class AppInit {
 
   bool isUserLoggedIn = false;
   User user = User();
-  Tailor tailor = Tailor();
   Position? currentPosition;
   List<Request> requests = [];
   List<Tailor> tailors = [];
@@ -91,8 +90,7 @@ class AppInit {
         style: NeckStyle.style3)
   ];
 
-  Future<void> updateLastLocation(
-      {bool firestoreUpdate = false, bool isBackground = false}) async {
+  Future<void> updateLastLocation({bool isBackground = false}) async {
     final isServiceEnabled =
         await GeolocatorPlatform.instance.isLocationServiceEnabled();
     if (!isServiceEnabled) {
@@ -112,19 +110,11 @@ class AppInit {
           LatLng(currentPosition!.latitude, currentPosition!.longitude);
 
       // Geolocating
-      final geolocatedModel =
-          await GeneralServices().geoCoding(AppInit().user.position!);
-      if (user.role == UserType.customer) user.address = geolocatedModel?.addr;
-      user.city = geolocatedModel?.city;
-      user.country = geolocatedModel?.country;
-
-      if (firestoreUpdate) {
-        // await FirestoreServices().updateUserWithDocId(user.docId!, {
-        //   'position':
-        //       '${currentPosition!.latitude}, ${currentPosition!.longitude}',
-        //   'updatedAt': DateTime.now()
-        // });
-      }
+      // final geolocatedModel =
+      //     await GeneralServices().geoCoding(AppInit().user.position!);
+      // if (user.role == UserType.customer) user.address = geolocatedModel?.addr;
+      // user.city = geolocatedModel?.city;
+      // user.country = geolocatedModel?.country;
     } else {
       await GeolocatorPlatform.instance.requestPermission();
     }

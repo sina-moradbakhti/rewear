@@ -7,10 +7,8 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
-import 'package:rewear/models/order.dart';
 import 'package:rewear/models/request.model.dart';
-import 'package:rewear/services/http.services.dart';
-// import 'package:rewear/services/firestorage.services.dart';
+import 'package:rewear/services/requests.dart';
 
 class AlterationBloc extends GetxController {
   Rx<String> description = ''.obs;
@@ -21,7 +19,7 @@ class AlterationBloc extends GetxController {
   List<XFile> photos = [];
   RxBool creatingAnOrderLoading = false.obs;
 
-  final services = HttpServices();
+  final services = RequestsServices();
   final app = AppInit();
 
   void updateNeckStyle(NeckStyleModel model) {
@@ -86,23 +84,20 @@ class AlterationBloc extends GetxController {
   void next() async {
     if (!checkNotEmptyFields()) return;
     creatingAnOrderLoading.value = true;
-    await app.updateLastLocation(firestoreUpdate: false);
+    await app.updateLastLocation();
 
     if (app.currentPosition != null) {
-      Order order =
-          Order(id: '', userId: app.user.id!, createdAt: DateTime.now());
-      order.color = selectedColor;
-      order.material = selectedMaterial.value;
-      order.neckStyle = selectedNeckStyle.value;
-      order.description = description.value;
-      order.images = [];
-      order.serviceType = 'Alteration';
-
       final request = Request(
-          deliveryToTailor: selectedDate.value!,
-          order: order,
-          customerId: app.user.id!,
-          orderDate: DateTime.now());
+        deliveryToTailor: selectedDate.value!,
+        customer: app.user,
+        orderDate: DateTime.now(),
+        color: selectedColor,
+        material: selectedMaterial.value,
+        neckStyle: selectedNeckStyle.value,
+        description: description.value,
+        images: [],
+        serviceType: 'Alteration',
+      );
 
       try {
         final reqId = await services.newRequest(request);
@@ -118,7 +113,7 @@ class AlterationBloc extends GetxController {
               images: uploadedImageList ?? [], reqId: reqId);
         }
         // Go to choose a tailor
-        Get.toNamed(MyRoutes.tailorsNearby, arguments: request);
+        Get.toNamed(MyRoutes.tailorsNearby, arguments: reqId);
         creatingAnOrderLoading.value = false;
       } catch (er) {
         print(er);

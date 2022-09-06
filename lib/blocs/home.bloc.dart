@@ -14,7 +14,11 @@ class HomeBloc extends GetxController {
   @override
   void onInit() {
     _checkIsUpdatedProfile();
-    currentCity.value = '${app.user.city}, ${app.user.country}';
+    if (app.user.city == null || app.user.country == null) {
+      currentCity.value = "Couldn't be determined";
+    } else {
+      currentCity.value = '${app.user.city}, ${app.user.country}';
+    }
     super.onInit();
   }
 

@@ -21,7 +21,7 @@ class TailorRequestDetails extends StatelessWidget {
         centerTitle: false,
         main: false,
         title: Text(
-          bloc.request?.order.serviceType ?? 'Service',
+          bloc.request?.serviceType ?? 'Service',
           style: Get.theme.textTheme.headline5,
         ),
       ),
@@ -278,11 +278,11 @@ class TailorRequestDetails extends StatelessWidget {
             _keyValueWidget(
                 'Order date', bloc.request!.orderDate.beautify(), true),
             _keyValueWidget(
-                'Material', bloc.request!.order.material ?? '', true),
+                'Material', bloc.request!.material ?? '', true),
             _keyValueWidget(
                 'Color',
                 Icon(Icons.circle,
-                    size: 25, color: bloc.request!.order.color ?? Colors.white),
+                    size: 25, color: bloc.request!.color ?? Colors.white),
                 false),
             Padding(
               padding: const EdgeInsets.only(bottom: 60, top: 30),
@@ -297,7 +297,7 @@ class TailorRequestDetails extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
-                    child: Text(bloc.request!.order.description ?? '',
+                    child: Text(bloc.request!.description ?? '',
                         style: Get.theme.textTheme.bodyText1),
                   ),
                 ],
@@ -316,7 +316,7 @@ class TailorRequestDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                for (final image in bloc.request!.order.images!)
+                for (final image in bloc.request!.images!)
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: SizedBox(

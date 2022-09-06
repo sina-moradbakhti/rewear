@@ -39,7 +39,7 @@ class LocationCoordinatorWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    'Coordinate your location',
+                    '${active ? 'Update' : 'Pin'} your location on the map',
                     style: active
                         ? Get.theme.textTheme.bodyText2!
                             .copyWith(color: MyColors.orange)

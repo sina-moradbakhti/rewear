@@ -44,7 +44,7 @@ class Tailor {
       }
     }
     return Tailor(
-      uid: json['uid'],
+      uid: json['_id'],
       email: json['email'],
       fullname: json['fullname'],
       fcmToken: json['fcmToken'],

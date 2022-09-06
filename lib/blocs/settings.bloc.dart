@@ -22,6 +22,7 @@ class SettingsBloc extends GetxController {
         ));
     try {
       await AppInit().user.signOut();
+      AppInit().currentPosition = null;
       // await FirebaseAuth.instance.signOut();
       Get.offAllNamed(MyRoutes.welcome);
     } catch (er) {

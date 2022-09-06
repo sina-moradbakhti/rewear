@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/images.dart';
+import 'package:rewear/generals/modals/updateTailorLocation.modal.dart';
 import 'package:rewear/models/errorException.dart';
-import 'package:rewear/services/http.services.dart';
 import 'package:rewear/generals/exts/extensions.dart';
+import 'package:rewear/services/update_profile.dart';
 
 class ProfileBloc extends GetxController {
   RxBool loading = false.obs;
@@ -17,15 +19,36 @@ class ProfileBloc extends GetxController {
   final ImagePicker _picker = ImagePicker();
   AppInit app = AppInit();
 
-  final services = HttpServices();
+  final services = UpdateProfileService();
+
+  @override
+  void onInit() {
+    locationIsSet.value = (app.user.position != null);
+    super.onInit();
+  }
 
   void coordinateLocation() async {
     coordinatingLocation.value = true;
-    await AppInit().updateLastLocation(isBackground: false);
-    if (AppInit().user.position != null) {
-      locationIsSet.value = true;
+    if (app.user.position == null) {
+      await app.updateLastLocation(isBackground: false);
     }
+    Get.dialog(
+      UpdateTailorLocationDialog(onReturnLocation: _setNewLocation),
+      useSafeArea: true,
+      barrierColor: Colors.black87,
+      transitionCurve: Curves.easeInOut,
+    );
     coordinatingLocation.value = false;
+  }
+
+  _setNewLocation(LatLng? newLocation) async {
+    if (newLocation == null) return;
+
+    await services.call(
+        position: '${newLocation.latitude},${newLocation.longitude}');
+
+    if (app.user.position == null) return;
+    locationIsSet.value = true;
   }
 
   ImageProvider getProfileAvatar() {
@@ -65,7 +88,7 @@ class ProfileBloc extends GetxController {
     loading.value = true;
 
     try {
-      await services.updateProfile(
+      await services.call(
           fullname: app.user.fullname,
           image: selectedFile.value?.path,
           cover: selectedCoverFile.value?.path,

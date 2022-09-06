@@ -8,17 +8,16 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/confirmTailory.modal.dart';
 import 'package:rewear/generals/modals/congrats.modal.dart';
-import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
-// import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/requests.dart';
 
 class NearbyBloc extends GetxController {
   var markers = [].obs;
-  Request? request;
+  String? requestId;
   GoogleMapController? mapController;
   RxBool myLocationLoading = false.obs;
   final app = AppInit();
-  final homeBloc = Get.find<HomeBloc>();
+  final services = RequestsServices();
 
   LatLng get myPosition => LatLng(
       app.user.position?.latitude ?? 0, app.user.position?.longitude ?? 0);
@@ -60,6 +59,7 @@ class NearbyBloc extends GetxController {
   }
 
   void moveTo(Tailor where, {makeOrder = false, bool scrolled = false}) async {
+    final homeBloc = Get.find<HomeBloc>();
     mapController?.moveCamera(CameraUpdate.newLatLng(
         LatLng(where.position!.latitude, where.position!.longitude)));
     homeBloc.currentCity.value = '${where.city} ${where.country}';
@@ -75,21 +75,22 @@ class NearbyBloc extends GetxController {
   }
 
   void makeRequest(Tailor tailor) async {
-    // try {
-    //   await FirestoreServices()
-    //       .updateRequests({'sellerId': tailor.uid}, request?.docId ?? '');
-    //   Get.back();
-    //   Get.dialog(const CongratsDialog(),
-    //       useSafeArea: true,
-    //       barrierColor: Colors.black87,
-    //       transitionCurve: Curves.easeInOut);
-    // } catch (er) {
-    //   Get.back();
-    //   app.handleError(er);
-    // }
+    try {
+      await services.updateRequestChooseSeller(
+          reqId: requestId!, sellerId: tailor.uid!);
+      Get.back();
+      Get.dialog(const CongratsDialog(),
+          useSafeArea: true,
+          barrierColor: Colors.black87,
+          transitionCurve: Curves.easeInOut);
+    } catch (er) {
+      Get.back();
+      app.handleError(er);
+    }
   }
 
   void showMe() async {
+    final homeBloc = Get.find<HomeBloc>();
     myLocationLoading.value = true;
     if (app.user.position == null) {
       await app.updateLastLocation(isBackground: false);
@@ -105,6 +106,7 @@ class NearbyBloc extends GetxController {
 
   @override
   void onInit() {
+    requestId = Get.arguments;
     initMarkers();
     super.onInit();
   }

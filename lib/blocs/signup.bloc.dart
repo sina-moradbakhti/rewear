@@ -1,11 +1,10 @@
-// import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/registerType.enum.dart';
 import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/http.services.dart';
+import 'package:rewear/services/authentication.dart';
 
 class SignupBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;
@@ -14,7 +13,7 @@ class SignupBloc extends GetxController {
   var password = ''.obs;
   RxBool loading = false.obs;
 
-  final services = HttpServices();
+  final services = AuthenticationServices();
 
   void changeUserType(UserType type) {
     selectedUserType.value = type;
@@ -85,7 +84,7 @@ class SignupBloc extends GetxController {
     if (user != null) {
       AppInit().user = user;
       await AppInit().user.saveToCacheAndLogin();
-      Get.offAllNamed(MyRoutes.home);
+      Get.offAllNamed(MyRoutes.launch);
     }
   }
 }

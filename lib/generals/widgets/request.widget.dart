@@ -45,7 +45,7 @@ class RequestWidget extends StatelessWidget {
                       width: 40,
                       height: 40,
                       child: Image.network(
-                        request.order.images?.first ?? '',
+                        request.images?.first ?? '',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -57,7 +57,7 @@ class RequestWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          request.order.serviceType ?? '',
+                          request.serviceType ?? '',
                           style: Get.theme.textTheme.bodyText1!
                               .copyWith(fontWeight: FontWeight.w500),
                         ),

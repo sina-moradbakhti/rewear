@@ -1,18 +1,16 @@
-// import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/registerType.enum.dart';
-import 'package:rewear/models/user.dart';
-import 'package:rewear/services/http.services.dart';
+import 'package:rewear/services/authentication.dart';
 
 class LoginBloc extends GetxController {
   var email = ''.obs;
   var password = ''.obs;
   RxBool loading = false.obs;
 
-  final services = HttpServices();
+  final services = AuthenticationServices();
 
   bool loginCheck(String email, String password) {
     String title = '';
@@ -68,7 +66,7 @@ class LoginBloc extends GetxController {
     if (user != null) {
       AppInit().user = user;
       await AppInit().user.saveToCacheAndLogin();
-      Get.offAllNamed(MyRoutes.home);
+      Get.offAllNamed(MyRoutes.launch);
     }
   }
 }

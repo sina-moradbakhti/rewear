@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
 import 'package:rewear/generals/widgets/star.widget.dart';
 import 'package:rewear/models/tailor.dart';
+import 'package:rewear/generals/exts/extensions.dart';
 
 class TailoryMapItem extends StatelessWidget {
   VoidCallback? onTapped;
@@ -38,7 +39,7 @@ class TailoryMapItem extends StatelessWidget {
                         height: 100,
                         child: (tailory.image != null)
                             ? Image.network(
-                                tailory.image!,
+                                tailory.image!.avatarURL(),
                                 fit: BoxFit.cover,
                               )
                             : Container())),

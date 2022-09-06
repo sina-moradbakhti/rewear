@@ -14,7 +14,7 @@ import 'package:rewear/models/userType.enum.dart';
 class Profile extends StatelessWidget {
   Profile({Key? key}) : super(key: key);
 
-  final bloc = ProfileBloc();
+  final bloc = Get.put(ProfileBloc());
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +100,7 @@ class Profile extends StatelessWidget {
         Obx(() => LocationCoordinatorWidget(
               onTapped: bloc.coordinateLocation,
               loading: bloc.coordinatingLocation.value,
-              active:
-                  (bloc.locationIsSet.value || bloc.app.user.position != null),
+              active: bloc.locationIsSet.value,
             )),
       ];
 

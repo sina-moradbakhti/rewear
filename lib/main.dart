@@ -25,7 +25,6 @@ import 'package:rewear/views/tailorsNearby/view.dart';
 import 'package:rewear/views/welcomeScreen/view.dart';
 
 void main() async {
-  await AppInit().preInit();
   runApp(const MyApp());
 }
 
