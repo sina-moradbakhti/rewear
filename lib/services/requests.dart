@@ -32,6 +32,90 @@ class RequestsServices extends HttpServices {
     }
   }
 
+  Future<bool?> updateRequestStatusBySeller(
+      {required String reqId,
+      bool? cancelBySeller,
+      String? cancelBySellerExcuse,
+      bool? sellerSeen,
+      bool? customerSeen,
+      double? price,
+      bool? acceptBySeller,
+      required Request req}) async {
+    final Uri url = Uri.parse('$baseUrl/update-request');
+    try {
+      final client = http.Client();
+      var body = {};
+      body = {'userId': AppInit().user.id ?? '', 'reqId': reqId};
+
+      if (cancelBySeller != null) {
+        body['cancelBySeller'] = cancelBySeller.toString();
+      }
+      if (cancelBySellerExcuse != null) {
+        body['cancelBySellerExcuse'] = cancelBySellerExcuse;
+      }
+      if (sellerSeen != null) {
+        body['sellerSeen'] = sellerSeen.toString();
+      }
+      if (customerSeen != null) {
+        body['customerSeen'] = customerSeen.toString();
+      }
+      if (price != null) {
+        body['price'] = price.toString();
+      }
+      if (acceptBySeller != null) {
+        body['acceptBySeller'] = acceptBySeller.toString();
+      }
+
+      await client.post(url,
+          body: body, headers: {'Authorization': AppInit().user.token ?? ''});
+
+      return true;
+    } catch (er) {
+      debugPrint(er.toString());
+      return null;
+    }
+  }
+
+  Future<bool?> updateRequestStatusByCustomer(
+      {required String reqId,
+      bool? cancelByCustomer,
+      String? cancelByCustomerExcuse,
+      bool? customerSeen,
+      bool? sellerSeen,
+      bool? acceptByUser,
+      required Request req}) async {
+    final Uri url = Uri.parse('$baseUrl/update-request');
+    try {
+      final client = http.Client();
+      var body = {};
+      body = {'userId': AppInit().user.id ?? '', 'reqId': reqId};
+
+      if (cancelByCustomer != null) {
+        body['cancelByCustomer'] = cancelByCustomer.toString();
+      }
+      if (cancelByCustomerExcuse != null) {
+        body['cancelByCustomerExcuse'] = cancelByCustomerExcuse;
+      }
+      if (customerSeen != null) {
+        body['customerSeen'] = customerSeen.toString();
+      }
+      if (sellerSeen != null) {
+        body['sellerSeen'] = sellerSeen.toString();
+      }
+      if (acceptByUser != null) {
+        body['acceptByUser'] = acceptByUser.toString();
+      }
+
+      await client.post(url,
+          body: body, headers: {'Authorization': AppInit().user.token ?? ''});
+
+      return true;
+    } catch (er) {
+      debugPrint(er.toString());
+      return null;
+    }
+  }
+
   Future<bool?> updateRequestImages(
       {required String reqId, required List<dynamic> images}) async {
     final Uri url = Uri.parse('$baseUrl/update-request');

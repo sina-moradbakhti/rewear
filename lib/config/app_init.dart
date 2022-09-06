@@ -10,14 +10,14 @@ import 'package:rewear/generals/modals/location.modal.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
+import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/general.services.dart';
+import 'package:rewear/services/init.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../models/request.model.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class AppInit {
   static final AppInit _singleton = AppInit._internal();
@@ -25,6 +25,8 @@ class AppInit {
     return _singleton;
   }
   AppInit._internal();
+
+  IO.Socket? socket;
 
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
@@ -173,5 +175,41 @@ class AppInit {
     if (!await launchUrl(Uri.parse(url))) {
       throw 'Could not launch $url';
     }
+  }
+
+  void initSocketClient() {
+    AppInit().socket = IO.io(
+        '$BASE_URL?token=${user.token}',
+        IO.OptionBuilder()
+            .setTransports(["websocket"])
+            .disableAutoConnect()
+            .enableForceNew()
+            .build());
+
+    AppInit().socket?.onConnect((data) => print('Connected'));
+    AppInit().socket?.onDisconnect((data) => print('Disconnected'));
+    AppInit().socket?.on('onUpdatedRequest', (data) => _onMessageHandler(data));
+
+    AppInit().socket?.connect();
+  } // end socket client initialization
+
+  _onMessageHandler(Map<String, dynamic> json) async {
+    // final reqId = json['data']['reqId'];
+    final initService = InitService();
+    await initService.call();
+    final tailor = user.role == UserType.seller;
+    if (tailor) {
+      tailorsStreamController.sink.add(true);
+    } else {
+      requestsStreamController.sink.add(true);
+    }
+  }
+
+  void notifyUserBySocket(Request request) {
+    final tailor = user.role == UserType.seller;
+    AppInit().socket?.emit('update-request', {
+      'to': !tailor ? request.seller!.id! : request.customer.id,
+      'data': {'reqId': request.id!}
+    });
   }
 }

@@ -4,6 +4,7 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
+import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/services/get_tailors_nearby.dart';
 import 'package:rewear/services/init.dart';
 
@@ -19,8 +20,13 @@ class LaunchScreen extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 2));
     if (app.isUserLoggedIn) {
       await initService.call();
-      // FirestoreServices().getRequests(); // listen for new request
-      await tailorsServices.getTailorsNearby(); // listen for new tailors
+
+      if (app.user.role == UserType.customer) {
+        await tailorsServices.getTailorsNearby(); // listen for new tailors
+      }
+
+      app.initSocketClient();
+
       Get.offNamed(MyRoutes.home);
     } else {
       Get.offNamed(MyRoutes.welcome);

@@ -6,6 +6,7 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/generals/exts/extensions.dart';
 
 class RequestWidget extends StatelessWidget {
   final Request request;
@@ -45,7 +46,7 @@ class RequestWidget extends StatelessWidget {
                       width: 40,
                       height: 40,
                       child: Image.network(
-                        request.images?.first ?? '',
+                        (request.images?.first ?? '').clothURL(request.id!),
                         fit: BoxFit.cover,
                       ),
                     ),

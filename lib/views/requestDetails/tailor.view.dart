@@ -212,9 +212,9 @@ class TailorRequestDetails extends StatelessWidget {
                                                   backgroundColor:
                                                       MyColors.grey,
                                                   backgroundImage: NetworkImage(
-                                                      bloc.customer.value
+                                                      (bloc.customer.value
                                                               ?.image ??
-                                                          ''))
+                                                          '').avatarURL()))
                                               : CircleAvatar(
                                                   radius: 30,
                                                   backgroundColor:
@@ -324,7 +324,7 @@ class TailorRequestDetails extends StatelessWidget {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(image),
+                        child: Image.network(image.clothURL(bloc.request!.id!)),
                       ),
                     ),
                   )

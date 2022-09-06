@@ -31,7 +31,7 @@ class FindServices extends StatelessWidget {
                 AppInit().user.role! == UserType.customer
                     ? CustomerServiceWidget()
                     : StreamBuilder(
-                        stream: AppInit().requestsStream,
+                        stream: AppInit().tailorsStream,
                         builder: ((context, snapshot) =>
                             SellerServiceWidget())),
               ],

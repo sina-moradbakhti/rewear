@@ -8,8 +8,9 @@ import 'dart:convert';
 
 class InitService extends HttpServices {
   Future<void> call() async {
-    final Uri url = Uri.parse('$baseUrl/init');
-     final client = http.Client();
+    try {
+      final Uri url = Uri.parse('$baseUrl/init');
+      final client = http.Client();
       final response = await client.post(url, body: {
         'userId': AppInit().user.id ?? '',
         'email': AppInit().user.email ?? '',
@@ -25,8 +26,6 @@ class InitService extends HttpServices {
         }
         AppInit().user.updateCache();
       }
-    try {
-     
     } catch (er) {
       debugPrint(er.toString());
     }

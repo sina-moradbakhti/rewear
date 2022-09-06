@@ -130,7 +130,8 @@ class RequestDetails extends StatelessWidget {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      bloc.tailor.value?.cover ?? '')),
+                                      (bloc.tailor.value?.cover ?? '')
+                                          .coverURL())),
                             )
                           : const BoxDecoration(),
                       child: Padding(
@@ -188,9 +189,10 @@ class RequestDetails extends StatelessWidget {
                                                   backgroundColor:
                                                       MyColors.grey,
                                                   backgroundImage: NetworkImage(
-                                                      bloc.tailor.value
-                                                              ?.image ??
-                                                          ''))
+                                                      (bloc.tailor.value
+                                                                  ?.image ??
+                                                              '')
+                                                          .avatarURL()))
                                               : CircleAvatar(
                                                   radius: 30,
                                                   backgroundColor:
@@ -253,8 +255,7 @@ class RequestDetails extends StatelessWidget {
           children: [
             _keyValueWidget(
                 'Order date', bloc.request!.orderDate.beautify(), true),
-            _keyValueWidget(
-                'Material', bloc.request!.material ?? '', true),
+            _keyValueWidget('Material', bloc.request!.material ?? '', true),
             _keyValueWidget(
                 'Color',
                 Icon(Icons.circle,
@@ -300,7 +301,7 @@ class RequestDetails extends StatelessWidget {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(image),
+                        child: Image.network(image.clothURL(bloc.request!.id!)),
                       ),
                     ),
                   )

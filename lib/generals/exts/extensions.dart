@@ -30,6 +30,16 @@ extension StringToColor on String {
             .replaceAll('_cover', '');
   }
 
+  String clothURL(String reqId) {
+    final str = this;
+    return AppInit.BASE_URL +
+        '/resources/cloth/' +
+        str
+            .replaceAll('uploads/perm/', '')
+            .replaceAll('.jpg', '')
+            .replaceAll('_avatar', '');
+  }
+
   Color? toColor() {
     if (this == '') return null;
     final String strColor = this;

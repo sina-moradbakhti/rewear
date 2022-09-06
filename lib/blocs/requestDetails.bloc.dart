@@ -5,7 +5,7 @@ import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
-// import 'package:rewear/services/firestore.services.dart';
+import 'package:rewear/services/requests.dart';
 
 class RequestDetailsBloc extends GetxController {
   final app = AppInit();
@@ -16,6 +16,8 @@ class RequestDetailsBloc extends GetxController {
   RxBool acceptLoading = false.obs;
   var showBottomPriceButtons = false.obs;
   Rx<String> strPrice = ''.obs;
+
+  final services = RequestsServices();
 
   @override
   void onInit() {
@@ -39,87 +41,138 @@ class RequestDetailsBloc extends GetxController {
   }
 
   void _getTailorProfile() async {
-    // final user = await FirestoreServices().getUser(request!.sellerId ?? '');
-    // tailor.value = Tailor.fromJson(user.data);
+    tailor.value = Tailor.fromJson(request!.seller!.toJson());
   }
 
   void _getCustomerProfile() async {
-    // final user = await FirestoreServices().getUser(request!.customerId);
-    // customer.value = User.fromJson(user.data);
+    customer.value = User.fromJson(request!.customer.toJson());
   }
 
   void accept() async {
-    // try {
-    //   acceptLoading.value = true;
+    try {
+      acceptLoading.value = true;
 
-    //   if (app.user.role == UserType.customer) {
-    //     // customer
-    //     await FirestoreServices().updateRequests(
-    //         {'acceptedByUser': true, 'tailorSeen': false},
-    //         request!.docId ?? '');
-    //     request!.acceptedByUser = true;
-    //   } else {
-    //     // seller
+      if (app.user.role == UserType.customer) {
+        // customer
+        await services.updateRequestStatusByCustomer(
+            reqId: request!.id!,
+            acceptByUser: true,
+            sellerSeen: false,
+            req: request!);
+        request!.acceptedByUser = true;
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(accept: true);
+      } else {
+        // seller
 
-    //     if (strPrice.value.isEmpty) {
-    //       acceptLoading.value = false;
-    //       app.handleError(MyErrorException(
-    //           title: 'Price',
-    //           message: 'You have to estimate a price for this order!'));
-    //       return;
-    //     }
+        if (strPrice.value.isEmpty) {
+          acceptLoading.value = false;
+          app.handleError(MyErrorException(
+              title: 'Price',
+              message: 'You have to estimate a price for this order!'));
+          return;
+        }
 
-    //     await FirestoreServices().updateRequests({
-    //       'acceptedBySeller': true,
-    //       'price': double.parse(strPrice.value),
-    //       'seen': false
-    //     }, request!.docId ?? '');
-    //     request!.acceptedBySeller = true;
-    //   }
+        await services.updateRequestStatusBySeller(
+            reqId: request!.id!,
+            acceptBySeller: true,
+            price: double.parse(strPrice.value),
+            customerSeen: false,
+            req: request!);
+        request!.acceptedBySeller = true;
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(accept: true);
+      }
 
-    //   acceptLoading.value = false;
-    //   showBottomPriceButtons.value = false;
-    // } catch (er) {
-    //   acceptLoading.value = false;
-    // }
+      acceptLoading.value = false;
+      showBottomPriceButtons.value = false;
+    } catch (er) {
+      acceptLoading.value = false;
+    }
   }
 
   void cancel() async {
-    // try {
-    //   cancelLoading.value = true;
+    try {
+      cancelLoading.value = true;
 
-    //   if (app.user.role == UserType.customer) {
-    //     // customer
-    //     await FirestoreServices().updateRequests(
-    //         {'canceledByUser': true, 'cancelExcuse': '', 'tailorSeen': false},
-    //         request!.docId ?? '');
-    //     request!.canceledByUser = true;
-    //   } else {
-    //     // seller
-    //     await FirestoreServices().updateRequests(
-    //         {'canceledBySeller': true, 'cancelExcuse': '', 'seen': false},
-    //         request!.docId ?? '');
-    //     request!.canceledBySeller = true;
-    //   }
+      if (app.user.role == UserType.customer) {
+        // customer
+        await services.updateRequestStatusByCustomer(
+            reqId: request!.id!,
+            cancelByCustomer: true,
+            cancelByCustomerExcuse: '',
+            sellerSeen: false,
+            req: request!);
+        request!.canceledByUser = true;
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(reject: true);
+      } else {
+        // seller
+        await services.updateRequestStatusBySeller(
+            reqId: request!.id!,
+            cancelBySeller: true,
+            cancelBySellerExcuse: '',
+            customerSeen: false,
+            req: request!);
+        request!.canceledBySeller = true;
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(reject: true);
+      }
 
-    //   cancelLoading.value = false;
-    //   showBottomPriceButtons.value = false;
-    // } catch (er) {
-    //   cancelLoading.value = false;
-    // }
+      cancelLoading.value = false;
+      showBottomPriceButtons.value = false;
+    } catch (er) {
+      cancelLoading.value = false;
+    }
   }
 
-  void _seen() {
-    // if (app.user.role == UserType.customer) {
-    //   if (!request!.seen) {
-    //     FirestoreServices()
-    //         .updateRequests({'seen': true}, request!.docId ?? '');
-    //   }
-    // } else {
-    //   if (!request!.tailorSeen) {
-    //     FirestoreServices()
-    //         .updateRequests({'tailorSeen': true}, request!.docId ?? '');
-    //   }
-    // }
+  void _seen() async {
+    if (app.user.role == UserType.customer) {
+      if (!request!.seen) {
+        await services.updateRequestStatusBySeller(
+            customerSeen: true, reqId: request!.id!, req: request!);
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(seen: true);
+      }
+    } else {
+      if (!request!.tailorSeen) {
+        await services.updateRequestStatusByCustomer(
+            sellerSeen: true, reqId: request!.id!, req: request!);
+        app.notifyUserBySocket(request!);
+        updateRequestsLocally(seen: true);
+      }
+    }
+  }
+
+  void updateRequestsLocally({bool? accept, bool? reject, bool? seen}) {
+    final index =
+        app.requests.indexWhere((element) => element.id == request!.id);
+    if (index >= 0) {
+      if (app.user.role == UserType.seller) {
+        // tailor
+        if (accept != null) {
+          app.requests[index].acceptedBySeller = accept;
+        }
+        if (reject != null) {
+          app.requests[index].canceledBySeller = reject;
+        }
+        if (seen != null) {
+          app.requests[index].tailorSeen = seen;
+        }
+        app.tailorsStreamController.sink.add(true);
+      } else {
+        // customer
+        if (accept != null) {
+          app.requests[index].acceptedByUser = accept;
+        }
+        if (reject != null) {
+          app.requests[index].canceledByUser = reject;
+        }
+        if (seen != null) {
+          app.requests[index].seen = seen;
+        }
+        app.requestsStreamController.sink.add(true);
+      }
+    }
   }
 }
