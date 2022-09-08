@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class InitService extends HttpServices {
-  Future<void> call() async {
+  Future<bool> call() async {
     try {
       final Uri url = Uri.parse('$baseUrl/init');
       final client = http.Client();
@@ -18,7 +18,7 @@ class InitService extends HttpServices {
         'Authorization': AppInit().user.token ?? ''
       });
       final decodedResponse = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && decodedResponse['data'] != null) {
         AppInit().user = User.fromJson(decodedResponse['data']['user']);
         AppInit().requests.clear();
         for (final reqItem in decodedResponse['data']['requests']) {
@@ -26,9 +26,13 @@ class InitService extends HttpServices {
         }
         AppInit().requests.sort((a, b) => b.orderDate.compareTo(a.orderDate));
         AppInit().user.updateCache();
+        return true;
+      } else {
+        return false;
       }
     } catch (er) {
       debugPrint(er.toString());
+      return false;
     }
   }
 }

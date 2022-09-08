@@ -100,7 +100,7 @@ class TailorRequestDetails extends StatelessWidget {
             child: SafeArea(
               child: Padding(
                 padding:
-                    MyConstants.primaryPadding.copyWith(bottom: 0, top: 10),
+                    MyConstants.primaryPadding.copyWith(bottom: 10, top: 10),
                 child: Text(
                     !bloc.request!.acceptedByUser
                         ? 'Waiting to customer...'

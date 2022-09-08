@@ -31,7 +31,7 @@ class AppInit {
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
   static const String BASE_URL =
-      'http://localhost:4933'; // http://rewear.asbrothers.ca
+      'http://192.168.1.37:4933'; // http://rewear.asbrothers.ca
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =
@@ -92,7 +92,29 @@ class AppInit {
         style: NeckStyle.style3)
   ];
 
-  Future<void> updateLastLocation({bool isBackground = false}) async {
+  Future<bool> checkLocationPermission() async {
+    final isServiceEnabled =
+        await GeolocatorPlatform.instance.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      Get.dialog(const TurnOffLocationDialog(),
+          useSafeArea: true,
+          barrierColor: Colors.black87,
+          transitionCurve: Curves.easeInOut);
+      return false;
+    }
+
+    final check = await GeolocatorPlatform.instance.checkPermission();
+    if (check == LocationPermission.whileInUse ||
+        check == LocationPermission.always) {
+      return true;
+    } else {
+      final checkAgain = await GeolocatorPlatform.instance.requestPermission();
+      return (checkAgain == LocationPermission.always ||
+          checkAgain == LocationPermission.whileInUse);
+    }
+  }
+
+  Future<bool> updateLastLocation({bool isBackground = false}) async {
     final isServiceEnabled =
         await GeolocatorPlatform.instance.isLocationServiceEnabled();
     if (!isServiceEnabled) {
@@ -102,7 +124,7 @@ class AppInit {
             barrierColor: Colors.black87,
             transitionCurve: Curves.easeInOut);
       }
-      return;
+      return false;
     }
     final check = await GeolocatorPlatform.instance.checkPermission();
     if (check == LocationPermission.whileInUse ||
@@ -110,7 +132,7 @@ class AppInit {
       currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();
       user.position =
           LatLng(currentPosition!.latitude, currentPosition!.longitude);
-
+      return true;
       // Geolocating
       // final geolocatedModel =
       //     await GeneralServices().geoCoding(AppInit().user.position!);
@@ -118,7 +140,16 @@ class AppInit {
       // user.city = geolocatedModel?.city;
       // user.country = geolocatedModel?.country;
     } else {
-      await GeolocatorPlatform.instance.requestPermission();
+      final checkAgain = await GeolocatorPlatform.instance.requestPermission();
+      final status = (checkAgain == LocationPermission.always ||
+          checkAgain == LocationPermission.whileInUse);
+      if (status) {
+        currentPosition =
+            await GeolocatorPlatform.instance.getCurrentPosition();
+        user.position =
+            LatLng(currentPosition!.latitude, currentPosition!.longitude);
+      }
+      return status;
     }
   }
 

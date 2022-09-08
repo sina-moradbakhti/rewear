@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:record/record.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
@@ -9,8 +8,11 @@ import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/services/requests.dart';
+import 'package:record/record.dart';
 
-class AlterationBloc extends GetxController {
+class ServiceBloc extends GetxController {
+  final record = Record();
+
   Rx<String> description = ''.obs;
   Rx<NeckStyle> selectedNeckStyle = NeckStyle.style0.obs;
   Rx<String> selectedMaterial = ''.obs;
@@ -18,9 +20,22 @@ class AlterationBloc extends GetxController {
   Color? selectedColor = Colors.green;
   List<XFile> photos = [];
   RxBool creatingAnOrderLoading = false.obs;
+  var isRecordingVoice = false.obs;
+  var recordedAudioPath = ''.obs;
+  String serviceType = 'Alteration';
 
   final services = RequestsServices();
   final app = AppInit();
+
+  ServiceBloc({required this.serviceType});
+
+  @override
+  void onInit() {
+    _initRecorder();
+    super.onInit();
+  }
+
+  _initRecorder() async {}
 
   void updateNeckStyle(NeckStyleModel model) {
     selectedNeckStyle.value = model.style;
@@ -45,10 +60,31 @@ class AlterationBloc extends GetxController {
     selectedDate.value = date;
   }
 
-  void recordVoice() async {
-    final record = Record();
-    bool status = await record.hasPermission();
-    print('Record : $status');
+  void startRecordVoice() async {
+    try {
+      if (await record.hasPermission()) {
+        await record.start();
+        isRecordingVoice.value = true;
+      } else {
+        app.handleError(MyErrorException(
+            message:
+                'Microphone permission not granted, you can grant permission from your settings',
+            title: 'Microphone Permission'));
+      }
+    } catch (er) {
+      debugPrint('error while recording voice $er');
+    }
+  }
+
+  void removeRecordedVoice() {
+    recordedAudioPath.value = '';
+  }
+
+  void stopVoiceRecording() async {
+    final path = await record.stop();
+    isRecordingVoice.value = false;
+    recordedAudioPath.value = path ?? '';
+    debugPrint('Voice recording has been stoped! ($path)');
   }
 
   void updatePhotoList(List<XFile> list) {
@@ -85,7 +121,6 @@ class AlterationBloc extends GetxController {
     if (!checkNotEmptyFields()) return;
     creatingAnOrderLoading.value = true;
     await app.updateLastLocation();
-
     if (app.currentPosition != null) {
       final request = Request(
         deliveryToTailor: selectedDate.value!,
@@ -96,7 +131,7 @@ class AlterationBloc extends GetxController {
         neckStyle: selectedNeckStyle.value,
         description: description.value,
         images: [],
-        serviceType: 'Alteration',
+        serviceType: serviceType,
       );
 
       try {

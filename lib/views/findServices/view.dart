@@ -11,30 +11,30 @@ class FindServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              AppInit().user.role! == UserType.customer
+                  ? CustomerServiceWidget()
+                  : StreamBuilder(
+                      stream: AppInit().tailorsStream,
+                      builder: ((context, snapshot) => SellerServiceWidget())),
+            ],
+          ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 105),
-              child: Image.asset(
-                MyImages.eco_banner,
-                fit: BoxFit.cover,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 70),
+                child: Image.asset(
+                  MyImages.eco_banner,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppInit().user.role! == UserType.customer
-                    ? CustomerServiceWidget()
-                    : StreamBuilder(
-                        stream: AppInit().tailorsStream,
-                        builder: ((context, snapshot) =>
-                            SellerServiceWidget())),
-              ],
             ),
           ),
         ],

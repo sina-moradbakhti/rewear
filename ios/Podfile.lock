@@ -5,6 +5,8 @@ PODS:
   - AppAuth/Core (1.5.0)
   - AppAuth/ExternalUserAgent (1.5.0):
     - AppAuth/Core
+  - audioplayers_darwin (0.0.1):
+    - Flutter
   - Firebase/CoreOnly (9.3.0):
     - FirebaseCore (= 9.3.0)
   - Firebase/Messaging (9.3.0):
@@ -102,6 +104,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -132,6 +135,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -155,6 +160,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
+  audioplayers_darwin: 387322cb364026a1782298c982693b1b6aa9fa1b
   Firebase: ef75abb1cdbc746d5a38f4e26c422c807b189b8c
   firebase_core: 96214f90497b808a2cf2a24517084c5f6de37b53
   firebase_messaging: a2cd2c6dd7b5430bb9e4e50e9a474413ae3bce09

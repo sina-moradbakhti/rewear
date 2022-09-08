@@ -9,6 +9,7 @@ import 'package:rewear/views/catalouges/view.dart';
 import 'package:rewear/views/findServices/view.dart';
 import 'package:rewear/views/profile/view.dart';
 import 'package:rewear/views/requests/view.dart';
+import 'package:rewear/views/store/view.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     AppInit().user.role == UserType.seller
         ? Catalogues(showAppBar: false)
         : Requests(showAppBar: false),
+    Store(),
     Profile()
   ];
 

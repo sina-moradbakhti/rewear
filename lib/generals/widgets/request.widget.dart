@@ -22,6 +22,7 @@ class RequestWidget extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.5, color: MyColors.grey))),
       child: MaterialButton(
+        elevation: 0,
         color: ((userType == UserType.customer &&
                     (request.acceptedBySeller &&
                         !request.acceptedByUser &&

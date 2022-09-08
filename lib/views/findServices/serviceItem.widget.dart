@@ -19,11 +19,12 @@ class ServiceItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double boxSize = 150;
     return LayoutBuilder(
         builder: (context, size) => Container(
             width:
                 type == UserType.customer ? (size.maxWidth / 2) : size.maxWidth,
-            height: type == UserType.customer ? 220 : 150,
+            height: boxSize, // type == UserType.customer ? 220 : 150,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(width: 2, color: MyColors.grey),
@@ -47,12 +48,12 @@ class ServiceItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                             SizedBox(
-                              width: size.maxWidth / 1.5,
-                              height: size.maxWidth / 1.5,
+                              width: boxSize / 1.5,
+                              height: boxSize / 1.5,
                               child: Image.asset(image),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 20),
+                              padding: const EdgeInsets.only(top: 0),
                               child: Text(
                                 title,
                                 style: Get.theme.textTheme.bodyText1!

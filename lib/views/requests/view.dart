@@ -65,6 +65,7 @@ class Requests extends StatelessWidget {
             Expanded(
                 child: StreamBuilder(
               builder: (context, snapshot) => ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 100),
                   itemBuilder: ((context, index) =>
                       RequestWidget(request: bloc.app.requests[index])),
                   itemCount: bloc.app.requests.length),

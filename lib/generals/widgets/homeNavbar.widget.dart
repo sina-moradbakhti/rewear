@@ -56,6 +56,11 @@ class HomeNavbar extends StatelessWidget {
                           icon: MySvgs.book,
                           onTapped: () => _bloc.changeTab(MainNavItem.orders)),
                   HomeNavbarItem(
+                      isSelected: _bloc.currentTab.value == MainNavItem.store,
+                      title: 'Store',
+                      icon: IconlyFont.bag,
+                      onTapped: () => _bloc.changeTab(MainNavItem.store)),
+                  HomeNavbarItem(
                       isSelected: _bloc.currentTab.value == MainNavItem.profile,
                       title: 'Profile',
                       icon: IconlyFont.profile,
@@ -105,7 +110,7 @@ class HomeNavbarItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(title,
-                            style: Get.theme.textTheme.bodyText1!
+                            style: Get.theme.textTheme.bodyText2!
                                 .copyWith(color: MyColors.orange)),
                       )
                     ]),
@@ -137,7 +142,7 @@ class HomeNavbarItem extends StatelessWidget {
                       ),
                       Text(
                         title,
-                        style: Get.theme.textTheme.bodyText1,
+                        style: Get.theme.textTheme.bodyText2,
                       )
                     ]),
               ),

@@ -51,6 +51,9 @@ class MyImages {
   // Slides
   static const String tailorySlide01 =
       MyImages.rootPath + '/' + 'tailory-slide-01.png';
+
+  static const String storeSoonBackground =
+      MyImages.rootPath + '/' + 'store_soon_background.png';
 }
 
 class MySvgs {

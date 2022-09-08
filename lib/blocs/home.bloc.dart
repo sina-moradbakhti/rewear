@@ -31,8 +31,11 @@ class HomeBloc extends GetxController {
       case MainNavItem.orders:
         controller?.animateTo(1);
         break;
-      case MainNavItem.profile:
+      case MainNavItem.store:
         controller?.animateTo(2);
+        break;
+      case MainNavItem.profile:
+        controller?.animateTo(3);
         break;
     }
   }

@@ -11,11 +11,13 @@ class MyPrimaryButton extends StatelessWidget {
   bool designViceVersa = false;
   Color? color;
   bool loading = false;
+  bool hasUnderline;
   Color? textColor;
   MyPrimaryButton(
       {Key? key,
       required this.onPressed,
       required this.title,
+      this.hasUnderline = false,
       this.color,
       this.textColor,
       this.loading = false,
@@ -37,6 +39,9 @@ class MyPrimaryButton extends StatelessWidget {
                 title,
                 style: TextStyle(
                     height: 1.4,
+                    decoration: hasUnderline
+                        ? TextDecoration.underline
+                        : TextDecoration.none,
                     fontSize: 14,
                     color: textColor ??
                         (designViceVersa ? MyColors.orange : MyColors.white),

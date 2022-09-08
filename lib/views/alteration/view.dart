@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:rewear/blocs/alteration.bloc.dart';
+import 'package:rewear/blocs/service.bloc.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/buttons.dart';
+import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/datefield.dart';
 import 'package:rewear/generals/dropdowns.dart';
 import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/textfields.dart';
+import 'package:rewear/generals/widgets/audioPlayer.widget.dart';
 import 'package:rewear/generals/widgets/break.widget.dart';
 import 'package:rewear/generals/widgets/colorSelector.widget.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
@@ -19,7 +21,7 @@ import 'package:rewear/generals/widgets/uploadBox.widget.dart';
 class Alteration extends StatelessWidget {
   Alteration({Key? key}) : super(key: key);
 
-  final bloc = Get.put(AlterationBloc());
+  final bloc = Get.put(ServiceBloc(serviceType: 'Alteration'));
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +61,28 @@ class Alteration extends StatelessWidget {
                       current: bloc.currentDateToStr(),
                       onTapped: bloc.chooseDate),
                   BreakWidget(size: 5),
-                  MyCustomfield(
-                    icon: IconlyFont.voice,
-                    title: 'Voice writing (Optional)',
-                    hint: 'Long tap here to record voice',
-                    onLongTapped: bloc.recordVoice,
-                  ),
-                  BreakWidget(size: 5),
+                  // Obx(() => MyCustomfield(
+                  //       backgroundColor: bloc.isRecordingVoice.value
+                  //           ? MyColors.lightOrange
+                  //           : MyColors.lightGrey,
+                  //       icon: IconlyFont.voice,
+                  //       title: 'Voice writing (Optional)',
+                  //       hint: bloc.isRecordingVoice.value
+                  //           ? 'Recording... (Tap to stop recording)'
+                  //           : 'Long tap here to record voice',
+                  //       onTapped: bloc.isRecordingVoice.value
+                  //           ? bloc.stopVoiceRecording
+                  //           : null,
+                  //       onLongTapped: !bloc.isRecordingVoice.value
+                  //           ? bloc.startRecordVoice
+                  //           : null,
+                  //     )),
+                  // Obx(() => bloc.recordedAudioPath.value != ''
+                  //     ? AudioPlayerWidget(
+                  //         audioPath: bloc.recordedAudioPath.value,
+                  //         onTappedDelete: bloc.removeRecordedVoice)
+                  //     : Container()),
+                  // BreakWidget(size: 20),
                   ColorSelectorWidget(
                       selectedColor: Colors.green,
                       onChanged: bloc.changedColor),

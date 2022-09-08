@@ -1,48 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rewear/config/app_init.dart';
+import 'package:rewear/blocs/launch.bloc.dart';
+import 'package:rewear/generals/buttons.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
-import 'package:rewear/generals/routes.dart';
-import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/services/get_tailors_nearby.dart';
-import 'package:rewear/services/init.dart';
 
 class LaunchScreen extends StatelessWidget {
   LaunchScreen({Key? key}) : super(key: key);
-
-  final app = AppInit();
-  final tailorsServices = TailorsServices();
-  final initService = InitService();
-
-  void _init() async {
-    await AppInit().preInit();
-    await Future.delayed(const Duration(seconds: 2));
-    if (app.isUserLoggedIn) {
-      await initService.call();
-
-      if (app.user.role == UserType.customer) {
-        await tailorsServices.getTailorsNearby(); // listen for new tailors
-      }
-
-      app.initSocketClient();
-
-      Get.offNamed(MyRoutes.home);
-    } else {
-      Get.offNamed(MyRoutes.welcome);
-    }
-  }
+  final bloc = Get.put(LaunchBloc());
 
   @override
   Widget build(BuildContext context) {
-    _init();
     return Scaffold(
       backgroundColor: Get.theme.primaryColor,
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
               Image.asset(
                 MyImages.circularRewearLogo,
@@ -50,9 +25,32 @@ class LaunchScreen extends StatelessWidget {
                 height: Get.width / 2,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: CircularProgressIndicator(
-                    color: MyColors.white, strokeWidth: 1.5),
+                padding: EdgeInsets.only(top: (Get.width / 2) + 100),
+                child: Obx(
+                  () => bloc.loadingStatus.value
+                      ? CircularProgressIndicator(
+                          color: MyColors.white, strokeWidth: 1.5)
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.warning_rounded,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                            SizedBox(
+                                width: Get.size.width / 2,
+                                child: MyPrimaryButton(
+                                  onPressed: bloc.reInit,
+                                  hasUnderline: true,
+                                  title: 'Refresh Connection',
+                                  color: MyColors.orange,
+                                  textColor: Colors.white,
+                                ))
+                          ],
+                        ),
+                ),
               )
             ],
           ),

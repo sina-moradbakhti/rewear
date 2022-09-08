@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/buttons.dart';
-import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/modals/requestStatus.model.dart';
 import 'package:rewear/generals/widgets/break.widget.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
@@ -22,41 +21,39 @@ class RequestHelpDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
+              padding: const EdgeInsets.symmetric(vertical: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0, bottom: 25),
-                    child: Text(
-                      "Status guideline",
-                      textAlign: TextAlign.center,
-                      style: Get.theme.textTheme.headline5!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+                  Text(
+                    "Status guideline",
+                    textAlign: TextAlign.center,
+                    style: Get.theme.textTheme.headline5!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(top: 0, bottom: 25),
+                    padding: EdgeInsets.symmetric(vertical: 15),
                     child: Hr(),
                   ),
                   ..._guidItems
                 ],
               ),
             ),
-            const Hr(),
-            Padding(
-                padding: MyConstants.topPadding,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: MyPrimaryButton(
-                      designViceVersa: true,
-                      onPressed: Get.back,
-                      title: 'Close',
-                    )),
-                  ],
-                ))
+             const Padding(
+               padding: EdgeInsets.symmetric(vertical: 15),
+               child: Hr(),
+             ),
+            Row(
+              children: [
+                Expanded(
+                    child: MyPrimaryButton(
+                  designViceVersa: true,
+                  onPressed: Get.back,
+                  title: 'Close',
+                )),
+              ],
+            )
           ],
         ),
       ),

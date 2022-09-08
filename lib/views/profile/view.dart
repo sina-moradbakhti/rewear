@@ -38,7 +38,10 @@ class Profile extends StatelessWidget {
 
   Widget _getContent(bool withoutAppbar) => SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: withoutAppbar ? 30 : 0),
+          padding: EdgeInsets.symmetric(
+              vertical: withoutAppbar
+                  ? (bloc.app.user.role == UserType.customer ? 30 : 0)
+                  : 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
