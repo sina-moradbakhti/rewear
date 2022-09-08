@@ -6,7 +6,6 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/models/userType.enum.dart';
-import 'package:rewear/generals/exts/extensions.dart';
 
 class RequestWidget extends StatelessWidget {
   final Request request;
@@ -43,8 +42,8 @@ class RequestWidget extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 55,
+                      height: 55,
                       child: Image.network(
                         (request.images?.first ?? '').clothURL(request.id!),
                         fit: BoxFit.cover,
@@ -52,7 +51,7 @@ class RequestWidget extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 15),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +59,10 @@ class RequestWidget extends StatelessWidget {
                         Text(
                           request.serviceType ?? '',
                           style: Get.theme.textTheme.bodyText1!
-                              .copyWith(fontWeight: FontWeight.w500),
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          request.orderDate.beautify(),
+                          request.deliveryToTailor.beautify(),
                           style: Get.theme.textTheme.bodyText2,
                         )
                       ],
@@ -83,6 +82,7 @@ class RequestWidget extends StatelessWidget {
     if (request.canceledBySeller) {
       return Icon(
         Icons.close,
+        size: 26,
         color: MyColors.red,
       );
     }
@@ -90,17 +90,20 @@ class RequestWidget extends StatelessWidget {
     if (!request.acceptedBySeller) {
       return Icon(
         Icons.circle_outlined,
+        size: 26,
         color: MyColors.grey,
       );
     } else {
       if (!request.acceptedByUser) {
         return Icon(
           Icons.emoji_people_rounded,
+          size: 26,
           color: MyColors.orange,
         );
       } else {
         return const Icon(
           Icons.check_circle_outline_rounded,
+          size: 26,
           color: Colors.green,
         );
       }
@@ -108,9 +111,10 @@ class RequestWidget extends StatelessWidget {
   }
 
   Widget get _statusForTailor {
-    if (request.canceledByUser) {
+    if (request.canceledByUser || request.canceledBySeller) {
       return Icon(
         Icons.close,
+        size: 26,
         color: MyColors.red,
       );
     }
@@ -118,17 +122,20 @@ class RequestWidget extends StatelessWidget {
     if (request.acceptedBySeller && request.acceptedByUser) {
       return const Icon(
         Icons.check_circle_outline_rounded,
+        size: 26,
         color: Colors.green,
       );
     } else {
       if (request.acceptedByUser) {
         return Icon(
           Icons.emoji_people_rounded,
+          size: 26,
           color: MyColors.orange,
         );
       } else {
         return Icon(
           Icons.circle_outlined,
+          size: 26,
           color: MyColors.grey,
         );
       }

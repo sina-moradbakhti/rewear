@@ -9,6 +9,7 @@ import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/confirmTailory.modal.dart';
 import 'package:rewear/generals/modals/congrats.modal.dart';
 import 'package:rewear/models/tailor.dart';
+import 'package:rewear/services/init.dart';
 import 'package:rewear/services/requests.dart';
 
 class NearbyBloc extends GetxController {
@@ -18,6 +19,7 @@ class NearbyBloc extends GetxController {
   RxBool myLocationLoading = false.obs;
   final app = AppInit();
   final services = RequestsServices();
+  final initService = InitService();
 
   LatLng get myPosition => LatLng(
       app.user.position?.latitude ?? 0, app.user.position?.longitude ?? 0);
@@ -78,6 +80,9 @@ class NearbyBloc extends GetxController {
     try {
       await services.updateRequestChooseSeller(
           reqId: requestId!, sellerId: tailor.uid!);
+      await initService.call();
+      app.notifyUserBySocket(
+          app.requests.firstWhere((element) => element.id == requestId));
       Get.back();
       Get.dialog(const CongratsDialog(),
           useSafeArea: true,

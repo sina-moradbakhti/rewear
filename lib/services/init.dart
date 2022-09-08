@@ -24,6 +24,7 @@ class InitService extends HttpServices {
         for (final reqItem in decodedResponse['data']['requests']) {
           AppInit().requests.add(Request.fromJson(reqItem));
         }
+        AppInit().requests.sort((a, b) => b.orderDate.compareTo(a.orderDate));
         AppInit().user.updateCache();
       }
     } catch (er) {
