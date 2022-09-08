@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/requests.bloc.dart';
+import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/request.widget.dart';
@@ -32,10 +34,25 @@ class Requests extends StatelessWidget {
   Widget get _title => !showAppBar
       ? Padding(
           padding: const EdgeInsets.only(bottom: 15, top: 24, left: 24),
-          child: Text(
-            MyStrings.requests_title,
-            style: Get.theme.textTheme.headline5!
-                .copyWith(fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                MyStrings.requests_title,
+                style: Get.theme.textTheme.headline5!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                  padding: EdgeInsets.zero,
+                  splashRadius: 15,
+                  splashColor: MyColors.lightOrange,
+                  onPressed: bloc.showHelp,
+                  icon: Icon(
+                    CupertinoIcons.question_circle_fill,
+                    color: MyColors.orange.withOpacity(.8),
+                  ))
+            ],
           ),
         )
       : Container();

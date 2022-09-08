@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/modals/requestStatus.model.dart';
 import 'package:rewear/generals/routes.dart';
+import 'package:rewear/generals/widgets/requestStatus.widget.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/models/userType.enum.dart';
@@ -20,7 +22,15 @@ class RequestWidget extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.5, color: MyColors.grey))),
       child: MaterialButton(
-        color: (request.acceptedBySeller && !request.acceptedByUser)
+        color: ((userType == UserType.customer &&
+                    (request.acceptedBySeller &&
+                        !request.acceptedByUser &&
+                        !request.canceledByUser)) ||
+                (userType == UserType.seller &&
+                    (!request.acceptedBySeller &&
+                        !request.canceledBySeller &&
+                        !request.acceptedByUser &&
+                        !request.canceledByUser)))
             ? MyColors.lightOrange
             : MyColors.white,
         padding: EdgeInsets.zero,
@@ -70,7 +80,7 @@ class RequestWidget extends StatelessWidget {
                   )
                 ],
               ),
-              userType == UserType.seller ? _statusForTailor : _status
+              _status
             ],
           ),
         ),
@@ -79,65 +89,29 @@ class RequestWidget extends StatelessWidget {
   }
 
   Widget get _status {
-    if (request.canceledBySeller) {
-      return Icon(
-        Icons.close,
-        size: 26,
-        color: MyColors.red,
-      );
-    }
-
-    if (!request.acceptedBySeller) {
-      return Icon(
-        Icons.circle_outlined,
-        size: 26,
-        color: MyColors.grey,
-      );
+    if (request.canceledBySeller || request.canceledByUser) {
+      return const RequestStatusWidget(status: RequestStatus.canceled);
     } else {
-      if (!request.acceptedByUser) {
-        return Icon(
-          Icons.emoji_people_rounded,
-          size: 26,
-          color: MyColors.orange,
-        );
+      // Order is not canceled but
+      if (!request.acceptedBySeller) {
+        // not accepted yet
+        if (request.tailorSeen) {
+          // seen
+          return const RequestStatusWidget(
+              status: RequestStatus.pendingSellerApproval);
+        } else {
+          // not seen
+          return const RequestStatusWidget(
+              status: RequestStatus.pendingSellerSeen);
+        }
       } else {
-        return const Icon(
-          Icons.check_circle_outline_rounded,
-          size: 26,
-          color: Colors.green,
-        );
-      }
-    }
-  }
-
-  Widget get _statusForTailor {
-    if (request.canceledByUser || request.canceledBySeller) {
-      return Icon(
-        Icons.close,
-        size: 26,
-        color: MyColors.red,
-      );
-    }
-
-    if (request.acceptedBySeller && request.acceptedByUser) {
-      return const Icon(
-        Icons.check_circle_outline_rounded,
-        size: 26,
-        color: Colors.green,
-      );
-    } else {
-      if (request.acceptedByUser) {
-        return Icon(
-          Icons.emoji_people_rounded,
-          size: 26,
-          color: MyColors.orange,
-        );
-      } else {
-        return Icon(
-          Icons.circle_outlined,
-          size: 26,
-          color: MyColors.grey,
-        );
+        // Order is accepted by seller
+        if (!request.acceptedByUser) {
+          return const RequestStatusWidget(
+              status: RequestStatus.pendingUserApproval);
+        } else {
+          return const RequestStatusWidget(status: RequestStatus.approved);
+        }
       }
     }
   }

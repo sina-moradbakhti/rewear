@@ -24,7 +24,7 @@ class Profile extends StatelessWidget {
     }
 
     return withoutAppbar
-        ? Scaffold(body: _getContent)
+        ? Scaffold(body: _getContent(withoutAppbar))
         : Scaffold(
             appBar: CustomAppbar(
               centerTitle: true,
@@ -33,12 +33,12 @@ class Profile extends StatelessWidget {
                 style: Get.theme.textTheme.headline5,
               ),
             ),
-            body: _getContent);
+            body: _getContent(withoutAppbar));
   } // build
 
-  Widget get _getContent => SingleChildScrollView(
+  Widget _getContent(bool withoutAppbar) => SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0),
+          padding: EdgeInsets.symmetric(vertical: withoutAppbar ? 30 : 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
