@@ -31,7 +31,7 @@ class AppInit {
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
   static const String BASE_URL =
-      'http://192.168.1.37:4933'; // http://rewear.asbrothers.ca
+      'http://localhost:4933'; // http://rewear.asbrothers.ca
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =

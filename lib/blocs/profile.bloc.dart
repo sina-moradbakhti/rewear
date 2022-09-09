@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rewear/config/app_init.dart';
-import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/updateTailorLocation.modal.dart';
 import 'package:rewear/models/errorException.dart';
-import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/services/update_profile.dart';
 
 class ProfileBloc extends GetxController {
@@ -57,26 +54,6 @@ class ProfileBloc extends GetxController {
 
     if (app.user.position == null) return;
     locationIsSet.value = true;
-  }
-
-  ImageProvider getProfileAvatar() {
-    if (selectedFile.value == null) {
-      if (app.user.image != null) {
-        return NetworkImage(app.user.image!.avatarURL());
-      }
-      return const AssetImage(MyImages.defaultProfile);
-    }
-    return FileImage(File(selectedFile.value!.path));
-  }
-
-  ImageProvider? getProfileCover() {
-    if (selectedCoverFile.value == null) {
-      if (app.user.cover != null) {
-        return NetworkImage(app.user.cover!.coverURL());
-      }
-      return null;
-    }
-    return FileImage(File(selectedCoverFile.value!.path));
   }
 
   void uploadProfile() async {

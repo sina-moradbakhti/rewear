@@ -1,15 +1,20 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/profile.bloc.dart';
 import 'package:rewear/generals/buttons.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/textfields.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
 import 'package:rewear/generals/widgets/locationCoordinator.widget.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/generals/exts/extensions.dart';
 
 class Profile extends StatelessWidget {
   Profile({Key? key}) : super(key: key);
@@ -135,18 +140,36 @@ class Profile extends StatelessWidget {
               Obx(() => MaterialButton(
                     padding: EdgeInsets.zero,
                     onPressed: bloc.uploadCover,
-                    child: Container(
-                      height: 180,
-                      decoration: bloc.getProfileCover() != null
-                          ? BoxDecoration(
-                              color: MyColors.grey,
-                              image: DecorationImage(
-                                  image: bloc.getProfileCover()!,
-                                  fit: BoxFit.cover))
-                          : BoxDecoration(
+                    child: bloc.selectedCoverFile.value != null
+                        ? Container(
+                            height: 180,
+                            decoration: BoxDecoration(
                               color: MyColors.grey,
                             ),
-                    ),
+                            child: SizedBox(
+                              width: Get.size.width,
+                              child: Image.file(
+                                File(bloc.selectedCoverFile.value!.path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: MyColors.grey,
+                            ),
+                            child: SizedBox(
+                              width: Get.size.width,
+                              child: CachedNetworkImage(
+                                  imageUrl: (bloc.app.user.cover ?? '')
+                                      .coverURL(bloc.app.user.id ?? ''),
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) =>
+                                      Container()),
+                            ),
+                          ),
                   )),
               Padding(
                 padding:
@@ -180,7 +203,21 @@ class Profile extends StatelessWidget {
               Obx(() => CircleAvatar(
                     radius: radius - 5,
                     backgroundColor: MyColors.grey,
-                    backgroundImage: bloc.getProfileAvatar(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(radius - 5),
+                      child: bloc.selectedFile.value == null
+                          ? SizedBox(
+                              width: 120,
+                              child: CachedNetworkImage(
+                                  imageUrl: (bloc.app.user.image ?? '')
+                                      .avatarURL(bloc.app.user.id ?? ''),
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(MyImages.defaultProfile)),
+                            )
+                          : Image.file(File(bloc.selectedFile.value!.path)),
+                    ),
                   )),
               Align(
                 alignment: Alignment.bottomCenter,

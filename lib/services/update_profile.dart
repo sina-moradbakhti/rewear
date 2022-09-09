@@ -58,10 +58,10 @@ class UpdateProfileService extends HttpServices {
         if (position != null) {
           AppInit().user.position = AppInit().user.convertLatLng(position);
         }
-        if (image != null) {
+        if (image != null && decodedResponse['data']['cover'] != null) {
           AppInit().user.cover = decodedResponse['data']['cover'];
         }
-        if (cover != null) {
+        if (cover != null && decodedResponse['data']['image'] != null) {
           AppInit().user.image = decodedResponse['data']['image'];
         }
 

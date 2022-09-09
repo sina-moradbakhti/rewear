@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/requestDetails.bloc.dart';
 import 'package:rewear/generals/buttons.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/widgets/avatar.widget.dart';
 import 'package:rewear/generals/widgets/break.widget.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
@@ -25,44 +28,46 @@ class RequestDetails extends StatelessWidget {
           style: Get.theme.textTheme.headline5,
         ),
       ),
-      body: SafeArea(
-          bottom: false,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: StreamBuilder(
+          stream: bloc.app.requestsStream,
+          builder: (context, snapshot) {
+            return SafeArea(
+                bottom: false,
+                child: Stack(
                   children: [
-                    _images,
-                    const Hr(),
-                    Stack(
-                      children: [
-                        (!bloc.request!.acceptedBySeller)
-                            ? ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.grey, BlendMode.color),
-                                child: _seller)
-                            : _seller,
-                        _tailorStatus,
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _images,
+                          const Hr(),
+                          SizedBox(
+                            width: Get.size.width,
+                            child: Stack(
+                              children: [
+                                _seller,
+                                _tailorStatus,
+                              ],
+                            ),
+                          ),
+                          const Hr(),
+                          _price,
+                          const Hr(),
+                          _details,
+                          BreakWidget(
+                            size: 50,
+                          )
+                        ],
+                      ),
                     ),
-                    const Hr(),
-                    _price,
-                    const Hr(),
-                    _details,
-                    BreakWidget(
-                      size: 50,
-                    )
+                    Obx(() => bloc.showBottomPriceButtons.value
+                        ? _safeAreaButtons
+                        : Container())
                   ],
-                ),
-              ),
-              Obx(() => bloc.showBottomPriceButtons.value
-                  ? _safeAreaButtons
-                  : Container())
-            ],
-          )),
+                ));
+          }),
     );
   } // build
 
@@ -117,132 +122,132 @@ class RequestDetails extends StatelessWidget {
         ),
       );
 
-  Widget get _seller => Container(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() => Container(
-                      decoration: bloc.tailor.value?.cover != null
-                          ? BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      (bloc.tailor.value?.cover ?? '')
-                                          .coverURL())),
-                            )
-                          : const BoxDecoration(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: bloc.tailor.value?.uid == null
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    left: MyConstants.primaryPadding.left,
-                                    right: MyConstants.primaryPadding.right,
-                                    bottom: 15,
-                                    top: 0),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tailor',
-                                        style: Get.theme.textTheme.headline4!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          'Seller not accepted yet',
-                                          style: Get.textTheme.bodyText1,
-                                        ),
-                                      )
-                                    ]),
-                              )
-                            : Padding(
-                                padding: EdgeInsets.only(
-                                    left: MyConstants.primaryPadding.left,
-                                    right: MyConstants.primaryPadding.right,
-                                    bottom: 15,
-                                    top: 0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Tailor',
-                                      style: Get.theme.textTheme.headline4!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
+  Widget get _seller => Padding(
+      padding: const EdgeInsets.only(bottom: 0),
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: 0.4,
+            child: SizedBox(
+              height: 150,
+              width: Get.size.width,
+              child: CachedNetworkImage(
+                  imageUrl: (bloc.tailor.value?.cover ?? '')
+                      .coverURL(bloc.tailor.value?.uid ?? ''),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                  errorWidget: (context, url, error) => Container(
+                        color: MyColors.lightGrey,
+                        width: Get.size.width,
+                        height: 150,
+                      )),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(() => Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: bloc.tailor.value?.uid == null
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                left: MyConstants.primaryPadding.left,
+                                right: MyConstants.primaryPadding.right,
+                                bottom: 15,
+                                top: 0),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tailor',
+                                    style: Get.theme.textTheme.headline4!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      'Seller not accepted yet',
+                                      style: Get.textTheme.bodyText1,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 15),
-                                      child: Row(
-                                        children: [
-                                          bloc.tailor.value?.cover != null
-                                              ? CircleAvatar(
-                                                  radius: 30,
-                                                  backgroundColor:
-                                                      MyColors.grey,
-                                                  backgroundImage: NetworkImage(
-                                                      (bloc.tailor.value
-                                                                  ?.image ??
-                                                              '')
-                                                          .avatarURL()))
-                                              : CircleAvatar(
-                                                  radius: 30,
-                                                  backgroundColor:
-                                                      MyColors.grey,
-                                                ),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${bloc.tailor.value?.fullname}',
+                                  )
+                                ]),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(
+                                left: MyConstants.primaryPadding.left,
+                                right: MyConstants.primaryPadding.right,
+                                bottom: 15,
+                                top: 0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Tailor',
+                                  style: Get.theme.textTheme.headline4!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Row(
+                                    children: [
+                                      AvatarWidget(
+                                          avatarId:
+                                              (bloc.tailor.value?.image ?? '')
+                                                  .avatarURL(
+                                                      bloc.tailor.value?.uid ??
+                                                          '')),
+                                      Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '${bloc.tailor.value?.fullname}',
+                                                style: Get
+                                                    .theme.textTheme.bodyText1!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: CupertinoButton(
+                                                  padding: EdgeInsets.zero,
+                                                  onPressed: () => bloc.app
+                                                      .openLink(
+                                                          'tel:${bloc.tailor.value?.phone}'),
+                                                  child: Text(
+                                                    '${bloc.tailor.value?.phone}',
                                                     style: Get.theme.textTheme
                                                         .bodyText1!
                                                         .copyWith(
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .bold),
+                                                                    .normal),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5),
-                                                    child: Text(
-                                                      '${bloc.tailor.value?.phone}',
-                                                      style: Get.theme.textTheme
-                                                          .bodyText1!
-                                                          .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                      ),
-                    ))
-              ],
-            )),
-      );
+                              ],
+                            ),
+                          ),
+                  ))
+            ],
+          ),
+        ],
+      ));
 
   Widget get _details => Container(
         padding: EdgeInsets.only(
@@ -255,6 +260,8 @@ class RequestDetails extends StatelessWidget {
           children: [
             _keyValueWidget(
                 'Order date', bloc.request!.orderDate.beautify(), true),
+            _keyValueWidget(
+                'Due date', bloc.request!.deliveryToTailor.beautify(), true),
             _keyValueWidget('Material', bloc.request!.material ?? '', true),
             _keyValueWidget(
                 'Color',
@@ -301,7 +308,7 @@ class RequestDetails extends StatelessWidget {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(image.clothURL(bloc.request!.id!)),
+                        child: Image.network(image.resURL(bloc.request!.id!)),
                       ),
                     ),
                   )

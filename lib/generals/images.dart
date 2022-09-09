@@ -78,3 +78,10 @@ class MySvgs {
   static const String share = MySvgs.rootPath + '/' + 'ic_share.svg';
   static const String facebook = MySvgs.rootPath + '/' + 'ic_facebook.svg';
 }
+
+class MyJpegs {
+  MyJpegs._();
+  static const String rootPath = "assets/images/jpg";
+  static const String noRequestsFound =
+      MyJpegs.rootPath + '/' + 'no_requests_found.jpg';
+}

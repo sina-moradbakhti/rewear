@@ -35,7 +35,7 @@ class MyStrings {
 
   // My Tailory
   static const String tlrs_title = 'My Tailory';
-  static const String tlrs_requests = 'Requests';
+  static const String tlrs_requests = 'Orders';
   static const String tlrs_catalog = 'Catalogue';
 
   // Alteration
@@ -58,6 +58,7 @@ class MyStrings {
 
   // Requests
   static const String requests_title = 'Requests';
+  static const String orders_title = 'Orders';
 
   // Catalogues
   static const String catalogues_title = 'Catalogues';

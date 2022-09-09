@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
@@ -8,6 +9,8 @@ import 'package:rewear/generals/widgets/requestStatus.widget.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/models/userType.enum.dart';
+
+import 'defaultClotheImage.widget.dart';
 
 class RequestWidget extends StatelessWidget {
   final Request request;
@@ -55,8 +58,11 @@ class RequestWidget extends StatelessWidget {
                     child: SizedBox(
                       width: 55,
                       height: 55,
-                      child: Image.network(
-                        (request.images?.first ?? '').clothURL(request.id!),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            (request.images?.first ?? '').resURL(request.id!),
+                        errorWidget: ((context, url, error) =>
+                            const DefaultClothImageWidget()),
                         fit: BoxFit.cover,
                       ),
                     ),

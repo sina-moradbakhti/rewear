@@ -21,7 +21,25 @@ class RequestDetailsBloc extends GetxController {
 
   @override
   void onInit() {
-    request = Get.arguments;
+    _init(true);
+    if (app.user.role == UserType.seller) {
+      app.tailorsStream.listen((event) {
+        request =
+            app.requests.firstWhere((element) => element.id == request!.id);
+        _init(false);
+      });
+    } else {
+      app.requestsStream.listen((event) {
+        request =
+            app.requests.firstWhere((element) => element.id == request!.id);
+        _init(false);
+      });
+    }
+    super.onInit();
+  }
+
+  void _init(bool firstTime) async {
+    if (firstTime) request = Get.arguments;
     if (app.user.role == UserType.customer) {
       if (request!.acceptedBySeller &&
           (!request!.acceptedByUser && !request!.canceledByUser)) {
@@ -37,7 +55,6 @@ class RequestDetailsBloc extends GetxController {
       _getCustomerProfile();
     }
     _seen();
-    super.onInit();
   }
 
   void _getTailorProfile() async {

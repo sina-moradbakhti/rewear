@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
@@ -38,8 +39,11 @@ class TailoryMapItem extends StatelessWidget {
                         width: 100,
                         height: 100,
                         child: (tailory.image != null)
-                            ? Image.network(
-                                tailory.image!.avatarURL(),
+                            ? CachedNetworkImage(
+                                imageUrl:
+                                    tailory.image!.avatarURL(tailory.uid ?? ''),
+                                errorWidget: (context, url, error) =>
+                                    Container(),
                                 fit: BoxFit.cover,
                               )
                             : Container())),

@@ -1,5 +1,5 @@
+import 'dart:math';
 import 'dart:ui';
-
 import 'package:rewear/config/app_init.dart';
 
 extension ColorToString on Color {
@@ -10,34 +10,39 @@ extension ColorToString on Color {
 }
 
 extension StringToColor on String {
-  String avatarURL() {
+  String avatarURL(String userId) {
+    final rand = Random();
     final str = this;
     return AppInit.BASE_URL +
-        '/resources/avatar/' +
-        str
-            .replaceAll('uploads/perm/', '')
-            .replaceAll('.jpg', '')
-            .replaceAll('_avatar', '');
+        '/images/avatar/' +
+        userId +
+        '/' +
+        str.replaceAll('.jpg', '') +
+        '?rand=' +
+        rand.nextInt(9999).toString();
   }
 
-  String coverURL() {
+  String coverURL(String userId) {
+    final rand = Random();
     final str = this;
     return AppInit.BASE_URL +
-        '/resources/cover/' +
-        str
-            .replaceAll('uploads/perm/', '')
-            .replaceAll('.jpg', '')
-            .replaceAll('_cover', '');
+        '/images/cover/' +
+        userId +
+        '/' +
+        str.replaceAll('.jpg', '') +
+        '?rand=' +
+        rand.nextInt(9999).toString();
   }
 
-  String clothURL(String reqId) {
+  String resURL(String reqId) {
     final str = this;
     return AppInit.BASE_URL +
-        '/resources/cloth/' +
-        str
-            .replaceAll('uploads/perm/', '')
-            .replaceAll('.jpg', '')
-            .replaceAll('_avatar', '');
+        '/images/request/' +
+        'userId' +
+        '/' +
+        reqId +
+        '/' +
+        str.replaceAll('.jpg', '');
   }
 
   Color? toColor() {

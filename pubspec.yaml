@@ -24,6 +24,7 @@ dependencies:
   socket_io_client: ^2.0.0
   record: ^4.4.0
   audioplayers: ^1.0.1
+  cached_network_image: ^3.2.2
 
 dev_dependencies:
   flutter_test:

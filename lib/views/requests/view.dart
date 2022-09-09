@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/requests.bloc.dart';
 import 'package:rewear/generals/colors.dart';
+import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/request.widget.dart';
+import 'package:rewear/models/userType.enum.dart';
 
 class Requests extends StatelessWidget {
   bool showAppBar = true;
@@ -39,7 +41,7 @@ class Requests extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                MyStrings.requests_title,
+                MyStrings.orders_title,
                 style: Get.theme.textTheme.headline5!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
@@ -56,22 +58,36 @@ class Requests extends StatelessWidget {
           ),
         )
       : Container();
-  Widget get _content => Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _title,
-            Expanded(
-                child: StreamBuilder(
-              builder: (context, snapshot) => ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 100),
-                  itemBuilder: ((context, index) =>
-                      RequestWidget(request: bloc.app.requests[index])),
-                  itemCount: bloc.app.requests.length),
-              stream: bloc.app.requestsStream,
-            ))
-          ],
-        ),
-      );
+  Widget get _content => StreamBuilder(
+      stream: bloc.app.requestsStream,
+      builder: (context, snapshot) => bloc.app.requests.isNotEmpty
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _title,
+                Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 100),
+                        itemBuilder: ((context, index) => RequestWidget(
+                              request: bloc.app.requests[index],
+                              userType: UserType.customer,
+                            )),
+                        itemCount: bloc.app.requests.length))
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _title,
+                Text('No Orders found!',
+                    style: Get.theme.textTheme.bodyText1!
+                        .copyWith(color: MyColors.darkGrey)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  child: Image.asset(MyJpegs.noRequestsFound),
+                )
+              ],
+            ));
 }
