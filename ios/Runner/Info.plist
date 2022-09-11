@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.206836641686-qe7t7sk28frlqkosj19700da5gpqigfe</string>
+				<string>com.googleusercontent.apps.206836641686-o5vjsl5q05k42gro4eosvtfju4p4aqei</string>
 			</array>
 		</dict>
 	</array>
@@ -52,6 +52,11 @@
 	<string>Rewear needs to access the Camera to record your voice</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Rewear needs to access the PhotoLibrary to show you the photos</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

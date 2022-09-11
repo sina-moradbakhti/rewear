@@ -155,6 +155,11 @@ class ServiceBloc extends GetxController {
         Get.back();
         app.handleError(er);
       }
+    } else {
+      app.handleError(MyErrorException(
+          message:
+              'To create an order you have to turn on your Location Service, then we are able to show you tailors nearby.',
+          title: 'Location Service'));
     }
     creatingAnOrderLoading.value = false;
   }

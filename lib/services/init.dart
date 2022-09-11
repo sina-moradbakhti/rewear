@@ -10,30 +10,36 @@ class InitService extends HttpServices {
   Future<bool> call() async {
     final Uri url = Uri.parse('$baseUrl/init');
     final client = http.Client();
-    final response = await client.post(url, body: {
-      'userId': AppInit().user.id ?? '',
-      'email': AppInit().user.email ?? '',
-    }, headers: {
-      'Authorization': AppInit().user.token ?? ''
-    });
 
-    final decodedResponse = jsonDecode(response.body);
-    if (response.statusCode == 200 && decodedResponse['data'] != null) {
-      AppInit().user = User.fromJson(decodedResponse['data']['user']);
-      AppInit().requests.clear();
-      if (decodedResponse['data']['requests'] != null) {
-        for (final reqItem in decodedResponse['data']['requests']) {
-          AppInit().requests.add(Request.fromJson(reqItem));
+    try {
+      final response = await client.post(url, body: {
+        'userId': AppInit().user.id ?? '',
+        'email': AppInit().user.email ?? '',
+        'fcmToken': AppInit().user.fcmToken ?? '',
+      }, headers: {
+        'Authorization': AppInit().user.token ?? ''
+      });
+
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode == 200 && decodedResponse['data'] != null) {
+        AppInit().user = User.fromJson(decodedResponse['data']['user']);
+        AppInit().requests.clear();
+        if (decodedResponse['data']['requests'] != null) {
+          for (final reqItem in decodedResponse['data']['requests']) {
+            final req = Request.fromJson(reqItem);
+            if (req.seller?.id != null && req.id != null) {
+              AppInit().requests.add(req);
+            }
+          }
+          AppInit().requests.sort((a, b) => b.orderDate.compareTo(a.orderDate));
         }
-        AppInit().requests.sort((a, b) => b.orderDate.compareTo(a.orderDate));
-      }
-      AppInit().user.updateCache();
+        AppInit().user.updateCache();
 
-      return true;
-    } else {
-      return false;
-    }
-    try {} catch (er) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (er) {
       debugPrint(er.toString());
       return false;
     }

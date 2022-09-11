@@ -25,15 +25,16 @@ class ProfileBloc extends GetxController {
   }
 
   void coordinateLocation() async {
+    coordinatingLocation.value = true;
     final locCheck = await app.checkLocationPermission();
     if (!locCheck) {
       app.handleError(MyErrorException(
           message:
               'Location Service permission not granted, you can grant permission from your settings',
           title: 'Location Service'));
+      coordinatingLocation.value = false;
     }
 
-    coordinatingLocation.value = true;
     if (app.user.position == null) {
       await app.updateLastLocation(isBackground: false);
     }

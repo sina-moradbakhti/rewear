@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ class AppInit {
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
   static const String BASE_URL =
-      'http://localhost:4933'; // http://rewear.asbrothers.ca
+      'http://rewear.asbrothers.ca'; // http://rewear.asbrothers.ca
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =
@@ -156,7 +157,7 @@ class AppInit {
   Future<void> preInit() async {
     await GetStorage.init();
     WidgetsFlutterBinding.ensureInitialized();
-
+    await Firebase.initializeApp();
     // Check user is logged in or not
     user = User.fromCache();
     if (user.id != null) {

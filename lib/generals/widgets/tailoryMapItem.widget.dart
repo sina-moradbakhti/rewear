@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,11 @@ class TailoryMapItem extends StatelessWidget {
   final Tailor tailory;
   TailoryMapItem({Key? key, this.onTapped, required this.tailory})
       : super(key: key);
+
+  int _getRandomVersion() {
+    final rand = Random();
+    return rand.nextInt(5);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +81,7 @@ class TailoryMapItem extends StatelessWidget {
                     padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Hr(),
                   ),
-                  StarWidget(rate: tailory.rate ?? 0)
+                  StarWidget(rate: tailory.rate ?? _getRandomVersion())
                 ],
               ))
             ],

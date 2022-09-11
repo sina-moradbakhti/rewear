@@ -205,25 +205,27 @@ class Profile extends StatelessWidget {
                     backgroundColor: MyColors.grey,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(radius - 5),
-                      child: bloc.selectedFile.value == null
-                          ? SizedBox(
-                              width: 120,
-                              child: CachedNetworkImage(
-                                  imageUrl: (bloc.app.user.image ?? '')
-                                      .avatarURL(bloc.app.user.id ?? ''),
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(MyImages.defaultProfile)),
-                            )
-                          : Image.file(File(bloc.selectedFile.value!.path)),
+                      child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: bloc.selectedFile.value == null
+                            ? CachedNetworkImage(
+                                imageUrl: (bloc.app.user.image ?? '')
+                                    .avatarURL(bloc.app.user.id ?? ''),
+                                alignment: Alignment.center,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(MyImages.defaultProfile))
+                            : Image.file(File(bloc.selectedFile.value!.path),
+                                fit: BoxFit.cover),
+                      ),
                     ),
                   )),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  width: 85,
-                  height: 30,
+                  width: 65,
+                  height: 22.5,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: MyColors.orange,

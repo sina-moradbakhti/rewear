@@ -21,7 +21,10 @@ class TailorsServices extends HttpServices {
       if (response.statusCode == 200) {
         if (decodedResponse['data'] != null) {
           for (final tailorJson in decodedResponse['data']) {
-            list.add(Tailor.fromJson(tailorJson));
+            final tailor = Tailor.fromJson(tailorJson);
+            if (tailor.position != null && tailor.phone != null) {
+              list.add(tailor);
+            }
           }
           AppInit().tailors.clear();
           AppInit().tailors.addAll(list);

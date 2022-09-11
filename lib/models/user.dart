@@ -47,7 +47,11 @@ class User {
     return User.fromJson(box.read(MyConstants.USER_DATA_ID));
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return User();
+    }
+
     LatLng? pos;
     if (json['position'] != null) {
       if (json['position'].runtimeType == List<dynamic>) {

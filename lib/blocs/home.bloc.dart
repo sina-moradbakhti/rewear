@@ -15,7 +15,7 @@ class HomeBloc extends GetxController {
   void onInit() {
     _checkIsUpdatedProfile();
     if (app.user.city == null || app.user.country == null) {
-      currentCity.value = "Couldn't be determined";
+      currentCity.value = "New Market, ON, CA";
     } else {
       currentCity.value = '${app.user.city}, ${app.user.country}';
     }

@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
@@ -25,8 +27,17 @@ class LaunchBloc extends GetxController {
       loadingStatus.value = true;
     }
     await app.preInit();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
+    String? fcmToken;
     if (app.isUserLoggedIn) {
+      try {
+        fcmToken = await FirebaseMessaging.instance.getToken();
+        app.user.fcmToken = fcmToken;
+      } catch (er) {
+        debugPrint(':::::::: [FirebaseMessaging > Getting FCM Token] ::::::::');
+        debugPrint('$er');
+      }
+
       final initstatus = await initService.call();
       if (!initstatus) {
         loadingStatus.value = false;
