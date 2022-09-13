@@ -33,6 +33,7 @@ class LaunchBloc extends GetxController {
       try {
         fcmToken = await FirebaseMessaging.instance.getToken();
         app.user.fcmToken = fcmToken;
+        debugPrint(fcmToken);
       } catch (er) {
         debugPrint(':::::::: [FirebaseMessaging > Getting FCM Token] ::::::::');
         debugPrint('$er');

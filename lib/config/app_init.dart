@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -154,10 +155,18 @@ class AppInit {
     }
   }
 
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    print('Handling a background message ${message.messageId}');
+    print('Handling a background message ${message.notification?.body}');
+    print('Handling a background message ${message.data}');
+  }
+
   Future<void> preInit() async {
     await GetStorage.init();
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     // Check user is logged in or not
     user = User.fromCache();
     if (user.id != null) {
