@@ -52,6 +52,12 @@ extension StringToColor on String {
     return Color.fromRGBO(
         int.parse(rgb[0]), int.parse(rgb[1]), int.parse(rgb[2]), 1);
   }
+
+  bool validatePassword() {
+    String pattern = r'^(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(this);
+  }
 }
 
 extension DateBeautifier on DateTime {

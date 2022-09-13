@@ -1,8 +1,9 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
+import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/authentication.dart';
 
 class ForgotPasswordBloc extends GetxController {
   Rx<UserType> selectedUserType = UserType.customer.obs;
@@ -10,9 +11,7 @@ class ForgotPasswordBloc extends GetxController {
   RxBool loading = false.obs;
   RxBool showWarning = false.obs;
 
-  void changeUserType(UserType type) {
-    selectedUserType.value = type;
-  }
+  final services = AuthenticationServices();
 
   Future<void> forgotPassword() async {
     if (email.isEmpty) {
@@ -28,12 +27,15 @@ class ForgotPasswordBloc extends GetxController {
 
     loading.value = true;
     try {
-      // await FirebaseAuth.instance.sendPasswordResetEmail(email: email.value);
-      // AppInit().handleError(MyErrorException(
-      //     message: 'the reset password link is sent to your email',
-      //     title: 'Successfully Sent'));
-      // loading.value = false;
-      // showWarning.value = true;
+      final result = await services.resetPassword(email.value);
+      if (result) {
+        showWarning.value = true;
+        await Future.delayed(const Duration(seconds: 2));
+        loading.value = false;
+        Get.toNamed(MyRoutes.verificationCode, arguments: email.value);
+      } else {
+        loading.value = false;
+      }
     } catch (er) {
       AppInit().handleError(er);
       loading.value = false;

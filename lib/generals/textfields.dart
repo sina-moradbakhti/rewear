@@ -68,7 +68,8 @@ class _MyTextfieldState extends State<MyTextfield> {
         widget.title.toLowerCase().contains('phone')) {
       return TextInputType.phone;
     }
-    if (widget.title.toLowerCase() == 'age') {
+    if (widget.title.toLowerCase() == 'age' ||
+        widget.title.toLowerCase().contains('code')) {
       return TextInputType.number;
     }
     if (widget.title.toLowerCase().contains('name')) {

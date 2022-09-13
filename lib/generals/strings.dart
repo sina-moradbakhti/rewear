@@ -10,10 +10,14 @@ class MyStrings {
 
   // Sign up
   static const String signup_title = 'Sign up';
+  static const String signup_google_title = 'Sign up with Google';
   static const String signup_caption = 'Welcome Rewear!';
+  static const String signup_caption_dynamic = 'Welcome to Rewear, ';
   static const String signup_fullName_text = 'Full name';
   static const String signup_email_text = 'Email';
   static const String signup_password_text = 'Password';
+  static const String signup_repassword_text = 'Re-Password';
+  static const String code = 'Code';
 
   // Login
   static const String login_title = 'Login';
@@ -25,6 +29,16 @@ class MyStrings {
   static const String fgp_title = 'Forgot Password';
   static const String fgp_caption = 'Do not worry, we just need your email';
   static const String fgp_button = 'Reset password';
+
+  static const String vfc_title = 'Verification Code';
+  static const String vfc_caption =
+      "Please enter the verification code that we sent to your email (if you didn't get the email, please check your SPAM folder as well)";
+  static const String vfc_button = 'Verify';
+
+  static const String cp_title = 'Set new password';
+  static const String cp_caption =
+      "Now, you can set new password then you'll login to the app";
+  static const String cp_button = 'Update Password';
 
   // Find Services
   static const String srvc_title = 'Find Services';

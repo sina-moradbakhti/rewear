@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
+import 'package:rewear/generals/routes.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/services/http.services.dart';
@@ -34,9 +36,14 @@ class InitService extends HttpServices {
           AppInit().requests.sort((a, b) => b.orderDate.compareTo(a.orderDate));
         }
         AppInit().user.updateCache();
-
         return true;
       } else {
+        if (decodedResponse['data'] == null &&
+            decodedResponse['error_code'] == 'user_not_found') {
+          await AppInit().user.signOut();
+          AppInit().currentPosition = null;
+          Get.offAllNamed(MyRoutes.welcome);
+        }
         return false;
       }
     } catch (er) {

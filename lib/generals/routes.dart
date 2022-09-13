@@ -3,8 +3,11 @@ class MyRoutes {
   static const String launch = '/';
   static const String welcome = '/welcome';
   static const String signup = '/signup';
+  static const String signupWithGoogle = '/signup-google';
   static const String login = '/login';
   static const String forgotPassword = '/forgot-password';
+  static const String verificationCode = '/verification-code';
+  static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String alteration = '/alteration';
   static const String repair = '/repair';
