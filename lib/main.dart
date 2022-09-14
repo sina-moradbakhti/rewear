@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/themes.dart';
 import 'package:rewear/views/alteration/view.dart';
@@ -27,6 +28,7 @@ import 'package:rewear/views/verificationCode/view.dart';
 import 'package:rewear/views/welcomeScreen/view.dart';
 
 void main() async {
+  await AppInit().initLibs();
   runApp(const MyApp());
 }
 

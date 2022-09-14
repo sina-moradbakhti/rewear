@@ -33,7 +33,7 @@ class AppInit {
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
   static const String BASE_URL =
-      'http://localhost:4933'; // http://rewear.asbrothers.ca
+      'http://rewear.asbrothers.ca'; // http://rewear.asbrothers.ca | http://localhost:4933
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =
@@ -155,18 +155,13 @@ class AppInit {
     }
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    print('Handling a background message ${message.messageId}');
-    print('Handling a background message ${message.notification?.body}');
-    print('Handling a background message ${message.data}');
-  }
-
-  Future<void> preInit() async {
+  Future<void> initLibs() async {
     await GetStorage.init();
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  Future<void> preInit() async {
     // Check user is logged in or not
     user = User.fromCache();
     if (user.id != null) {

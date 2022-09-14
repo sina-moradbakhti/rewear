@@ -85,7 +85,7 @@ class AuthenticationServices extends HttpServices {
         if (decodedResponse['data'] != null) {
           return User.fromJson(decodedResponse['data']);
         } else {
-          return null;
+          return User(id: '');
         }
       } else {
         handleError(MyErrorException(

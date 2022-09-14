@@ -11,12 +11,14 @@ class WelcomeBloc extends GetxController {
     var result = await GoogleSignIn().signIn();
     if (result.isBlank != null && result?.id != null && result?.email != null) {
       final user = await services.googleSignInCheck(result: result!);
-      if (user != null) {
+      if (user != null && user.id != '') {
         AppInit().user = user;
         await AppInit().user.saveToCacheAndLogin();
         Get.offAllNamed(MyRoutes.launch);
       } else {
-        Get.offNamed(MyRoutes.signupWithGoogle, arguments: result);
+        if (user?.id == '') {
+          Get.toNamed(MyRoutes.signupWithGoogle, arguments: result);
+        }
       }
     }
   }

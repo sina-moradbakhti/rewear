@@ -47,10 +47,12 @@ class ChangePassword extends StatelessWidget {
                       MyTextfield(
                           onChanges: (newVal) => bloc.password.value = newVal,
                           title: MyStrings.signup_password_text,
+                          isPassword: true,
                           hint: 'Password'),
                       MyTextfield(
                           onChanges: (newVal) => bloc.repassword.value = newVal,
                           title: MyStrings.signup_repassword_text,
+                          isPassword: true,
                           hint: 'Re-password'),
                     ],
                   ),
