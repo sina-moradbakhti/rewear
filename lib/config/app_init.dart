@@ -159,6 +159,7 @@ class AppInit {
     await GetStorage.init();
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    await FirebaseMessaging.instance.requestPermission();
   }
 
   Future<void> preInit() async {
