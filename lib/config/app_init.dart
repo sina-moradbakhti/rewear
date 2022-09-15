@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -33,7 +34,7 @@ class AppInit {
   static const String GOOGLE_MAP_API =
       'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
   static const String BASE_URL =
-      'http://rewear.asbrothers.ca'; // http://rewear.asbrothers.ca | http://localhost:4933
+      'https://rewear.asbrothers.ca'; // http://rewear.asbrothers.ca | http://localhost:4933
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
   static const String PRIVACY_POLICY_URL = 'https://asbrothers.ca/privacy';
   static const String googleMapStyle01 =
@@ -171,6 +172,7 @@ class AppInit {
       debugPrint(message.notification?.title);
       debugPrint(message.notification?.body);
     });
+    FlutterAppBadger.removeBadge();
   }
 
   Future<void> preInit() async {
@@ -236,6 +238,9 @@ class AppInit {
 
     AppInit().socket?.onConnect((data) => print('Connected'));
     AppInit().socket?.onDisconnect((data) => print('Disconnected'));
+    AppInit().socket?.onError((err) => print('Socket Error $err'));
+    AppInit().socket?.onConnectError((err) => print('onConnectError $err'));
+    AppInit().socket?.onConnectTimeout((err) => print('onConnectTimeout $err'));
     AppInit().socket?.on('onUpdatedRequest', (data) => _onMessageHandler(data));
 
     AppInit().socket?.connect();

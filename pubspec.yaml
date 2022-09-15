@@ -26,6 +26,7 @@ dependencies:
   cached_network_image: ^3.2.2
   firebase_core: ^1.22.0
   firebase_messaging: ^11.2.10
+  flutter_app_badger: ^1.4.0
 
 dev_dependencies:
   flutter_test:
