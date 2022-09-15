@@ -11,6 +11,8 @@ import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/defaultClotheImage.widget.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
 import 'package:rewear/generals/exts/extensions.dart';
+import 'package:rewear/generals/widgets/loading.widget.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 
 class TailorRequestDetails extends StatelessWidget {
   TailorRequestDetails({Key? key}) : super(key: key);
@@ -78,46 +80,54 @@ class TailorRequestDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                  child: Obx(() => MyPrimaryButton(
-                      color: MyColors.darkGrey,
-                      loading: bloc.cancelLoading.value,
-                      onPressed: () =>
-                          bloc.acceptLoading.value ? null : bloc.cancel(),
-                      title: 'Cancel'))),
+                  child: Obx(() => bloc.cancelLoading.value
+                      ? const MyLoading()
+                      : MyPrimaryButton(
+                          color: MyColors.darkGrey,
+                          loading: bloc.cancelLoading.value,
+                          onPressed: () =>
+                              bloc.acceptLoading.value ? null : bloc.cancel(),
+                          title: 'Cancel'))),
               BreakWidget(size: 20, vertical: false),
               Expanded(
-                  child: Obx(() => MyPrimaryButton(
-                      loading: bloc.acceptLoading.value,
-                      onPressed: () =>
-                          bloc.cancelLoading.value ? null : bloc.accept(),
-                      title: 'Accept')))
+                  child: Obx(() => bloc.acceptLoading.value
+                      ? const MyLoading()
+                      : MyPrimaryButton(
+                          loading: bloc.acceptLoading.value,
+                          onPressed: () =>
+                              bloc.cancelLoading.value ? null : bloc.accept(),
+                          title: 'Accept')))
             ],
           ),
         ),
       ));
 
-  Widget get _waitingForCustomer => Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: bloc.request!.acceptedByUser
-                    ? Colors.green
-                    : MyColors.orange),
-            child: SafeArea(
-              child: Padding(
-                padding:
-                    MyConstants.primaryPadding.copyWith(bottom: 10, top: 10),
-                child: Text(
-                    !bloc.request!.acceptedByUser
-                        ? 'Waiting to customer...'
-                        : 'You can deliver the order till now',
-                    textAlign: TextAlign.center,
-                    style: Get.theme.textTheme.headline6!
-                        .copyWith(color: Colors.white)),
-              ),
-            )),
-      );
+  Widget get _waitingForCustomer => (bloc.request?.orderStatus ==
+              OrderStatus.acceptedBySeller ||
+          bloc.request?.orderStatus == OrderStatus.acceptedByBoth)
+      ? Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: bloc.request!.orderStatus == OrderStatus.acceptedByBoth
+                      ? Colors.green
+                      : MyColors.orange),
+              child: SafeArea(
+                child: Padding(
+                  padding:
+                      MyConstants.primaryPadding.copyWith(bottom: 10, top: 10),
+                  child: Text(
+                      bloc.request!.orderStatus == OrderStatus.acceptedBySeller
+                          ? 'Waiting to customer...'
+                          : 'You can deliver the order till now',
+                      textAlign: TextAlign.center,
+                      style: Get.theme.textTheme.headline6!
+                          .copyWith(color: Colors.white)),
+                ),
+              )),
+        )
+      : Container();
 
   Widget get _price => Container(
         padding: EdgeInsets.only(
@@ -146,7 +156,8 @@ class TailorRequestDetails extends StatelessWidget {
                       const TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                       hintText: 'price...',
-                      enabled: bloc.showBottomPriceButtons.value),
+                      enabled: bloc.showBottomPriceButtons.value &&
+                          bloc.request?.orderStatus == OrderStatus.pending),
                   style: Get.theme.textTheme.headline5!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
@@ -360,47 +371,48 @@ class TailorRequestDetails extends StatelessWidget {
       );
 
   String _getOrderSt() {
-    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
-      return bloc.request!.canceledBySeller ? 'Seller Rejected' : 'Rejected';
+    switch (bloc.request!.orderStatus) {
+      case OrderStatus.pending:
+        return 'Pending';
+      case OrderStatus.acceptedByBoth:
+        return 'Accepted';
+      case OrderStatus.acceptedBySeller:
+        return 'Seller accepted';
+      case OrderStatus.rejectedByCustomer:
+        return 'Rejected';
+      case OrderStatus.rejectedBySeller:
+        return 'Seller Rejected';
+      default:
+        return 'Pending';
     }
-
-    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
-      return 'Accepted';
-    } else if (bloc.request!.acceptedBySeller &&
-        !bloc.request!.acceptedByUser) {
-      return 'Seller accepted';
-    }
-
-    return 'Pending';
   }
 
   Color _getOrderStBd() {
-    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
-      return Colors.red;
+    switch (bloc.request!.orderStatus) {
+      case OrderStatus.pending:
+        return MyColors.mediumGrey;
+      case OrderStatus.acceptedByBoth:
+      case OrderStatus.acceptedBySeller:
+        return Colors.green;
+      case OrderStatus.rejectedByCustomer:
+      case OrderStatus.rejectedBySeller:
+        return Colors.red;
+      default:
+        return MyColors.mediumGrey;
     }
-
-    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
-      return Colors.green;
-    } else if (bloc.request!.acceptedBySeller &&
-        !bloc.request!.acceptedByUser) {
-      return Colors.green;
-    }
-
-    return MyColors.mediumGrey;
   }
 
   Color _getOrderStClr() {
-    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
-      return Colors.white;
+    switch (bloc.request!.orderStatus) {
+      case OrderStatus.pending:
+        return MyColors.black;
+      case OrderStatus.acceptedByBoth:
+      case OrderStatus.acceptedBySeller:
+      case OrderStatus.rejectedByCustomer:
+      case OrderStatus.rejectedBySeller:
+        return MyColors.white;
+      default:
+        return MyColors.black;
     }
-
-    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
-      return Colors.white;
-    } else if (bloc.request!.acceptedBySeller &&
-        !bloc.request!.acceptedByUser) {
-      return Colors.white;
-    }
-
-    return MyColors.black;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rewear/config/app_init.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/services/http.services.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class RequestsServices extends HttpServices {
         'material': request.material.toString(),
         'serviceType': request.serviceType.toString(),
         'deliveryToTailor': request.deliveryToTailor.toString(),
+        'orderStatus': orderStatusToString(OrderStatus.pending)
       }, headers: {
         'Authorization': AppInit().user.token ?? ''
       });
@@ -34,12 +36,12 @@ class RequestsServices extends HttpServices {
 
   Future<bool?> updateRequestStatusBySeller(
       {required String reqId,
-      bool? cancelBySeller,
-      String? cancelBySellerExcuse,
+      OrderStatus? orderStatus,
+      String? cancelExcuse,
       bool? sellerSeen,
       bool? customerSeen,
       double? price,
-      bool? acceptBySeller,
+      required String fcmToken,
       required Request req}) async {
     final Uri url = Uri.parse('$baseUrl/update-request');
     try {
@@ -47,11 +49,13 @@ class RequestsServices extends HttpServices {
       var body = {};
       body = {'userId': AppInit().user.id ?? '', 'reqId': reqId};
 
-      if (cancelBySeller != null) {
-        body['cancelBySeller'] = cancelBySeller.toString();
+      body['fcmToken'] = fcmToken;
+
+      if (orderStatus != null) {
+        body['orderStatus'] = orderStatus.toString();
       }
-      if (cancelBySellerExcuse != null) {
-        body['cancelBySellerExcuse'] = cancelBySellerExcuse;
+      if (cancelExcuse != null) {
+        body['cancelExcuse'] = cancelExcuse;
       }
       if (sellerSeen != null) {
         body['sellerSeen'] = sellerSeen.toString();
@@ -61,9 +65,6 @@ class RequestsServices extends HttpServices {
       }
       if (price != null) {
         body['price'] = price.toString();
-      }
-      if (acceptBySeller != null) {
-        body['acceptBySeller'] = acceptBySeller.toString();
       }
 
       await client.post(url,
@@ -78,11 +79,11 @@ class RequestsServices extends HttpServices {
 
   Future<bool?> updateRequestStatusByCustomer(
       {required String reqId,
-      bool? cancelByCustomer,
-      String? cancelByCustomerExcuse,
+      String? cancelExcuse,
       bool? customerSeen,
       bool? sellerSeen,
-      bool? acceptByUser,
+      OrderStatus? orderStatus,
+      required String fcmToken,
       required Request req}) async {
     final Uri url = Uri.parse('$baseUrl/update-request');
     try {
@@ -90,20 +91,19 @@ class RequestsServices extends HttpServices {
       var body = {};
       body = {'userId': AppInit().user.id ?? '', 'reqId': reqId};
 
-      if (cancelByCustomer != null) {
-        body['cancelByCustomer'] = cancelByCustomer.toString();
+      body['fcmToken'] = fcmToken;
+
+      if (orderStatus != null) {
+        body['orderStatus'] = orderStatus.toString();
       }
-      if (cancelByCustomerExcuse != null) {
-        body['cancelByCustomerExcuse'] = cancelByCustomerExcuse;
+      if (cancelExcuse != null) {
+        body['cancelExcuse'] = cancelExcuse;
       }
       if (customerSeen != null) {
         body['customerSeen'] = customerSeen.toString();
       }
       if (sellerSeen != null) {
         body['sellerSeen'] = sellerSeen.toString();
-      }
-      if (acceptByUser != null) {
-        body['acceptByUser'] = acceptByUser.toString();
       }
 
       await client.post(url,
@@ -136,7 +136,9 @@ class RequestsServices extends HttpServices {
   }
 
   Future<bool?> updateRequestChooseSeller(
-      {required String reqId, required String sellerId}) async {
+      {required String reqId,
+      required String sellerId,
+      required String fcmToken}) async {
     final Uri url = Uri.parse('$baseUrl/update-request');
     try {
       final client = http.Client();
@@ -144,6 +146,7 @@ class RequestsServices extends HttpServices {
         'userId': AppInit().user.id ?? '',
         'reqId': reqId,
         'sellerId': sellerId,
+        'fcmToken': fcmToken
       }, headers: {
         'Authorization': AppInit().user.token ?? ''
       });

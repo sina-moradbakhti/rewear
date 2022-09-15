@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/models/errorException.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
@@ -41,16 +42,17 @@ class RequestDetailsBloc extends GetxController {
   void _init(bool firstTime) async {
     if (firstTime) request = Get.arguments;
     if (app.user.role == UserType.customer) {
-      if (request!.acceptedBySeller &&
-          (!request!.acceptedByUser && !request!.canceledByUser)) {
+      if (request!.orderStatus == OrderStatus.acceptedBySeller) {
         showBottomPriceButtons.value = true;
+      } else {
+        showBottomPriceButtons.value = false;
       }
       _getTailorProfile();
     } else {
-      if (!request!.acceptedBySeller &&
-          !request!.canceledBySeller &&
-          !request!.canceledByUser) {
+      if (request!.orderStatus == OrderStatus.pending) {
         showBottomPriceButtons.value = true;
+      } else {
+        showBottomPriceButtons.value = false;
       }
       _getCustomerProfile();
     }
@@ -73,10 +75,11 @@ class RequestDetailsBloc extends GetxController {
         // customer
         await services.updateRequestStatusByCustomer(
             reqId: request!.id!,
-            acceptByUser: true,
+            orderStatus: OrderStatus.acceptedByBoth,
             sellerSeen: false,
+            fcmToken: tailor.value?.fcmToken ?? '',
             req: request!);
-        request!.acceptedByUser = true;
+        request!.orderStatus = OrderStatus.acceptedByBoth;
         app.notifyUserBySocket(request!);
         updateRequestsLocally(accept: true);
       } else {
@@ -92,11 +95,12 @@ class RequestDetailsBloc extends GetxController {
 
         await services.updateRequestStatusBySeller(
             reqId: request!.id!,
-            acceptBySeller: true,
+            orderStatus: OrderStatus.acceptedBySeller,
             price: double.parse(strPrice.value),
             customerSeen: false,
+            fcmToken: tailor.value?.fcmToken ?? '',
             req: request!);
-        request!.acceptedBySeller = true;
+        request!.orderStatus = OrderStatus.acceptedBySeller;
         app.notifyUserBySocket(request!);
         updateRequestsLocally(accept: true);
       }
@@ -116,22 +120,24 @@ class RequestDetailsBloc extends GetxController {
         // customer
         await services.updateRequestStatusByCustomer(
             reqId: request!.id!,
-            cancelByCustomer: true,
-            cancelByCustomerExcuse: '',
+            orderStatus: OrderStatus.rejectedByCustomer,
+            cancelExcuse: '',
             sellerSeen: false,
+            fcmToken: tailor.value?.fcmToken ?? '',
             req: request!);
-        request!.canceledByUser = true;
+        request!.orderStatus = OrderStatus.rejectedByCustomer;
         app.notifyUserBySocket(request!);
         updateRequestsLocally(reject: true);
       } else {
         // seller
         await services.updateRequestStatusBySeller(
             reqId: request!.id!,
-            cancelBySeller: true,
-            cancelBySellerExcuse: '',
+            orderStatus: OrderStatus.rejectedBySeller,
+            cancelExcuse: '',
             customerSeen: false,
+            fcmToken: tailor.value?.fcmToken ?? '',
             req: request!);
-        request!.canceledBySeller = true;
+        request!.orderStatus = OrderStatus.rejectedBySeller;
         app.notifyUserBySocket(request!);
         updateRequestsLocally(reject: true);
       }
@@ -145,16 +151,24 @@ class RequestDetailsBloc extends GetxController {
 
   void _seen() async {
     if (app.user.role == UserType.customer) {
-      if (!request!.seen) {
+      if (!request!.customerSeen) {
         await services.updateRequestStatusBySeller(
-            customerSeen: true, reqId: request!.id!, req: request!);
+          customerSeen: true,
+          reqId: request!.id!,
+          req: request!,
+          fcmToken: tailor.value?.fcmToken ?? '',
+        );
         app.notifyUserBySocket(request!);
         updateRequestsLocally(seen: true);
       }
     } else {
-      if (!request!.tailorSeen) {
+      if (!request!.sellerSeen) {
         await services.updateRequestStatusByCustomer(
-            sellerSeen: true, reqId: request!.id!, req: request!);
+          sellerSeen: true,
+          reqId: request!.id!,
+          req: request!,
+          fcmToken: tailor.value?.fcmToken ?? '',
+        );
         app.notifyUserBySocket(request!);
         updateRequestsLocally(seen: true);
       }
@@ -167,26 +181,26 @@ class RequestDetailsBloc extends GetxController {
     if (index >= 0) {
       if (app.user.role == UserType.seller) {
         // tailor
-        if (accept != null) {
-          app.requests[index].acceptedBySeller = accept;
+        if (accept != null && accept) {
+          app.requests[index].orderStatus = OrderStatus.acceptedBySeller;
         }
-        if (reject != null) {
-          app.requests[index].canceledBySeller = reject;
+        if (reject != null && reject) {
+          app.requests[index].orderStatus = OrderStatus.rejectedBySeller;
         }
         if (seen != null) {
-          app.requests[index].tailorSeen = seen;
+          app.requests[index].sellerSeen = seen;
         }
         app.tailorsStreamController.sink.add(true);
       } else {
         // customer
-        if (accept != null) {
-          app.requests[index].acceptedByUser = accept;
+        if (accept != null && accept) {
+          app.requests[index].orderStatus = OrderStatus.acceptedBySeller;
         }
-        if (reject != null) {
-          app.requests[index].canceledByUser = reject;
+        if (reject != null && reject) {
+          app.requests[index].orderStatus = OrderStatus.rejectedByCustomer;
         }
         if (seen != null) {
-          app.requests[index].seen = seen;
+          app.requests[index].customerSeen = seen;
         }
         app.requestsStreamController.sink.add(true);
       }

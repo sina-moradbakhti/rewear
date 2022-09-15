@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:rewear/blocs/home.bloc.dart';
+// import 'package:rewear/blocs/home.bloc.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/confirmTailory.modal.dart';
@@ -61,10 +61,10 @@ class NearbyBloc extends GetxController {
   }
 
   void moveTo(Tailor where, {makeOrder = false, bool scrolled = false}) async {
-    final homeBloc = Get.find<HomeBloc>();
+    // final homeBloc = Get.find<HomeBloc>();
     mapController?.moveCamera(CameraUpdate.newLatLng(
         LatLng(where.position!.latitude, where.position!.longitude)));
-    homeBloc.currentCity.value = '${where.city} ${where.country}';
+    // homeBloc.currentCity.value = '${where.city} ${where.country}';
 
     if (makeOrder && !scrolled) {
       await Future.delayed(const Duration(milliseconds: 300));
@@ -79,7 +79,9 @@ class NearbyBloc extends GetxController {
   void makeRequest(Tailor tailor) async {
     try {
       await services.updateRequestChooseSeller(
-          reqId: requestId!, sellerId: tailor.uid!);
+          reqId: requestId!,
+          sellerId: tailor.uid!,
+          fcmToken: tailor.fcmToken ?? '');
       await initService.call();
       app.notifyUserBySocket(
           app.requests.firstWhere((element) => element.id == requestId));
@@ -95,7 +97,7 @@ class NearbyBloc extends GetxController {
   }
 
   void showMe() async {
-    final homeBloc = Get.find<HomeBloc>();
+    // final homeBloc = Get.find<HomeBloc>();
     myLocationLoading.value = true;
     if (app.user.position == null) {
       await app.updateLastLocation(isBackground: false);
@@ -103,7 +105,7 @@ class NearbyBloc extends GetxController {
 
     if (app.user.position != null) {
       mapController?.moveCamera(CameraUpdate.newLatLng(app.user.position!));
-      homeBloc.currentCity.value = '${app.user.city} ${app.user.country}';
+      //homeBloc.currentCity.value = '${app.user.city} ${app.user.country}';
     }
 
     myLocationLoading.value = false;

@@ -7,6 +7,7 @@ import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/blocs/home.bloc.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/models/mainNavItem.enum.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/userType.enum.dart';
 
 class HomeNavbar extends StatelessWidget {
@@ -39,8 +40,12 @@ class HomeNavbar extends StatelessWidget {
                               badge: AppInit()
                                   .requests
                                   .where((req) =>
-                                      (!req.seen && req.acceptedBySeller) ||
-                                      (!req.seen && req.canceledBySeller))
+                                      (!req.customerSeen &&
+                                          req.orderStatus ==
+                                              OrderStatus.rejectedBySeller) ||
+                                      (!req.customerSeen &&
+                                          req.orderStatus ==
+                                              OrderStatus.acceptedBySeller))
                                   .toList()
                                   .isNotEmpty,
                               isSelected:

@@ -7,6 +7,7 @@ import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/models/mainNavItem.enum.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/userType.enum.dart';
 import 'package:rewear/views/findServices/serviceItem.widget.dart';
 
@@ -31,7 +32,11 @@ class SellerServiceWidget extends StatelessWidget {
     _list[0].badge = AppInit()
         .requests
         .where((req) =>
-            (!req.acceptedBySeller && !req.canceledBySeller) || !req.tailorSeen)
+            (req.orderStatus == OrderStatus.rejectedByCustomer &&
+                !req.sellerSeen) ||
+            (req.orderStatus == OrderStatus.acceptedByBoth &&
+                !req.sellerSeen) ||
+            (req.orderStatus == OrderStatus.pending && !req.sellerSeen))
         .toList()
         .length;
     return Padding(

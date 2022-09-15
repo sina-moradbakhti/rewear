@@ -6,6 +6,7 @@ import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/modals/requestStatus.model.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/widgets/requestStatus.widget.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/request.model.dart';
 import 'package:rewear/generals/exts/extensions.dart';
 import 'package:rewear/models/userType.enum.dart';
@@ -26,17 +27,7 @@ class RequestWidget extends StatelessWidget {
           border: Border(bottom: BorderSide(width: 0.5, color: MyColors.grey))),
       child: MaterialButton(
         elevation: 0,
-        color: ((userType == UserType.customer &&
-                    (request.acceptedBySeller &&
-                        !request.acceptedByUser &&
-                        !request.canceledByUser)) ||
-                (userType == UserType.seller &&
-                    (!request.acceptedBySeller &&
-                        !request.canceledBySeller &&
-                        !request.acceptedByUser &&
-                        !request.canceledByUser)))
-            ? MyColors.lightOrange
-            : MyColors.white,
+        color: _getStColor(),
         padding: EdgeInsets.zero,
         onPressed: () => userType == UserType.seller
             ? Get.toNamed(MyRoutes.tailorRequestDetails, arguments: request)
@@ -95,14 +86,25 @@ class RequestWidget extends StatelessWidget {
     );
   }
 
+  Color _getStColor() {
+    if (userType == UserType.customer && !request.customerSeen) {
+      return MyColors.lightOrange;
+    } else if (userType == UserType.seller && !request.sellerSeen) {
+      return MyColors.lightOrange;
+    }
+
+    return MyColors.white;
+  }
+
   Widget get _status {
-    if (request.canceledBySeller || request.canceledByUser) {
+    if (request.orderStatus == OrderStatus.rejectedBySeller ||
+        request.orderStatus == OrderStatus.rejectedByCustomer) {
       return const RequestStatusWidget(status: RequestStatus.canceled);
     } else {
       // Order is not canceled but
-      if (!request.acceptedBySeller) {
+      if (request.orderStatus != OrderStatus.acceptedBySeller) {
         // not accepted yet
-        if (request.tailorSeen) {
+        if (request.sellerSeen) {
           // seen
           return const RequestStatusWidget(
               status: RequestStatus.pendingSellerApproval);
@@ -113,7 +115,7 @@ class RequestWidget extends StatelessWidget {
         }
       } else {
         // Order is accepted by seller
-        if (!request.acceptedByUser) {
+        if (request.orderStatus != OrderStatus.acceptedByBoth) {
           return const RequestStatusWidget(
               status: RequestStatus.pendingUserApproval);
         } else {

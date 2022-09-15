@@ -27,7 +27,6 @@ class LaunchBloc extends GetxController {
       loadingStatus.value = true;
     }
     await app.preInit();
-    await Future.delayed(const Duration(seconds: 1));
     String? fcmToken;
     if (app.isUserLoggedIn) {
       try {

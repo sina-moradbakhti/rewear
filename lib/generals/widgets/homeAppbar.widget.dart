@@ -18,10 +18,10 @@ class HomeAppbar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
       elevation: 0,
-      actions: [
-        IconButton(
-          icon: const Icon(IconlyFont.search),
-          onPressed: () => Get.toNamed(MyRoutes.search),
+      actions: const [
+         IconButton(
+          icon: Icon(IconlyFont.search, color: Colors.white),
+          onPressed: null, //() => Get.toNamed(MyRoutes.search),
         ),
       ],
       leading: IconButton(

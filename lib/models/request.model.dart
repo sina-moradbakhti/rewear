@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/generals/exts/extensions.dart';
+import 'package:rewear/models/orderStatus.enum.dart';
 import 'package:rewear/models/user.dart';
 
 class Request {
   String? id;
   User? seller;
   final User customer;
-  bool seen = false;
-  bool tailorSeen = false;
-  bool acceptedBySeller = false;
-  bool acceptedByUser = false;
-  bool canceledBySeller = false;
-  bool canceledByUser = false;
+  bool sellerSeen = false;
+  bool customerSeen = false;
   String canceledExcuse = '';
+  OrderStatus orderStatus;
 
   List<String>? images;
   String? description;
@@ -38,15 +36,12 @@ class Request {
       this.material,
       required this.customer,
       this.seller,
-      this.seen = false,
-      this.acceptedBySeller = false,
-      this.acceptedByUser = false,
+      this.sellerSeen = false,
+      this.customerSeen = false,
+      this.orderStatus = OrderStatus.pending,
       this.timeToDelivery,
       this.isReady = false,
       required this.orderDate,
-      this.canceledBySeller = false,
-      this.canceledByUser = false,
-      this.tailorSeen = false,
       this.canceledExcuse = '',
       this.price = 0,
       required this.deliveryToTailor});
@@ -54,14 +49,11 @@ class Request {
   factory Request.fromJson(Map<String, dynamic> data) {
     return Request(
       id: data['_id'],
-      seen: data['seen'] ?? false,
-      tailorSeen: data['tailorSeen'] ?? false,
+      sellerSeen: data['sellerSeen'] ?? false,
+      customerSeen: data['customerSeen'] ?? false,
       seller: User.fromJson(data['seller']),
       customer: User.fromJson(data['customer']),
-      acceptedBySeller: data['acceptedBySeller'],
-      acceptedByUser: data['acceptedByUser'],
-      canceledBySeller: data['canceledBySeller'] ?? false,
-      canceledByUser: data['canceledByUser'] ?? false,
+      orderStatus: stringToOrderStatus(data['orderStatus']),
       canceledExcuse: data['cancelExcuse'] ?? '',
       isReady: data['isReady'],
       price: double.parse(data['price'].toString()),
