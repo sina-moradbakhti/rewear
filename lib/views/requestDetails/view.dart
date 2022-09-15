@@ -218,7 +218,7 @@ class RequestDetails extends StatelessWidget {
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
-                                                    top: 5),
+                                                    top: 0),
                                                 child: CupertinoButton(
                                                   padding: EdgeInsets.zero,
                                                   onPressed: () => bloc.app
@@ -338,22 +338,60 @@ class RequestDetails extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Container(
             decoration: BoxDecoration(
-                color: bloc.request!.acceptedBySeller
-                    ? Colors.green
-                    : MyColors.mediumGrey,
+                color: _getOrderStBd(),
                 borderRadius: BorderRadius.circular(30)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-              child: Text(
-                  bloc.request!.acceptedBySeller
-                      ? 'Seller accepted'
-                      : 'Pending',
-                  style: Get.theme.textTheme.bodyText2!.copyWith(
-                      color: bloc.request!.acceptedBySeller
-                          ? Colors.white
-                          : Colors.black)),
+              child: Text(_getOrderSt(),
+                  style: Get.theme.textTheme.bodyText2!
+                      .copyWith(color: _getOrderStClr())),
             ),
           ),
         ),
       );
+
+  String _getOrderSt() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return bloc.request!.canceledBySeller ? 'Seller Rejected' : 'Rejected';
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return 'Accepted';
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return 'Seller accepted';
+    }
+
+    return 'Pending';
+  }
+
+  Color _getOrderStBd() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return Colors.red;
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return Colors.green;
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return Colors.green;
+    }
+
+    return MyColors.mediumGrey;
+  }
+
+  Color _getOrderStClr() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return Colors.white;
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return Colors.white;
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return Colors.white;
+    }
+
+    return MyColors.black;
+  }
 }

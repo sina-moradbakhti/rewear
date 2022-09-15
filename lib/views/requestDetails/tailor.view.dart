@@ -229,18 +229,21 @@ class TailorRequestDetails extends StatelessWidget {
                                                     fontWeight:
                                                         FontWeight.bold),
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 5),
-                                            child: Text(
-                                              '${bloc.customer.value?.description}',
-                                              style: Get
-                                                  .theme.textTheme.bodyText1!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.normal),
+                                          if (bloc.customer.value
+                                                  ?.description !=
+                                              null)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 0),
+                                              child: Text(
+                                                '${bloc.customer.value?.description}',
+                                                style: Get
+                                                    .theme.textTheme.bodyText1!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                              ),
                                             ),
-                                          ),
                                         ],
                                       )),
                                 ],
@@ -344,22 +347,60 @@ class TailorRequestDetails extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Container(
             decoration: BoxDecoration(
-                color: bloc.request!.acceptedByUser
-                    ? Colors.green
-                    : MyColors.mediumGrey,
+                color: _getOrderStBd(),
                 borderRadius: BorderRadius.circular(30)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-              child: Text(
-                  bloc.request!.acceptedByUser
-                      ? 'Customer accepted'
-                      : 'Pending',
-                  style: Get.theme.textTheme.bodyText2!.copyWith(
-                      color: bloc.request!.acceptedByUser
-                          ? Colors.white
-                          : Colors.black)),
+              child: Text(_getOrderSt(),
+                  style: Get.theme.textTheme.bodyText2!
+                      .copyWith(color: _getOrderStClr())),
             ),
           ),
         ),
       );
+
+  String _getOrderSt() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return bloc.request!.canceledBySeller ? 'Seller Rejected' : 'Rejected';
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return 'Accepted';
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return 'Seller accepted';
+    }
+
+    return 'Pending';
+  }
+
+  Color _getOrderStBd() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return Colors.red;
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return Colors.green;
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return Colors.green;
+    }
+
+    return MyColors.mediumGrey;
+  }
+
+  Color _getOrderStClr() {
+    if (bloc.request!.canceledBySeller || bloc.request!.canceledByUser) {
+      return Colors.white;
+    }
+
+    if (bloc.request!.acceptedBySeller && bloc.request!.acceptedByUser) {
+      return Colors.white;
+    } else if (bloc.request!.acceptedBySeller &&
+        !bloc.request!.acceptedByUser) {
+      return Colors.white;
+    }
+
+    return MyColors.black;
+  }
 }

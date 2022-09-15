@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/themes.dart';
+import 'package:rewear/services/init.dart';
 import 'package:rewear/views/alteration/view.dart';
 import 'package:rewear/views/catalogueDetails/view.dart';
 import 'package:rewear/views/catalouges/view.dart';
@@ -33,12 +34,23 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget with WidgetsBindingObserver {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      await InitService().call();
+      AppInit().requestsStreamController.sink.add(true);
+      AppInit().tailorsStreamController.sink.add(true);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addObserver(this);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: GetMaterialApp(

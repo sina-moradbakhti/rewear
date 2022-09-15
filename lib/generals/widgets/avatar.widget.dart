@@ -8,14 +8,17 @@ class AvatarWidget extends StatelessWidget {
   const AvatarWidget({Key? key, required this.avatarId}) : super(key: key);
 
   @override
-  CircleAvatar build(BuildContext context) {
-    return CircleAvatar(
-      radius: 30,
-      backgroundColor: MyColors.grey,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: MyColors.lightGrey, borderRadius: BorderRadius.circular(60)),
+      clipBehavior: Clip.antiAlias,
+      child: SizedBox(
+        width: 60,
+        height: 60,
         child: CachedNetworkImage(
             imageUrl: avatarId,
+            fit: BoxFit.cover,
             errorWidget: (context, url, error) =>
                 const DefaultAvatarImageWidget()),
       ),
