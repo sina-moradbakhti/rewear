@@ -160,6 +160,17 @@ class AppInit {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     await FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging.onMessage.listen((event) {
+      debugPrint('::::::::::: FOREGROUND NOTIFICATION :::::::::::');
+      debugPrint(event.notification?.title);
+      debugPrint(event.notification?.body);
+    });
+
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      debugPrint('::::::::::: BACKGROUND NOTIFICATION :::::::::::');
+      debugPrint(message.notification?.title);
+      debugPrint(message.notification?.body);
+    });
   }
 
   Future<void> preInit() async {
