@@ -70,37 +70,56 @@ class TailorRequestDetails extends StatelessWidget {
     );
   } // build
 
-  Widget get _safeAreaButtons => SafeArea(
-          child: Align(
+  Widget get _safeAreaButtons => Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-          padding: MyConstants.primaryPadding.copyWith(bottom: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                  child: Obx(() => bloc.cancelLoading.value
-                      ? const MyLoading()
-                      : MyPrimaryButton(
-                          color: MyColors.darkGrey,
-                          loading: bloc.cancelLoading.value,
-                          onPressed: () =>
-                              bloc.acceptLoading.value ? null : bloc.cancel(),
-                          title: 'Cancel'))),
-              BreakWidget(size: 20, vertical: false),
-              Expanded(
-                  child: Obx(() => bloc.acceptLoading.value
-                      ? const MyLoading()
-                      : MyPrimaryButton(
-                          loading: bloc.acceptLoading.value,
-                          onPressed: () =>
-                              bloc.cancelLoading.value ? null : bloc.accept(),
-                          title: 'Accept')))
-            ],
-          ),
+  padding: MyConstants.primaryPadding.copyWith(bottom: 20),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Expanded(
+          child: Obx(() => bloc.cancelLoading.value
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                      child: SizedBox(
+                          width: 20, height: 20, child: MyLoading()),
+                    ),
+                  ],
+                )
+              : MyPrimaryButton(
+                  color: MyColors.darkGrey,
+                  loading: bloc.cancelLoading.value,
+                  onPressed: () =>
+                      bloc.acceptLoading.value ? null : bloc.cancel(),
+                  title: 'Cancel'))),
+      BreakWidget(size: 20, vertical: false),
+      Expanded(
+          child: Obx(() => bloc.acceptLoading.value
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                      child: SizedBox(
+                          width: 20, height: 20, child: MyLoading()),
+                    ),
+                  ],
+                )
+              : MyPrimaryButton(
+                  loading: bloc.acceptLoading.value,
+                  onPressed: () =>
+                      bloc.cancelLoading.value ? null : bloc.accept(),
+                  title: 'Accept')))
+    ],
+  ),
         ),
-      ));
+      );
 
   Widget get _waitingForCustomer => (bloc.request?.orderStatus ==
               OrderStatus.acceptedBySeller ||
@@ -113,18 +132,16 @@ class TailorRequestDetails extends StatelessWidget {
                   color: bloc.request!.orderStatus == OrderStatus.acceptedByBoth
                       ? Colors.green
                       : MyColors.orange),
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      MyConstants.primaryPadding.copyWith(bottom: 10, top: 10),
-                  child: Text(
-                      bloc.request!.orderStatus == OrderStatus.acceptedBySeller
-                          ? 'Waiting to customer...'
-                          : 'You can deliver the order till now',
-                      textAlign: TextAlign.center,
-                      style: Get.theme.textTheme.headline6!
-                          .copyWith(color: Colors.white)),
-                ),
+              child: Padding(
+                padding:
+                    MyConstants.primaryPadding.copyWith(bottom: 20, top: 15),
+                child: Text(
+                    bloc.request!.orderStatus == OrderStatus.acceptedBySeller
+                        ? 'Waiting to customer...'
+                        : 'You can deliver the order till now',
+                    textAlign: TextAlign.center,
+                    style: Get.theme.textTheme.headline6!
+                        .copyWith(color: Colors.white)),
               )),
         )
       : Container();
