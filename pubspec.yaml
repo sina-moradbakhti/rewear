@@ -1,7 +1,7 @@
 name: rewear
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.0+4
+version: 1.0.0+5
 environment:
   sdk: ">=2.16.2 <3.0.0"
 
@@ -27,6 +27,7 @@ dependencies:
   firebase_core: ^1.22.0
   firebase_messaging: ^11.2.10
   flutter_app_badger: ^1.4.0
+  sign_in_with_apple: ^4.1.0
 
 dev_dependencies:
   flutter_test:

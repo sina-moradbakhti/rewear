@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
+import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
 
@@ -82,11 +83,51 @@ class GoogleButton extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Continue with Google',
+                  ' Sign in with Google',
                   style: TextStyle(
                       height: 1.4,
                       fontSize: 14,
                       color: MyColors.lightBlack,
+                      fontWeight: FontWeight.w400),
+                )
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+class AppleButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const AppleButton({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Container build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: MyConstants.buttonCircularRadius,
+      ),
+      child: ClipRRect(
+          borderRadius: MyConstants.buttonCircularRadius,
+          child: MaterialButton(
+            height: 50,
+            minWidth: double.infinity,
+            color: Colors.black,
+            onPressed: onPressed,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Icon(Icons.apple, color: MyColors.white),
+                ),
+                Text(
+                  '  Sign in with Apple',
+                  style: TextStyle(
+                      height: 1.4,
+                      fontSize: 14,
+                      color: MyColors.white,
                       fontWeight: FontWeight.w400),
                 )
               ],

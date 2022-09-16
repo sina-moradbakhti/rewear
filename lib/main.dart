@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:get/get.dart';
@@ -25,6 +24,7 @@ import 'package:rewear/views/requests/view.dart';
 import 'package:rewear/views/search/view.dart';
 import 'package:rewear/views/settings/view.dart';
 import 'package:rewear/views/signUp/view.dart';
+import 'package:rewear/views/signupWithApple/view.dart';
 import 'package:rewear/views/signupWithGoogle/view.dart';
 import 'package:rewear/views/tailorsNearby/view.dart';
 import 'package:rewear/views/verificationCode/view.dart';
@@ -88,6 +88,7 @@ class MyApp extends StatelessWidget with WidgetsBindingObserver {
               page: () => TailorRequestDetails()),
           GetPage(
               name: MyRoutes.tailorsNearby, page: () => const TailorsNearby()),
+          GetPage(name: MyRoutes.signupWithApple, page: () => SignUpWithApple())
         ],
         initialRoute: MyRoutes.launch, // MyRoutes.launch
       ),

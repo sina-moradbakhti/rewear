@@ -8,6 +8,8 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:get/get.dart';
 import 'package:rewear/generals/widgets/break.widget.dart';
+import 'package:rewear/generals/widgets/loading.widget.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class WelcomeScreen extends StatelessWidget {
   WelcomeScreen({Key? key}) : super(key: key);
@@ -30,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 24),
                     alignment: Alignment.center,
-                    height: Get.height / 2,
+                    height: Get.height / 2.5,
                     color: MyColors.lightGrey,
                     child: Image.asset(MyImages.tailorySlide01),
                   ),
@@ -40,18 +42,32 @@ class WelcomeScreen extends StatelessWidget {
                     style: Get.theme.textTheme.headline5,
                     textAlign: TextAlign.center),
                 BreakWidget(size: 20),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    MyPrimaryButton(
-                        onPressed: () => Get.toNamed(MyRoutes.signup),
-                        title: MyStrings.welcome_screen_getStarted_btn),
-                    Padding(
-                      padding: MyConstants.topPadding,
-                      child: GoogleButton(onPressed: bloc.signInByGoogle),
-                    )
-                  ],
+                Obx(
+                  () => bloc.loading.value
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30),
+                            child: MyLoading(),
+                          ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            MyPrimaryButton(
+                                onPressed: () => Get.toNamed(MyRoutes.signup),
+                                title: MyStrings.welcome_screen_getStarted_btn),
+                            Padding(
+                              padding: MyConstants.topPadding,
+                              child: AppleButton(onPressed: bloc.signInByApple),
+                            ),
+                            Padding(
+                              padding: MyConstants.topPadding,
+                              child:
+                                  GoogleButton(onPressed: bloc.signInByGoogle),
+                            )
+                          ],
+                        ),
                 ),
                 BreakWidget(size: 20),
                 MyTextButton(

@@ -6,6 +6,7 @@ import 'package:rewear/services/http.services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rewear/models/errorException.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthenticationServices extends HttpServices {
   Future<User?> signIn(
@@ -79,6 +80,37 @@ class AuthenticationServices extends HttpServices {
         'fullname': result.displayName ?? '',
         'email': result.email,
         'googleId': result.id
+      });
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        if (decodedResponse['data'] != null) {
+          return User.fromJson(decodedResponse['data']);
+        } else {
+          return User(id: '');
+        }
+      } else {
+        handleError(MyErrorException(
+            message: decodedResponse['message'],
+            title: decodedResponse['error_code']));
+        return null;
+      }
+    } catch (er) {
+      debugPrint(er.toString());
+      handleError(er);
+      return null;
+    }
+  }
+
+  Future<User?> appleSignInCheck({
+    required AuthorizationCredentialAppleID result,
+  }) async {
+    final Uri url = Uri.parse('$baseUrl/apple-check-user');
+    try {
+      final client = http.Client();
+      final response = await client.post(url, body: {
+        'fullname': '${result.givenName} ${result.familyName}',
+        'email': result.email,
+        'appleId': result.userIdentifier
       });
       final decodedResponse = jsonDecode(response.body);
       if (response.statusCode == 200) {
@@ -176,6 +208,36 @@ class AuthenticationServices extends HttpServices {
         'email': email,
         'userType': userType,
         'googleId': googleId
+      });
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return User.fromJson(decodedResponse['data']);
+      } else {
+        handleError(MyErrorException(
+            message: decodedResponse['message'],
+            title: decodedResponse['error_code']));
+        return null;
+      }
+    } catch (er) {
+      debugPrint(er.toString());
+      handleError(er);
+      return null;
+    }
+  }
+
+  Future<User?> registerWithApple(
+      {required String fullname,
+      required String email,
+      required String userType,
+      required String appleId}) async {
+    final Uri url = Uri.parse('$baseUrl/apple-signup');
+    try {
+      final client = http.Client();
+      final response = await client.post(url, body: {
+        'fullname': fullname,
+        'email': email,
+        'userType': userType,
+        'appleId': appleId
       });
       final decodedResponse = jsonDecode(response.body);
       if (response.statusCode == 200) {
