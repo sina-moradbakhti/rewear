@@ -4,6 +4,7 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/modals/confirm.modal.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
+import 'package:rewear/models/errorException.dart';
 import 'package:rewear/services/init.dart';
 
 class SettingsBloc extends GetxController {
@@ -41,8 +42,15 @@ class SettingsBloc extends GetxController {
   void removeAccount() async {
     Get.dialog(ConfirmDialog(
       onYepTapped: () async {
-        await service.removeAccount();
-        await _exitFromApp();
+        final removeResult = await service.removeAccount();
+        if (removeResult) {
+          await _exitFromApp();
+        } else {
+          AppInit().handleError(MyErrorException(
+              message:
+                  'An error occured while removing account, please try again couple of minutes later.',
+              title: 'Error'));
+        }
       },
       okButton: "Remove",
       title: 'Remove Account',

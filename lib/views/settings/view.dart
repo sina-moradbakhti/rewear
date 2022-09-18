@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rewear/blocs/settings.bloc.dart';
-import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/colors.dart';
-import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
