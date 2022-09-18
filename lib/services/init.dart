@@ -51,4 +51,27 @@ class InitService extends HttpServices {
       return false;
     }
   }
+
+  Future<bool> removeAccount() async {
+    final Uri url = Uri.parse('$baseUrl/remove-account');
+    final client = http.Client();
+
+    try {
+      final response = await client.post(url, body: {
+        'userId': AppInit().user.id ?? '',
+        'email': AppInit().user.email ?? '',
+      }, headers: {
+        'Authorization': AppInit().user.token ?? ''
+      });
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (er) {
+      debugPrint(er.toString());
+      return false;
+    }
+  }
 }

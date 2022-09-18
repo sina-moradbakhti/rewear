@@ -8,7 +8,6 @@ import 'package:rewear/generals/iconly_font_icons.dart';
 import 'package:rewear/generals/strings.dart';
 import 'package:rewear/generals/widgets/customAppbar.widget.dart';
 import 'package:rewear/generals/widgets/hr.widget.dart';
-import 'package:rewear/models/userType.enum.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -48,11 +47,23 @@ class Settings extends StatelessWidget {
                 onTapped: bloc.privacy,
               ),
               SettingsItemWidget(
+                title: MyStrings.contactUs,
+                icon: Icons.phone_rounded,
+                onTapped: bloc.contactUs,
+              ),
+              SettingsItemWidget(
                 title: MyStrings.logOut,
                 icon: IconlyFont.logout,
                 redColor: true,
-                isTheLast: true,
+                isTheLast: false,
                 onTapped: bloc.exit,
+              ),
+              SettingsItemWidget(
+                title: MyStrings.deactiveAccount,
+                icon: IconlyFont.delete,
+                redColor: true,
+                isTheLast: true,
+                onTapped: bloc.removeAccount,
               )
             ],
           ),
@@ -97,7 +108,10 @@ class SettingsItemWidget extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20),
               child: Text(
                 title,
-                style: Get.theme.textTheme.bodyText1,
+                style: redColor
+                    ? Get.theme.textTheme.bodyText1!
+                        .copyWith(color: MyColors.red)
+                    : Get.theme.textTheme.bodyText1,
               ),
             ),
           ],

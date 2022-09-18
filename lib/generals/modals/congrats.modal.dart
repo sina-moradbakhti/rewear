@@ -6,7 +6,6 @@ import 'package:rewear/generals/constants.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/widgets/break.widget.dart';
-import 'package:rewear/generals/widgets/hr.widget.dart';
 
 class CongratsDialog extends StatelessWidget {
   const CongratsDialog({Key? key}) : super(key: key);
