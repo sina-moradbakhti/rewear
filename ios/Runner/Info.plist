@@ -49,15 +49,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Rewear needs to access the Camera to take photo</string>
+	<string>This app requires access to Camera, that make you able to take a photo as your avatar</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
+	<string>This app requires access to Location Service to determind tailors nearby</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Rewear needs to access the Location Service to determind tailors nearby</string>
+	<string>This app requires access to Location Service to determind tailors nearby</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Rewear needs to access the Camera to record your voice</string>
+	<string>This app requires access to the Microphone, that make you able to record a video</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Rewear needs to access the PhotoLibrary to show you the photos</string>
+	<string>This app requires access to the Photo Library, that make you able to choose a photo</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
