@@ -4,6 +4,7 @@ import 'package:rewear/config/app_init.dart';
 import 'package:rewear/generals/modals/shouldUpdateProfile.modal.dart';
 import 'package:rewear/models/mainNavItem.enum.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/update_profile.dart';
 
 class HomeBloc extends GetxController {
   TabController? controller;
@@ -14,12 +15,34 @@ class HomeBloc extends GetxController {
   @override
   void onInit() {
     _checkIsUpdatedProfile();
+    _updateLocation();
     if (app.user.city == null || app.user.country == null) {
-      currentCity.value = "New Market, ON, CA";
+      currentCity.value = "Locating..";
     } else {
       currentCity.value = '${app.user.city}, ${app.user.country}';
     }
     super.onInit();
+  }
+
+  _updateLocation() async {
+    final permit = await app.getMyLocation();
+    if (permit == false) {
+      currentCity.value = "Permission denied";
+    } else {
+      if (app.user.city == null || app.user.country == null) {
+        currentCity.value = "Locating..";
+      } else {
+        currentCity.value = '${app.user.city}, ${app.user.country}';
+        final updateUserService = UpdateProfileService();
+        updateUserService.call(city: app.user.city, country: app.user.country);
+      }
+    }
+  }
+
+  grantPermission() async {
+    if (app.user.city == null || app.user.country == null) {
+      await _updateLocation();
+    }
   }
 
   void changeTab(MainNavItem item) {

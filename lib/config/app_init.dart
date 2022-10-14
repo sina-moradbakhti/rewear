@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/images.dart';
 import 'package:rewear/generals/modals/location.modal.dart';
+import 'package:rewear/generals/modals/permission.modal.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/models/neckStyle.enum.dart';
 import 'package:rewear/models/neckStyle.model.dart';
@@ -17,6 +18,7 @@ import 'package:rewear/models/request.model.dart';
 import 'package:rewear/models/tailor.dart';
 import 'package:rewear/models/user.dart';
 import 'package:rewear/models/userType.enum.dart';
+import 'package:rewear/services/general.services.dart';
 import 'package:rewear/services/init.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +34,7 @@ class AppInit {
   IO.Socket? socket;
 
   static const String GOOGLE_MAP_API =
-      'AIzaSyAHTTUlO5TGGXIYOxIW0PjEk6iAFAUL8S0';
+      'AIzaSyBYi5MvK1TbJ2_xX3VVmYR49hMY3P8Y3xI';
   static const String BASE_URL =
       'https://rewear.asbrothers.ca'; // https://rewear.asbrothers.ca | http://localhost:4933
   static const String TERMS_CONDITION_URL = 'https://asbrothers.ca/terms';
@@ -115,6 +117,39 @@ class AppInit {
       final checkAgain = await GeolocatorPlatform.instance.requestPermission();
       return (checkAgain == LocationPermission.always ||
           checkAgain == LocationPermission.whileInUse);
+    }
+  }
+
+  Future<bool> getMyLocation() async {
+    final isServiceEnabled =
+        await GeolocatorPlatform.instance.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      Get.dialog(const TurnOffLocationDialog(),
+          useSafeArea: true,
+          barrierColor: Colors.black87,
+          transitionCurve: Curves.easeInOut);
+      return false;
+    }
+    final check = await GeolocatorPlatform.instance.checkPermission();
+    if (check == LocationPermission.whileInUse ||
+        check == LocationPermission.always) {
+      currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();
+      user.position =
+          LatLng(currentPosition!.latitude, currentPosition!.longitude);
+      // Geolocating
+      final geolocatedModel =
+          await GeneralServices().geoCoding(AppInit().user.position!);
+      if (user.role == UserType.customer) user.address = geolocatedModel?.addr;
+      user.city = geolocatedModel?.city;
+      user.country = geolocatedModel?.country;
+
+      return true;
+    } else {
+      Get.dialog(const PermissionLocationDialog(),
+          useSafeArea: true,
+          barrierColor: Colors.black87,
+          transitionCurve: Curves.easeInOut);
+      return false;
     }
   }
 

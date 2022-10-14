@@ -28,6 +28,7 @@ dependencies:
   firebase_messaging: ^11.2.10
   flutter_app_badger: ^1.4.0
   sign_in_with_apple: ^4.1.0
+  in_app_review: ^2.0.4
 
 dev_dependencies:
   flutter_test:

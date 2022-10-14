@@ -38,10 +38,13 @@ class HomeAppbar extends StatelessWidget with PreferredSizeWidget {
             size: 21,
             color: MyColors.orange,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Obx(() => Text(homeBloc.currentCity.value,
-                style: Get.theme.textTheme.bodyText1)),
+          GestureDetector(
+            onTap: homeBloc.grantPermission,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Obx(() => Text(homeBloc.currentCity.value,
+                  style: Get.theme.textTheme.bodyText1)),
+            ),
           ),
         ],
       ),

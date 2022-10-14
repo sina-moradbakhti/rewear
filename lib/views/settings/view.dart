@@ -50,6 +50,11 @@ class Settings extends StatelessWidget {
                 onTapped: bloc.contactUs,
               ),
               SettingsItemWidget(
+                title: MyStrings.appReview,
+                icon: Icons.star_rate_rounded,
+                onTapped: bloc.leaveReview,
+              ),
+              SettingsItemWidget(
                 title: MyStrings.logOut,
                 icon: IconlyFont.logout,
                 redColor: true,

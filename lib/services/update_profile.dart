@@ -15,6 +15,8 @@ class UpdateProfileService extends HttpServices {
       String? phone,
       String? address,
       String? position,
+      String? city,
+      String? country,
       String? slogan}) async {
     final Uri url = Uri.parse('$baseUrl/update-profile');
 
@@ -63,6 +65,13 @@ class UpdateProfileService extends HttpServices {
         }
         if (cover != null && decodedResponse['data']['image'] != null) {
           AppInit().user.image = decodedResponse['data']['image'];
+        }
+
+        if (city != null) {
+          AppInit().user.city = city;
+        }
+        if (country != null) {
+          AppInit().user.country = country;
         }
 
         await AppInit().user.updateCache();

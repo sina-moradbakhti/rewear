@@ -6,14 +6,24 @@ import 'package:rewear/generals/routes.dart';
 import 'package:rewear/generals/widgets/loading.widget.dart';
 import 'package:rewear/models/errorException.dart';
 import 'package:rewear/services/init.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 class SettingsBloc extends GetxController {
   final service = InitService();
+  final InAppReview inAppReview = InAppReview.instance;
   void profile() =>
       Get.toNamed(MyRoutes.profile, arguments: {'withoutAppbar': false});
   void terms() => AppInit().openLink(AppInit.TERMS_CONDITION_URL);
   void privacy() => AppInit().openLink(AppInit.PRIVACY_POLICY_URL);
   void contactUs() => AppInit().openLink(AppInit.CONTACT_US);
+  void leaveReview() async {
+    if (await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }else{
+      inAppReview.openStoreListing(appStoreId: '1644390864');
+    }
+  }
+
   void exit() async {
     Get.dialog(ConfirmDialog(
       onYepTapped: () async {

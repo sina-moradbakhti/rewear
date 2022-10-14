@@ -90,4 +90,5 @@ class MyStrings {
   static const String tailoryProfile = 'Tailory profile';
   static const String logOut = 'Logout';
   static const String deactiveAccount = 'Remove Account';
+  static const String appReview = 'Leave a review';
 }

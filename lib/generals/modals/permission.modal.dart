@@ -5,8 +5,8 @@ import 'package:rewear/generals/buttons.dart';
 import 'package:rewear/generals/colors.dart';
 import 'package:rewear/generals/constants.dart';
 
-class TurnOffLocationDialog extends StatelessWidget {
-  const TurnOffLocationDialog({Key? key}) : super(key: key);
+class PermissionLocationDialog extends StatelessWidget {
+  const PermissionLocationDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class TurnOffLocationDialog extends StatelessWidget {
                 color: MyColors.darkGrey,
               ),
               Text(
-                "Location service is off",
+                "Permission denied",
                 style: Get.theme.textTheme.headline5!.copyWith(
                     fontWeight: FontWeight.bold, color: MyColors.darkGrey),
               ),
@@ -46,11 +46,11 @@ class TurnOffLocationDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       MyPrimaryButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Get.back();
-                          GeolocatorPlatform.instance.openAppSettings();
+                          await GeolocatorPlatform.instance.requestPermission();
                         },
-                        title: 'Turn on',
+                        title: 'Grant permission',
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
